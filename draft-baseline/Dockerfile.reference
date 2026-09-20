@@ -1,0 +1,17 @@
+FROM debian:bookworm-slim
+
+WORKDIR /work
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gcc \
+        make \
+        libc6-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY Makefile README.md ./
+COPY src ./src
+
+RUN make
+
+CMD ["./hello"]
