@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "job_id": "draft-job-001",
+  "trace_id": "draft-trace-001",
+  "job_type": "DRAFT",
+  "input": {
+    "repository": "https://github.com/smwy-cj/DevOps-Pro.git",
+    "commit": "3828e6e5e6f7ea27c25b0d627edef9e06b433152",
+    "project_path": "draft-baseline",
+    "documents": [
+      "draft-baseline/README.md"
+    ],
+    "build_command": "make",
+    "clean_command": "make clean",
+    "verify_command": "./hello",
+    "expected_output": "hello E3"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "job_id": "draft-job-001",
+  "trace_id": "draft-trace-001",
+  "job_type": "DRAFT",
+  "status": "FAILED",
+  "output": {
+    "dockerfile": "draft-baseline/Dockerfile.broken",
+    "build_log": "draft-baseline/artifacts/build-failed.log"
+  },
+  "error": {
+    "stage": "BUILD",
+    "code": "COMMAND_NOT_FOUND",
+    "message": "make: not found",
+    "exit_code": 127
+  }
+}

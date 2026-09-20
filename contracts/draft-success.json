@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "job_id": "draft-job-001",
+  "trace_id": "draft-trace-001",
+  "job_type": "DRAFT",
+  "status": "SUCCEEDED",
+  "output": {
+    "dockerfile": "draft-baseline/Dockerfile.reference",
+    "image_name": "draft-reference:latest",
+    "image_id": "draft-baseline/artifacts/image-id.txt",
+    "build_log": "draft-baseline/artifacts/build-success.log",
+    "run_log": "draft-baseline/artifacts/run-result.log",
+    "build_exit_code": 0,
+    "verify_exit_code": 0,
+    "actual_output": "hello E3"
+  },
+  "error": null
+}
