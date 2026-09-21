@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "trace-a06-b06-e2-redundant",
+  "job_type": "REPAIR",
+  "error": {
+    "code": "REPAIR_7001",
+    "message": "REPAIR accepts only MISSING findings; received REDUNDANT.",
+    "retryable": false,
+    "details": {
+      "finding_id": "finding-a06-md-001",
+      "expected_type": "MISSING",
+      "actual_type": "REDUNDANT"
+    }
+  }
+}
