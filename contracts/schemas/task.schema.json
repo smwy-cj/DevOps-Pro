@@ -1,0 +1,879 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-contract-v1/contracts/schemas/task.schema.json",
+  "title": "A06/B06 asynchronous task contract",
+  "description": "B06 proposal for the shared task envelope and the REPAIR request/result contract. Agreement with A06 is recorded separately in the ADR.",
+  "$ref": "#/$defs/document",
+  "$defs": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "jobId": {
+      "type": "string",
+      "pattern": "^job-[a-z0-9][a-z0-9-]{2,63}$"
+    },
+    "traceId": {
+      "type": "string",
+      "pattern": "^trace-[a-z0-9][a-z0-9-]{2,63}$"
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128
+    },
+    "jobType": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "FULL_CHECK",
+        "INCREMENTAL_CHECK",
+        "REPAIR"
+      ]
+    },
+    "jobStatus": {
+      "type": "string",
+      "enum": [
+        "QUEUED",
+        "RUNNING",
+        "SUCCEEDED",
+        "FAILED",
+        "TIMED_OUT",
+        "CANCELLED"
+      ]
+    },
+    "commitSha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "Complete lowercase Git commit SHA."
+    },
+    "configurationId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,63}$"
+    },
+    "repository": {
+      "type": "object",
+      "required": [
+        "url",
+        "commit"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "commit": {
+          "$ref": "#/$defs/commitSha"
+        },
+        "subdirectory": {
+          "type": "string",
+          "minLength": 1,
+          "default": ".",
+          "description": "Project root relative to the repository root. All other relative project paths are resolved from this directory."
+        }
+      },
+      "additionalProperties": false
+    },
+    "argv": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "commands": {
+      "type": "object",
+      "required": [
+        "clean",
+        "build",
+        "verify"
+      ],
+      "properties": {
+        "clean": {
+          "$ref": "#/$defs/argv"
+        },
+        "build": {
+          "$ref": "#/$defs/argv"
+        },
+        "verify": {
+          "$ref": "#/$defs/argv"
+        }
+      },
+      "additionalProperties": false
+    },
+    "configuration": {
+      "type": "object",
+      "required": [
+        "configuration_id",
+        "os",
+        "architecture",
+        "tool_versions",
+        "commands"
+      ],
+      "properties": {
+        "configuration_id": {
+          "$ref": "#/$defs/configurationId"
+        },
+        "os": {
+          "type": "string",
+          "minLength": 1
+        },
+        "architecture": {
+          "type": "string",
+          "enum": [
+            "amd64",
+            "arm64"
+          ]
+        },
+        "tool_versions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "commands": {
+          "$ref": "#/$defs/commands"
+        }
+      },
+      "additionalProperties": false
+    },
+    "artifactType": {
+      "type": "string",
+      "enum": [
+        "DOCKERFILE",
+        "CONTAINER_IMAGE",
+        "BUILD_LOG",
+        "TEST_LOG",
+        "ACTUAL_GRAPH",
+        "DECLARED_GRAPH",
+        "ERROR_REPORT",
+        "DELTA_REPORT",
+        "PATCH",
+        "REPAIR_REPORT"
+      ]
+    },
+    "artifactRef": {
+      "type": "object",
+      "required": [
+        "artifact_id",
+        "type",
+        "uri",
+        "media_type",
+        "producer_job_id",
+        "repository_commit"
+      ],
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{2,63}$"
+        },
+        "type": {
+          "$ref": "#/$defs/artifactType"
+        },
+        "uri": {
+          "type": "string",
+          "pattern": "^(artifact|https?)://.+"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 3,
+          "description": "Logical media type of the decoded artifact, independent of the HTTP Content-Type header."
+        },
+        "producer_job_id": {
+          "$ref": "#/$defs/jobId"
+        },
+        "repository_commit": {
+          "$ref": "#/$defs/commitSha"
+        },
+        "configuration_id": {
+          "$ref": "#/$defs/configurationId"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "readMethod": {
+      "type": "object",
+      "required": [
+        "method",
+        "url",
+        "authentication",
+        "expected_status",
+        "response_media_type",
+        "parse_as",
+        "encoding"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "const": "HTTPS_GET"
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://.+"
+        },
+        "authentication": {
+          "type": "string",
+          "enum": [
+            "NONE"
+          ]
+        },
+        "expected_status": {
+          "type": "integer",
+          "const": 200
+        },
+        "response_media_type": {
+          "type": "string",
+          "minLength": 3
+        },
+        "parse_as": {
+          "type": "string",
+          "const": "application/json"
+        },
+        "encoding": {
+          "type": "string",
+          "const": "utf-8"
+        }
+      },
+      "additionalProperties": false
+    },
+    "reportReference": {
+      "type": "object",
+      "required": [
+        "report_id",
+        "artifact",
+        "read_method"
+      ],
+      "properties": {
+        "report_id": {
+          "type": "string",
+          "pattern": "^report-[a-z0-9][a-z0-9-]{2,63}$"
+        },
+        "artifact": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "read_method": {
+          "$ref": "#/$defs/readMethod"
+        }
+      },
+      "additionalProperties": false
+    },
+    "declarationLocation": {
+      "type": "object",
+      "required": [
+        "path",
+        "line_start",
+        "line_end",
+        "current_text"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "line_start": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "line_end": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "current_text": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "repairFinding": {
+      "type": "object",
+      "description": "A selection snapshot. The referenced ERROR_REPORT remains the authoritative source for detector and evidence.",
+      "required": [
+        "finding_id",
+        "type",
+        "target",
+        "dependency",
+        "commit",
+        "configuration_id",
+        "declaration_location"
+      ],
+      "properties": {
+        "finding_id": {
+          "type": "string",
+          "pattern": "^finding-[a-z0-9][a-z0-9-]{2,63}$"
+        },
+        "type": {
+          "type": "string",
+          "const": "MISSING"
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dependency": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commit": {
+          "$ref": "#/$defs/commitSha"
+        },
+        "configuration_id": {
+          "$ref": "#/$defs/configurationId"
+        },
+        "declaration_location": {
+          "$ref": "#/$defs/declarationLocation"
+        }
+      },
+      "additionalProperties": false
+    },
+    "incrementalCheck": {
+      "type": "object",
+      "required": [
+        "change_file",
+        "expected_rebuild_target",
+        "method"
+      ],
+      "properties": {
+        "change_file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_rebuild_target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "repairVerification": {
+      "type": "object",
+      "required": [
+        "incremental_check"
+      ],
+      "properties": {
+        "incremental_check": {
+          "$ref": "#/$defs/incrementalCheck"
+        }
+      },
+      "additionalProperties": false
+    },
+    "repairInput": {
+      "type": "object",
+      "required": [
+        "repository",
+        "configuration",
+        "error_report",
+        "finding",
+        "makefile_path",
+        "verification"
+      ],
+      "properties": {
+        "repository": {
+          "$ref": "#/$defs/repository"
+        },
+        "configuration": {
+          "$ref": "#/$defs/configuration"
+        },
+        "error_report": {
+          "$ref": "#/$defs/reportReference"
+        },
+        "finding": {
+          "$ref": "#/$defs/repairFinding"
+        },
+        "makefile_path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path relative to repository.subdirectory."
+        },
+        "verification": {
+          "$ref": "#/$defs/repairVerification"
+        }
+      },
+      "additionalProperties": false
+    },
+    "systemError": {
+      "type": "object",
+      "required": [
+        "code",
+        "message",
+        "retryable"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "REQUEST_1001",
+            "BASELINE_2001",
+            "BASELINE_2002",
+            "BASELINE_2003",
+            "ENV_3001",
+            "ENV_3002",
+            "EXEC_4001",
+            "EXEC_4002",
+            "ANALYSIS_5001",
+            "ARTIFACT_6001",
+            "REPAIR_7001",
+            "REPAIR_7002",
+            "REPAIR_7003",
+            "REPAIR_7004",
+            "INTERNAL_9001"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "verificationStepResult": {
+      "type": "object",
+      "required": [
+        "status",
+        "command",
+        "exit_code"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "const": "PASSED"
+        },
+        "command": {
+          "$ref": "#/$defs/argv"
+        },
+        "exit_code": {
+          "type": "integer",
+          "const": 0
+        },
+        "observed": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "repairOutput": {
+      "type": "object",
+      "required": [
+        "patch",
+        "repair_report",
+        "verification",
+        "modified_files",
+        "summary"
+      ],
+      "properties": {
+        "patch": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "repair_report": {
+          "$ref": "#/$defs/artifactRef"
+        },
+        "verification": {
+          "type": "object",
+          "required": [
+            "clean_build",
+            "functional",
+            "incremental_rebuild"
+          ],
+          "properties": {
+            "clean_build": {
+              "$ref": "#/$defs/verificationStepResult"
+            },
+            "functional": {
+              "$ref": "#/$defs/verificationStepResult"
+            },
+            "incremental_rebuild": {
+              "$ref": "#/$defs/verificationStepResult"
+            }
+          },
+          "additionalProperties": false
+        },
+        "modified_files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "creationRequest": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "trace_id",
+        "idempotency_key",
+        "job_type",
+        "input"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "trace_id": {
+          "$ref": "#/$defs/traceId"
+        },
+        "idempotency_key": {
+          "$ref": "#/$defs/idempotencyKey"
+        },
+        "job_type": {
+          "$ref": "#/$defs/jobType"
+        },
+        "input": {
+          "type": "object"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "job_type": {
+                "const": "REPAIR"
+              }
+            },
+            "required": [
+              "job_type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "input": {
+                "$ref": "#/$defs/repairInput"
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "jobResource": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "job_id",
+        "trace_id",
+        "job_type",
+        "status",
+        "created_at",
+        "updated_at",
+        "input"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "job_id": {
+          "$ref": "#/$defs/jobId"
+        },
+        "trace_id": {
+          "$ref": "#/$defs/traceId"
+        },
+        "job_type": {
+          "$ref": "#/$defs/jobType"
+        },
+        "status": {
+          "$ref": "#/$defs/jobStatus"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "input": {
+          "type": "object"
+        },
+        "output": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "error": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/systemError"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "execution": {
+          "type": "object",
+          "properties": {
+            "started_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            },
+            "finished_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            },
+            "duration_ms": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "worker_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "job_type": {
+                "const": "REPAIR"
+              }
+            },
+            "required": [
+              "job_type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "input": {
+                "$ref": "#/$defs/repairInput"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "SUCCEEDED"
+              },
+              "job_type": {
+                "const": "REPAIR"
+              }
+            },
+            "required": [
+              "status",
+              "job_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "output"
+            ],
+            "properties": {
+              "output": {
+                "$ref": "#/$defs/repairOutput"
+              },
+              "error": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "FAILED",
+                  "TIMED_OUT"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "error"
+            ],
+            "properties": {
+              "error": {
+                "$ref": "#/$defs/systemError"
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "rejectionResponse": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "trace_id",
+        "job_type",
+        "error"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "trace_id": {
+          "$ref": "#/$defs/traceId"
+        },
+        "job_type": {
+          "type": "string",
+          "const": "REPAIR"
+        },
+        "error": {
+          "$ref": "#/$defs/systemError"
+        }
+      },
+      "additionalProperties": false
+    },
+    "repairReport": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "report_id",
+        "job_id",
+        "status",
+        "repository_commit",
+        "configuration_id",
+        "finding_id",
+        "changes",
+        "verification"
+      ],
+      "properties": {
+        "schema_version": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "report_id": {
+          "type": "string",
+          "pattern": "^repair-report-[a-z0-9][a-z0-9-]{2,63}$"
+        },
+        "job_id": {
+          "$ref": "#/$defs/jobId"
+        },
+        "status": {
+          "type": "string",
+          "const": "SUCCEEDED"
+        },
+        "repository_commit": {
+          "$ref": "#/$defs/commitSha"
+        },
+        "configuration_id": {
+          "$ref": "#/$defs/configurationId"
+        },
+        "finding_id": {
+          "type": "string",
+          "pattern": "^finding-[a-z0-9][a-z0-9-]{2,63}$"
+        },
+        "changes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "path",
+              "before",
+              "after",
+              "reason"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "before": {
+                "type": "string"
+              },
+              "after": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "verification": {
+          "type": "object",
+          "required": [
+            "clean_build",
+            "functional",
+            "incremental_rebuild",
+            "log"
+          ],
+          "properties": {
+            "clean_build": {
+              "$ref": "#/$defs/verificationStepResult"
+            },
+            "functional": {
+              "$ref": "#/$defs/verificationStepResult"
+            },
+            "incremental_rebuild": {
+              "$ref": "#/$defs/verificationStepResult"
+            },
+            "log": {
+              "$ref": "#/$defs/artifactRef"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "document": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/creationRequest"
+        },
+        {
+          "$ref": "#/$defs/jobResource"
+        },
+        {
+          "$ref": "#/$defs/rejectionResponse"
+        },
+        {
+          "$ref": "#/$defs/repairReport"
+        }
+      ]
+    }
+  }
+}

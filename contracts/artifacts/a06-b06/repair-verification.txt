@@ -1,0 +1,26 @@
+Verification date: 2026-09-21
+Source repository: https://gitee.com/yuisawe/nju-devops-2026-a06.git
+Source commit: f104b5bc7f4044a119d1b46aab5d64e70cf89de8
+Patch: fix-main-o-config-h.patch
+Environment: Ubuntu 22.04 on WSL2, x86_64
+GNU Make: 4.3
+C compiler: cc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+
+STEP 1: clean build with VALUE=1
+rm -f main.o app
+cc -O0 -Wall -Wextra -c main.c -o main.o
+cc -O0 -Wall -Wextra main.o -o app
+initial_output=1
+
+STEP 2: change config.h to VALUE=2, then run ordinary make
+cc -O0 -Wall -Wextra -c main.c -o main.o
+cc -O0 -Wall -Wextra main.o -o app
+incremental_output=2
+
+STEP 3: clean build from the same modified source
+rm -f main.o app
+cc -O0 -Wall -Wextra -c main.c -o main.o
+cc -O0 -Wall -Wextra main.o -o app
+clean_output=2
+
+RESULT: PASS - config.h now rebuilds main.o during ordinary make.

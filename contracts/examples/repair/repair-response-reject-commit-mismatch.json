@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "trace-a06-b06-e2-commit",
+  "job_type": "REPAIR",
+  "error": {
+    "code": "REPAIR_7002",
+    "message": "The request repository commit does not match the ERROR_REPORT commit.",
+    "retryable": false,
+    "details": {
+      "request_commit": "1111111111111111111111111111111111111111",
+      "report_commit": "f104b5bc7f4044a119d1b46aab5d64e70cf89de8",
+      "report_id": "report-a06-md-001"
+    }
+  }
+}

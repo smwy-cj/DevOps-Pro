@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "trace-a06-b06-e2-redundant",
+  "idempotency_key": "repair-a06-b06-e2-redundant",
+  "job_type": "REPAIR",
+  "input": {
+    "repository": {
+      "url": "https://gitee.com/yuisawe/nju-devops-2026-a06.git",
+      "commit": "f104b5bc7f4044a119d1b46aab5d64e70cf89de8",
+      "subdirectory": "contracts/fixtures/missing-dependency"
+    },
+    "configuration": {
+      "configuration_id": "gcc-11.4.0-O0-ubuntu22.04-amd64",
+      "os": "Ubuntu 22.04 on WSL2",
+      "architecture": "amd64",
+      "tool_versions": {
+        "make": "4.3",
+        "cc": "11.4.0"
+      },
+      "commands": {
+        "clean": [
+          "make",
+          "clean"
+        ],
+        "build": [
+          "make"
+        ],
+        "verify": [
+          "./app"
+        ]
+      }
+    },
+    "error_report": {
+      "report_id": "report-a06-md-001",
+      "artifact": {
+        "artifact_id": "error-report-a06-md-001",
+        "type": "ERROR_REPORT",
+        "uri": "https://gitee.com/yuisawe/nju-devops-2026-a06/raw/e2-missing-report-v2/contracts/examples/interop/a06-b06/missing-report.json",
+        "media_type": "application/json",
+        "producer_job_id": "job-full-a06-001",
+        "repository_commit": "f104b5bc7f4044a119d1b46aab5d64e70cf89de8",
+        "configuration_id": "gcc-11.4.0-O0-ubuntu22.04-amd64",
+        "sha256": "5ab74bbd62fe533e6841baa3d187ec017c3f67cf989c800267d2484d228b0cd7",
+        "size_bytes": 3205
+      },
+      "read_method": {
+        "method": "HTTPS_GET",
+        "url": "https://gitee.com/yuisawe/nju-devops-2026-a06/raw/e2-missing-report-v2/contracts/examples/interop/a06-b06/missing-report.json",
+        "authentication": "NONE",
+        "expected_status": 200,
+        "response_media_type": "text/plain; charset=utf-8",
+        "parse_as": "application/json",
+        "encoding": "utf-8"
+      }
+    },
+    "finding": {
+      "finding_id": "finding-a06-md-001",
+      "type": "REDUNDANT",
+      "target": "main.o",
+      "dependency": "config.h",
+      "commit": "f104b5bc7f4044a119d1b46aab5d64e70cf89de8",
+      "configuration_id": "gcc-11.4.0-O0-ubuntu22.04-amd64",
+      "declaration_location": {
+        "path": "Makefile",
+        "line_start": 10,
+        "line_end": 10,
+        "current_text": "main.o: main.c"
+      }
+    },
+    "makefile_path": "Makefile",
+    "verification": {
+      "incremental_check": {
+        "change_file": "config.h",
+        "expected_rebuild_target": "main.o",
+        "method": "modify dependency, run ordinary make, then verify output"
+      }
+    }
+  }
+}
