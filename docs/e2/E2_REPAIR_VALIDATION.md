@@ -70,3 +70,20 @@ Windows 的 `core.autocrlf=true` 将三个文本产物检出为 CRLF，导致实
 - 工作区无未提交修改；
 - 未修改 `main` 和 `dev`；
 - 验证成果保存在 `integration/e2-repair-validation` 分支。
+
+## 6. MDFixer 负责人补充复核（2026-09-22）
+
+以上 20 项是组员一在提交 `9d055227cf7742ed6e451d7dc679f5590d9da110` 上完成的历史记录。此后，MDFixer 负责人基于集成分支提交 `357df1612bc9870c4e9fcb9a85a8da776e43b94f` 补充了成功结果的来源与重检状态、Makefile 声明风格、项目路径基准，并新增跨平台校验脚本。本节记录的是**本地待合入文件**，不表示已有新的 GitHub 提交。
+
+在仓库根目录安装 Python 3 依赖并执行：
+
+```sh
+python3 -m pip install -r scripts/requirements-validation.txt
+python3 scripts/validate-contract.py
+```
+
+本地结果：`21/21 checks passed`。新增的一项检查确认成功结果与修复报告的来源、检测器重检状态、源码提交及配置一致。远端检查还会下载 A06 固定 ERROR_REPORT，核对 HTTP 状态、媒体类型、字节数、SHA-256，以及请求中选取的 repository、configuration 和 finding。没有网络时可以使用 `--skip-remote`；这时应为 `20/20 checks passed`，不代表完成远端联调。
+
+另外，已针对 A06 固定源码中的 Makefile 执行 `git apply --check`，补丁可应用。先前 Ubuntu 22.04 / Make 4.3 / GCC 11.4.0 的实际构建行为记录仍见三个 REPAIR 产物；本次补充复核没有重新运行这些环境中的构建测试，也没有运行 MDFixer 服务或 BuildChecker 检测器。
+
+合入前还需在 PowerShell 7 环境重跑 `scripts/validate-contract.ps1`。合入并确认文件内容后创建、推送 `e2-contract-v1` 标签；标签发布前，成功结果中的 GitHub Raw 产物地址不可用。

@@ -174,6 +174,23 @@ $repairReport = Get-Content -LiteralPath (Join-Path $artifactRoot 'repair-report
   ConvertFrom-Json -Depth 100
 $results.Add((Test-LocalArtifact 'repair-verification.txt' $repairReport.verification.log.sha256 $repairReport.verification.log.size_bytes))
 
+$resultAndReportMatch = (
+  $successResult.output.provenance -eq $repairReport.provenance -and
+  $successResult.output.verification.recheck.status -eq $repairReport.verification.recheck.status -and
+  $successResult.output.repair_report.repository_commit -eq $repairReport.repository_commit -and
+  $successResult.output.repair_report.configuration_id -eq $repairReport.configuration_id
+)
+if (-not $resultAndReportMatch) {
+  $failures.Add('success result and repair report disagree on provenance, recheck, commit, or configuration')
+}
+$results.Add([pscustomobject]@{
+  Check = 'result-report-consistency'
+  File = 'repair-result-success.json / repair-report.json'
+  Expected = 'matching provenance, recheck, commit, and configuration'
+  Actual = [string]$resultAndReportMatch
+  Passed = $resultAndReportMatch
+})
+
 if (-not $SkipRemote) {
   $requestObject = Get-Content -LiteralPath (Join-Path $exampleRoot 'repair-request.json') -Raw |
     ConvertFrom-Json -Depth 100

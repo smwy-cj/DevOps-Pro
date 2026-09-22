@@ -473,11 +473,60 @@
       },
       "additionalProperties": false
     },
+    "recheckResult": {
+      "type": "object",
+      "required": [
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "PASSED",
+            "FAILED",
+            "NOT_RUN"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "detector_job_id": {
+          "$ref": "#/$defs/jobId"
+        },
+        "result_artifact": {
+          "$ref": "#/$defs/artifactRef"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "PASSED"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "detector_job_id",
+              "result_artifact"
+            ]
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
     "repairOutput": {
       "type": "object",
       "required": [
         "patch",
         "repair_report",
+        "provenance",
         "verification",
         "modified_files",
         "summary"
@@ -489,12 +538,20 @@
         "repair_report": {
           "$ref": "#/$defs/artifactRef"
         },
+        "provenance": {
+          "type": "string",
+          "enum": [
+            "MANUAL_REFERENCE",
+            "MDFIXER_RUN"
+          ]
+        },
         "verification": {
           "type": "object",
           "required": [
             "clean_build",
             "functional",
-            "incremental_rebuild"
+            "incremental_rebuild",
+            "recheck"
           ],
           "properties": {
             "clean_build": {
@@ -505,6 +562,9 @@
             },
             "incremental_rebuild": {
               "$ref": "#/$defs/verificationStepResult"
+            },
+            "recheck": {
+              "$ref": "#/$defs/recheckResult"
             }
           },
           "additionalProperties": false
@@ -774,6 +834,9 @@
         "repository_commit",
         "configuration_id",
         "finding_id",
+        "provenance",
+        "declaration_style",
+        "style_rationale",
         "changes",
         "verification"
       ],
@@ -801,6 +864,26 @@
         "finding_id": {
           "type": "string",
           "pattern": "^finding-[a-z0-9][a-z0-9-]{2,63}$"
+        },
+        "provenance": {
+          "type": "string",
+          "enum": [
+            "MANUAL_REFERENCE",
+            "MDFIXER_RUN"
+          ]
+        },
+        "declaration_style": {
+          "type": "string",
+          "enum": [
+            "TARGET",
+            "MACRO",
+            "HYBRID",
+            "IMPLICIT"
+          ]
+        },
+        "style_rationale": {
+          "type": "string",
+          "minLength": 1
         },
         "changes": {
           "type": "array",
@@ -838,6 +921,7 @@
             "clean_build",
             "functional",
             "incremental_rebuild",
+            "recheck",
             "log"
           ],
           "properties": {
@@ -849,6 +933,9 @@
             },
             "incremental_rebuild": {
               "$ref": "#/$defs/verificationStepResult"
+            },
+            "recheck": {
+              "$ref": "#/$defs/recheckResult"
             },
             "log": {
               "$ref": "#/$defs/artifactRef"

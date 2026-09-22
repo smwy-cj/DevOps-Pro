@@ -33,6 +33,17 @@
 
 不再保留与 `configuration` 重复的 `environment` 字段。
 
+`input.configuration` 与 A06 固定报告的 `configuration` 同形；`input.finding` 是该报告中待修复 finding 的选择摘要。服务端下载报告后，必须核对摘要与原报告一致，不能把摘要当作独立检测结论。
+
+## 成功结果与验证含义
+
+- `output.patch` 指向可应用的 Git Patch，`output.repair_report` 指向修复报告；两者记录生产任务、源码提交、构建配置、SHA-256 和字节数。
+- 修复报告记录 `declaration_style` 和 `style_rationale`。本例为 `TARGET`，直接给 `main.o` 规则增加 `config.h`。
+- `output.provenance` 和修复报告的 `provenance` 区分 `MANUAL_REFERENCE` 与真正的 `MDFIXER_RUN`。本次成功 Job 是 E2 契约样例，补丁及增量构建经过人工实测；示例时间戳和 `job_id` 不代表 MDFixer 服务已运行。
+- `verification.recheck` 必须显式记录。当前为 `NOT_RUN`，因为 BuildChecker 尚未实现；不得把人工构建行为测试记作检测器重检通过。后续若写成 `PASSED`，须附检测任务 ID 和结果产物。
+
+路径基准：请求、修复报告和 `modified_files` 中的项目路径相对于 `repository.subdirectory`；Git Patch 中的 `a/`、`b/` 路径相对于**仓库根目录**，以便在仓库根目录运行 `git apply`。
+
 ## Artifact 语义
 
 `artifact.media_type` 表示解码后产物的逻辑格式。`read_method.response_media_type` 表示 HTTP 响应头，两者可以不同。
@@ -45,6 +56,7 @@
 - Artifact 记录 SHA-256 和字节数用于完整性校验。
 
 输出产物使用 Git 标签 `e2-contract-v1` 的 Raw URL。合并文件后必须创建并推送该标签，才能让 URL 可读取且保持不可变。
+在标签创建前，这些 URL 是待发布引用，不能作为已可下载的产物交给 A06 验收。
 
 ## REPAIR 拒绝规则
 

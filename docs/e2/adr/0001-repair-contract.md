@@ -20,6 +20,9 @@ A06 的报告包含 `declaration_location`，但 A06 当前 `common.schema.json`
 6. REPAIR 提出四个错误码：类型错误、commit 不匹配、configuration 不匹配、报告引用不一致。
 7. REDUNDANT 由 JSON Schema 和运行时共同拒绝；跨字段 commit/configuration 一致性由运行时检查。
 8. GitHub 输出产物通过不可变标签 `e2-contract-v1` 读取，并用 SHA-256 校验。
+9. 修复报告必须说明声明风格和修复理由；成功结果必须区分人工参考补丁与真实 MDFixer 运行。
+10. 重检结果单独记录。检测器尚未运行时写 `NOT_RUN` 和原因；`PASSED` 需要检测任务 ID 和结果产物。
+11. JSON 中的项目路径相对于 `repository.subdirectory`；Git Patch 路径相对于仓库根目录，以便直接执行 `git apply`。
 
 ## Alternatives
 
@@ -44,5 +47,7 @@ A06 的报告包含 `declaration_location`，但 A06 当前 `common.schema.json`
 - 有效请求只有一处 configuration 权威值。
 - 样例可通过结构校验和语义校验重复验收。
 - 合并后必须创建并推送 `e2-contract-v1` 标签。
+- 标签发布前，成功样例中的产物 URL 尚不可读取；不得声称已完成产物交接。
+- 当前成功 Job 是契约样例，Patch 的人工行为验证与 MDFixer 服务运行、检测器重检分别记录。
 - A06 需要确认错误码，并解决 `declaration_location` 与其公共 Schema 不一致的问题。
 - 如 A06 修改字段，双方必须同步更新 Schema、样例、ADR 和校验记录。

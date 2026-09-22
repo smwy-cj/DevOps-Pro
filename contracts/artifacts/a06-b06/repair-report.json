@@ -51,6 +51,13 @@
       "configuration_id": "gcc-11.4.0-O0-ubuntu22.04-amd64",
       "sha256": "4a698bb1b5135fa8f42f424d1598d36fb7aa79cdba6f86f4908e598ae421b757",
       "size_bytes": 826
+    },
+    "recheck": {
+      "status": "NOT_RUN",
+      "reason": "BuildChecker is not implemented yet; the reference patch was checked by build, functional, and incremental behavior tests."
     }
-  }
+  },
+  "provenance": "MANUAL_REFERENCE",
+  "declaration_style": "TARGET",
+  "style_rationale": "The Makefile explicitly declares main.o prerequisites on line 10, so add config.h to that target rule."
 }
