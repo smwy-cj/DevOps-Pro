@@ -1,0 +1,5 @@
+# *.patch -whitespace
+
+*.patch text eol=lf -whitespace
+contracts/artifacts/**/*.json text eol=lf
+contracts/artifacts/**/*.txt text eol=lf

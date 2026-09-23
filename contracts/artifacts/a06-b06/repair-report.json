@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "report_id": "repair-report-a06-b06-001",
+  "job_id": "job-repair-b06-001",
+  "status": "SUCCEEDED",
+  "repository_commit": "f104b5bc7f4044a119d1b46aab5d64e70cf89de8",
+  "configuration_id": "gcc-11.4.0-O0-ubuntu22.04-amd64",
+  "finding_id": "finding-a06-md-001",
+  "changes": [
+    {
+      "path": "Makefile",
+      "before": "main.o: main.c",
+      "after": "main.o: main.c config.h",
+      "reason": "main.c includes config.h, so main.o must be rebuilt whenever config.h changes."
+    }
+  ],
+  "verification": {
+    "clean_build": {
+      "status": "PASSED",
+      "command": [
+        "sh",
+        "-c",
+        "make clean && make"
+      ],
+      "exit_code": 0,
+      "observed": "A clean make completed and ./app printed 1 before the test change."
+    },
+    "functional": {
+      "status": "PASSED",
+      "command": [
+        "./app"
+      ],
+      "exit_code": 0,
+      "observed": "The executable printed the value compiled from config.h."
+    },
+    "incremental_rebuild": {
+      "status": "PASSED",
+      "command": [
+        "make"
+      ],
+      "exit_code": 0,
+      "observed": "After VALUE changed from 1 to 2, ordinary make rebuilt main.o and ./app printed 2."
+    },
+    "log": {
+      "artifact_id": "test-log-b06-repair-001",
+      "type": "TEST_LOG",
+      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-contract-v1/contracts/artifacts/a06-b06/repair-verification.txt",
+      "media_type": "text/plain",
+      "producer_job_id": "job-repair-b06-001",
+      "repository_commit": "f104b5bc7f4044a119d1b46aab5d64e70cf89de8",
+      "configuration_id": "gcc-11.4.0-O0-ubuntu22.04-amd64",
+      "sha256": "4a698bb1b5135fa8f42f424d1598d36fb7aa79cdba6f86f4908e598ae421b757",
+      "size_bytes": 826
+    },
+    "recheck": {
+      "status": "NOT_RUN",
+      "reason": "BuildChecker is not implemented yet; the reference patch was checked by build, functional, and incremental behavior tests."
+    }
+  },
+  "provenance": "MANUAL_REFERENCE",
+  "declaration_style": "TARGET",
+  "style_rationale": "The Makefile explicitly declares main.o prerequisites on line 10, so add config.h to that target rule."
+}

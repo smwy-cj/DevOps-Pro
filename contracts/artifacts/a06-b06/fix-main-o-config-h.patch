@@ -1,0 +1,12 @@
+diff --git a/contracts/fixtures/missing-dependency/Makefile b/contracts/fixtures/missing-dependency/Makefile
+--- a/contracts/fixtures/missing-dependency/Makefile
++++ b/contracts/fixtures/missing-dependency/Makefile
+@@ -7,7 +7,7 @@
+ app: main.o
+ 	$(CC) $(CFLAGS) main.o -o app
+ 
+-main.o: main.c
++main.o: main.c config.h
+ 	$(CC) $(CFLAGS) -c main.c -o main.o
+ 
+ clean:

@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "trace_id": "trace-a06-b06-e2-config",
+  "job_type": "REPAIR",
+  "error": {
+    "code": "REPAIR_7003",
+    "message": "The request configuration does not match the ERROR_REPORT configuration.",
+    "retryable": false,
+    "details": {
+      "request_configuration_id": "clang-18-O2-ubuntu22.04-amd64",
+      "report_configuration_id": "gcc-11.4.0-O0-ubuntu22.04-amd64",
+      "report_id": "report-a06-md-001"
+    }
+  }
+}
