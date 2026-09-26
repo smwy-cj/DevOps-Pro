@@ -4,8 +4,9 @@ on:
   push:
     branches: [dev]
     paths:
-      - '.github/workflows/draft-reference.yml'
-      - 'draft-baseline/**'
+      - 'draft-baseline/Dockerfile.reference'
+      - 'draft-baseline/Makefile'
+      - 'draft-baseline/src/**'
   workflow_dispatch:
 
 permissions:

@@ -1,0 +1,1 @@
+ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:f261c3e4893143e37caed1df2ec662244c699db0d0b3848e97f1ddce3f49d472

@@ -109,7 +109,13 @@ artifacts/run-result.log
 
 ## DRAFT v2 镜像与证据
 
-`.github/workflows/draft-reference.yml` 在 `dev` 的 DRAFT 文件更新时运行，也可以手动触发。它从 `Dockerfile.reference` 无缓存构建、运行容器并断言输出恰好为 `hello DevOps`，然后把镜像发布至 `ghcr.io/smwy-cj/devops-pro/draft-reference:dev-<commit-sha>`。工作流工件 `draft-reference-evidence` 包含本次重新生成的 UTF-8 构建日志、运行日志和完整的 `@sha256:` 镜像地址。旧的仓库内日志为 UTF-16 历史记录，不能当作本次构建证据。
+`.github/workflows/draft-reference.yml` 在 `dev` 的 DRAFT 源码、Makefile 或参考 Dockerfile 更新时运行，也可以手动触发。它从 `Dockerfile.reference` 无缓存构建、运行容器并断言输出恰好为 `hello DevOps`，然后把镜像发布至 `ghcr.io/smwy-cj/devops-pro/draft-reference:dev-<commit-sha>`。
+
+2026-09-26 的[构建运行记录](https://github.com/smwy-cj/DevOps-Pro/actions/runs/36226968640)已成功，源码提交为 `09bab8573f008425e2fc087c71a16634bed64e7e`。仓库内 `artifacts/build-success.log` 和 `artifacts/run-result.log` 已由该次构建的 UTF-8 工件替换，`artifacts/image-digest.txt` 记录完整镜像地址：
+
+```text
+ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:f261c3e4893143e37caed1df2ec662244c699db0d0b3848e97f1ddce3f49d472
+```
 
 首次发布的 GHCR 包可能默认为私有。发布成功后在 GitHub Package 的设置中将可见性改为 Public，再在未登录 GHCR 的环境中执行工件提供的完整 digest 地址：
 
@@ -119,4 +125,4 @@ docker pull ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:<工作流输出�
 docker run --rm ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:<工作流输出的64位摘要>
 ```
 
-匿名拉取和输出均通过后，才在验收提交上创建 `e2-draft-contract-v2` Git 标签，并记录其提交 SHA、工作流运行地址与镜像 digest。
+匿名拉取和输出均通过后，才在验收提交上创建 `e2-draft-contract-v2` Git 标签，并记录其提交 SHA、工作流运行地址与镜像 digest。当前尚未完成公开可见性和匿名拉取验收。
