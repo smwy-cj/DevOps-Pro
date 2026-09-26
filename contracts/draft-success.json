@@ -9,8 +9,8 @@
       "type": "DOCKERFILE",
       "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/draft-contract-v1/draft-baseline/Dockerfile.reference",
       "media_type": "text/plain",
-      "sha256": "35fbf507454005d8562acb78ff307e0f81b4f899dd57aebb7aab576e6bbea300",
-      "size_bytes": 284,
+      "sha256": "8dfcf35e3726f1252bd60e89c045f72a28f47ad2fa930e3269b4e0a5c15c1ba5",
+      "size_bytes": 268,
       "authentication": "NONE",
       "encoding": "utf-8"
     },

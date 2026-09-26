@@ -5,4 +5,5 @@ contracts/artifacts/**/*.json text eol=lf
 contracts/artifacts/**/*.txt text eol=lf
 draft-baseline/artifacts/**/*.log text eol=lf -whitespace
 draft-baseline/artifacts/image-id.txt text eol=lf
+draft-baseline/Dockerfile* text eol=lf -whitespace
 *.sh text eol=lf
