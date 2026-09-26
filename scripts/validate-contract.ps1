@@ -38,6 +38,34 @@ function Test-SchemaDocument {
   }
 }
 
+function Test-SchemaObject {
+  param(
+    [string]$Name,
+    [object]$Document,
+    [bool]$ExpectedValid
+  )
+
+  $actualValid = $false
+  try {
+    $actualValid = ($Document | ConvertTo-Json -Depth 100) |
+      Test-Json -Schema $schemaText -ErrorAction Stop
+  } catch {
+    $actualValid = $false
+  }
+
+  if ($actualValid -ne $ExpectedValid) {
+    $failures.Add("schema expectation failed: $Name expected=$ExpectedValid actual=$actualValid")
+  }
+
+  [pscustomobject]@{
+    Check = 'schema'
+    File = $Name
+    Expected = $ExpectedValid
+    Actual = $actualValid
+    Passed = ($actualValid -eq $ExpectedValid)
+  }
+}
+
 function Get-RepairSemanticCode {
   param([object]$Request)
 
@@ -144,6 +172,52 @@ function Test-LocalArtifact {
   }
 }
 
+function Test-PackageArtifact {
+  param(
+    [string]$RelativePath,
+    [string]$ExpectedSha256,
+    [long]$ExpectedSize
+  )
+
+  $artifactPath = Join-Path $packageRoot $RelativePath
+  $artifact = Get-Item -LiteralPath $artifactPath
+  $actualHash = (Get-FileHash -LiteralPath $artifactPath -Algorithm SHA256).Hash.ToLowerInvariant()
+  $passed = ($actualHash -eq $ExpectedSha256 -and $artifact.Length -eq $ExpectedSize)
+  if (-not $passed) {
+    $failures.Add("artifact metadata failed: $RelativePath")
+  }
+
+  [pscustomobject]@{
+    Check = 'draft-artifact'
+    File = $RelativePath
+    Expected = "$ExpectedSha256 / $ExpectedSize bytes"
+    Actual = "$actualHash / $($artifact.Length) bytes"
+    Passed = $passed
+  }
+}
+
+function Test-Utf8File {
+  param([string]$RelativePath)
+
+  $path = Join-Path $packageRoot $RelativePath
+  $passed = $true
+  try {
+    $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
+    $null = $strictUtf8.GetString([System.IO.File]::ReadAllBytes($path))
+  } catch {
+    $passed = $false
+    $failures.Add("UTF-8 decoding failed: $RelativePath")
+  }
+
+  [pscustomobject]@{
+    Check = 'draft-utf8'
+    File = $RelativePath
+    Expected = 'valid UTF-8'
+    Actual = [string]$passed
+    Passed = $passed
+  }
+}
+
 $results = [System.Collections.Generic.List[object]]::new()
 
 $results.Add((Test-SchemaDocument 'contracts/examples/repair/repair-request.json' $true))
@@ -155,6 +229,28 @@ $results.Add((Test-SchemaDocument 'contracts/artifacts/a06-b06/repair-report.jso
 $results.Add((Test-SchemaDocument 'contracts/examples/repair/repair-request-reject-redundant.json' $false))
 $results.Add((Test-SchemaDocument 'contracts/examples/repair/repair-request-reject-commit-mismatch.json' $true))
 $results.Add((Test-SchemaDocument 'contracts/examples/repair/repair-request-reject-configuration-mismatch.json' $true))
+$results.Add((Test-SchemaDocument 'contracts/draft-request.json' $true))
+$results.Add((Test-SchemaDocument 'contracts/draft-success.json' $true))
+$results.Add((Test-SchemaDocument 'contracts/draft-failure.json' $true))
+
+$draftRequest = Get-Content -LiteralPath (Join-Path $packageRoot 'contracts/draft-request.json') -Raw |
+  ConvertFrom-Json -Depth 100
+$draftSuccess = Get-Content -LiteralPath (Join-Path $packageRoot 'contracts/draft-success.json') -Raw |
+  ConvertFrom-Json -Depth 100
+$draftFailure = Get-Content -LiteralPath (Join-Path $packageRoot 'contracts/draft-failure.json') -Raw |
+  ConvertFrom-Json -Depth 100
+
+$invalidDraftRequest = $draftRequest | ConvertTo-Json -Depth 100 | ConvertFrom-Json -Depth 100
+$invalidDraftRequest.PSObject.Properties.Remove('idempotency_key')
+$results.Add((Test-SchemaObject 'draft-request without idempotency_key' $invalidDraftRequest $false))
+
+$invalidDraftSuccess = $draftSuccess | ConvertTo-Json -Depth 100 | ConvertFrom-Json -Depth 100
+$invalidDraftSuccess.input.configuration.commands.build = 'make'
+$results.Add((Test-SchemaObject 'draft-success with scalar build command' $invalidDraftSuccess $false))
+
+$invalidDraftFailure = $draftFailure | ConvertTo-Json -Depth 100 | ConvertFrom-Json -Depth 100
+$invalidDraftFailure.error.code = 'COMMAND_NOT_FOUND'
+$results.Add((Test-SchemaObject 'draft-failure with private error code' $invalidDraftFailure $false))
 
 $results.Add((Test-SemanticCase 'repair-request.json' 'OK'))
 $results.Add((Test-SemanticCase 'repair-request-reject-redundant.json' 'REPAIR_7001'))
@@ -173,6 +269,79 @@ $results.Add((Test-LocalArtifact 'repair-report.json' $successResult.output.repa
 $repairReport = Get-Content -LiteralPath (Join-Path $artifactRoot 'repair-report.json') -Raw |
   ConvertFrom-Json -Depth 100
 $results.Add((Test-LocalArtifact 'repair-verification.txt' $repairReport.verification.log.sha256 $repairReport.verification.log.size_bytes))
+
+$results.Add((Test-PackageArtifact 'draft-baseline/Dockerfile.reference' $draftSuccess.output.dockerfile.sha256 $draftSuccess.output.dockerfile.size_bytes))
+$results.Add((Test-PackageArtifact 'draft-baseline/artifacts/build-success.log' $draftSuccess.output.build_log.sha256 $draftSuccess.output.build_log.size_bytes))
+$results.Add((Test-PackageArtifact 'draft-baseline/artifacts/run-result.log' $draftSuccess.output.run_log.sha256 $draftSuccess.output.run_log.size_bytes))
+$results.Add((Test-PackageArtifact 'draft-baseline/Dockerfile.broken' $draftFailure.output.dockerfile.sha256 $draftFailure.output.dockerfile.size_bytes))
+$results.Add((Test-PackageArtifact 'draft-baseline/artifacts/build-failed.log' $draftFailure.output.build_log.sha256 $draftFailure.output.build_log.size_bytes))
+$results.Add((Test-Utf8File 'draft-baseline/artifacts/build-success.log'))
+$results.Add((Test-Utf8File 'draft-baseline/artifacts/run-result.log'))
+$results.Add((Test-Utf8File 'draft-baseline/artifacts/build-failed.log'))
+
+$requestInput = $draftRequest.input | ConvertTo-Json -Depth 100 -Compress
+$successInput = $draftSuccess.input | ConvertTo-Json -Depth 100 -Compress
+$failureInput = $draftFailure.input | ConvertTo-Json -Depth 100 -Compress
+$draftInputMatches = ($requestInput -eq $successInput -and $requestInput -eq $failureInput)
+if (-not $draftInputMatches) {
+  $failures.Add('DRAFT request, success, and failure input echoes differ')
+}
+$results.Add([pscustomobject]@{
+  Check = 'draft-input-consistency'
+  File = 'draft-request.json / draft-success.json / draft-failure.json'
+  Expected = 'identical input objects'
+  Actual = [string]$draftInputMatches
+  Passed = $draftInputMatches
+})
+
+foreach ($draftResult in @($draftSuccess, $draftFailure)) {
+  $artifactNames = if ($draftResult.status -eq 'SUCCEEDED') {
+    @('dockerfile', 'build_log', 'run_log')
+  } else {
+    @('dockerfile', 'build_log')
+  }
+  $repositoryCommit = $draftResult.input.repository.commit
+  $configurationId = $draftResult.input.configuration.configuration_id
+  $metadataMatches = $true
+  foreach ($artifactName in $artifactNames) {
+    $metadata = $draftResult.output.$artifactName
+    if (
+      $metadata.producer_job_id -ne $draftResult.job_id -or
+      $metadata.repository_commit -ne $repositoryCommit -or
+      $metadata.configuration_id -ne $configurationId
+    ) {
+      $metadataMatches = $false
+    }
+  }
+  if (-not $metadataMatches) {
+    $failures.Add("DRAFT $($draftResult.status) artifact provenance is inconsistent")
+  }
+  $resultFile = if ($draftResult.status -eq 'SUCCEEDED') {
+    'contracts/draft-success.json'
+  } else {
+    'contracts/draft-failure.json'
+  }
+  $results.Add([pscustomobject]@{
+    Check = 'draft-artifact-provenance'
+    File = $resultFile
+    Expected = 'matching job, commit, and configuration'
+    Actual = [string]$metadataMatches
+    Passed = $metadataMatches
+  })
+}
+
+$expectedPullReference = "$($draftSuccess.output.container_image.name)@$($draftSuccess.output.container_image.digest)"
+$imageDigestPinned = ($draftSuccess.output.container_image.pull_reference -eq $expectedPullReference)
+if (-not $imageDigestPinned) {
+  $failures.Add('DRAFT image pull reference is not pinned to its declared digest')
+}
+$results.Add([pscustomobject]@{
+  Check = 'draft-image-digest'
+  File = 'contracts/draft-success.json'
+  Expected = 'pull_reference equals name@digest'
+  Actual = [string]$imageDigestPinned
+  Passed = $imageDigestPinned
+})
 
 $resultAndReportMatch = (
   $successResult.output.provenance -eq $repairReport.provenance -and
