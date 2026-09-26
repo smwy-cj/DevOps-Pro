@@ -17,3 +17,12 @@
 - 待人工复核：AI 核对出 `input.configuration` 与 A06 报告同形，`input.finding` 与目标发现逐项一致，并建议保留补丁和增量构建的人工证据。MDFixer 负责人应确认这些结论后采纳；样例不表示 MDFixer 服务或检测器已运行。
 - 验证：核对 A06 报告 SHA-256 与大小、修复产物 SHA-256 与大小，并对 A06 固定 Makefile 执行 `git apply --check`。使用 Python `jsonschema` Draft 2020-12 校验九份请求、响应和报告样例，连同语义、产物及远端报告检查共 21/21 项通过；待组员在 PowerShell 7 环境重跑 `scripts/validate-contract.ps1` 并记录结果。
 - 关联文件：`contracts/schemas/task.schema.json`、`contracts/examples/repair/repair-result-success.json`、`contracts/artifacts/a06-b06/repair-report.json`、`docs/e2/REPAIR_CONTRACT.md`、`docs/e2/adr/0001-repair-contract.md`、`scripts/validate-contract.ps1`、`scripts/validate-contract.py`。
+
+## 2026-09-26：DRAFT Artifact 交付整改
+
+- 工具/模型：OpenAI Codex。
+- 任务：根据 A06 提出的五类阻塞点，补齐 DRAFT Artifact 匿名 URL、SHA-256/文件大小、UTF-8 日志、镜像 digest 和自动验收，并更新 DRAFT 契约、ADR、AI 使用记录和发布交接文档。
+- 人工判断：以仓库中的真实构建日志为准，将错误的 `hello E3` 预期修正为 `hello DevOps`；REPAIR 契约和 `e2-contract-v1` 保持不变。
+- 实际处理：发现原三个日志为 UTF-16LE，已转换为无 BOM UTF-8；新增 `scripts/validate-draft.py` 校验本地/远端 Artifact、SHA-256、文件大小、日志编码和 digest 一致性。
+- 发布边界：Git Raw 文件可在 `draft-contract-v1` 标签下匿名读取；容器镜像的公共仓库 digest 引用尚未提供，因此自动校验将其标记为发布门禁，不冒充已完成匿名 `docker pull`。
+- 关联文件：`contracts/draft-request.json`、`contracts/draft-success.json`、`contracts/draft-failure.json`、`docs/draft/DRAFT_CONTRACT.md`、`docs/draft/adr/0002-draft-artifact-delivery.md`、`docs/draft/DRAFT_RELEASE_HANDOFF.md`、`scripts/validate-draft.py`。

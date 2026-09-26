@@ -8,7 +8,7 @@
 - Commit: `3828e6e5e6f7ea27c25b0d627edef9e06b433152`
 - Build command: `make`
 - Verify command: `./hello`
-- Expected output: `hello E3`
+- Expected output: `hello DevOps`
 
 ## 项目结构
 
@@ -89,7 +89,7 @@ docker run --rm draft-reference
 预期输出：
 
 ```text
-hello E3
+hello DevOps
 ```
 
 运行日志位于：
@@ -97,6 +97,8 @@ hello E3
 ```text
 artifacts/run-result.log
 ```
+
+所有构建和运行日志按 UTF-8 保存。Artifact 的匿名 URL、SHA-256 和文件大小由仓库根目录的 `scripts/validate-draft.py` 自动校验。
 
 ## DRAFT处理流程
 

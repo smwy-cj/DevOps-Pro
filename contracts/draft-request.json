@@ -13,6 +13,12 @@
     "build_command": "make",
     "clean_command": "make clean",
     "verify_command": "./hello",
-    "expected_output": "hello E3"
+    "expected_output": "hello DevOps",
+    "artifact_policy": {
+      "authentication": "NONE",
+      "encoding": "utf-8",
+      "integrity": "SHA-256 and size_bytes",
+      "uri_policy": "HTTPS raw URL on the immutable draft-contract-v1 tag"
+    }
   }
 }

@@ -5,8 +5,24 @@
   "job_type": "DRAFT",
   "status": "FAILED",
   "output": {
-    "dockerfile": "draft-baseline/Dockerfile.broken",
-    "build_log": "draft-baseline/artifacts/build-failed.log"
+    "dockerfile": {
+      "type": "DOCKERFILE",
+      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/draft-contract-v1/draft-baseline/Dockerfile.broken",
+      "media_type": "text/plain",
+      "sha256": "8afecd21794ec1f5cca65d93ed4fe1f3d45a14f9467078e0e506b0b4ef790e4e",
+      "size_bytes": 85,
+      "authentication": "NONE",
+      "encoding": "utf-8"
+    },
+    "build_log": {
+      "type": "BUILD_LOG",
+      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/draft-contract-v1/draft-baseline/artifacts/build-failed.log",
+      "media_type": "text/plain",
+      "sha256": "8aa59bccc4e1f580a4c8bc762945fff3c8f1af593d676073854214c6b0cbcd80",
+      "size_bytes": 1612,
+      "authentication": "NONE",
+      "encoding": "utf-8"
+    }
   },
   "error": {
     "stage": "BUILD",

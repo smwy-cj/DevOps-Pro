@@ -5,14 +5,53 @@
   "job_type": "DRAFT",
   "status": "SUCCEEDED",
   "output": {
-    "dockerfile": "draft-baseline/Dockerfile.reference",
-    "image_name": "draft-reference:latest",
-    "image_id": "draft-baseline/artifacts/image-id.txt",
-    "build_log": "draft-baseline/artifacts/build-success.log",
-    "run_log": "draft-baseline/artifacts/run-result.log",
+    "dockerfile": {
+      "type": "DOCKERFILE",
+      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/draft-contract-v1/draft-baseline/Dockerfile.reference",
+      "media_type": "text/plain",
+      "sha256": "35fbf507454005d8562acb78ff307e0f81b4f899dd57aebb7aab576e6bbea300",
+      "size_bytes": 284,
+      "authentication": "NONE",
+      "encoding": "utf-8"
+    },
+    "image": {
+      "name": "draft-reference:latest",
+      "digest": "sha256:78ac90770fb4c0d28ec8bb15e7a006c33f12f76851a88776f39d3201eb79afdc",
+      "digest_artifact": {
+        "type": "CONTAINER_IMAGE",
+        "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/draft-contract-v1/draft-baseline/artifacts/image-id.txt",
+        "media_type": "text/plain",
+        "sha256": "e02dd16f2cdb83e338c81e95056029c8f314391dbe944a18256d2e74fc028c74",
+        "size_bytes": 72,
+        "authentication": "NONE",
+        "encoding": "utf-8"
+      },
+      "pull": {
+        "status": "RELEASE_BLOCKED",
+        "reason": "A public registry reference is required before anonymous digest pull can be verified."
+      }
+    },
+    "build_log": {
+      "type": "BUILD_LOG",
+      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/draft-contract-v1/draft-baseline/artifacts/build-success.log",
+      "media_type": "text/plain",
+      "sha256": "dacc5f672144c90f742185c30b2fd870633524ff886c5fb93dfa13615c147700",
+      "size_bytes": 20204,
+      "authentication": "NONE",
+      "encoding": "utf-8"
+    },
+    "run_log": {
+      "type": "TEST_LOG",
+      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/draft-contract-v1/draft-baseline/artifacts/run-result.log",
+      "media_type": "text/plain",
+      "sha256": "2bd113207dd85ff79c85419de8daaea1fa26870abb6da6e13c159f678d838a06",
+      "size_bytes": 13,
+      "authentication": "NONE",
+      "encoding": "utf-8"
+    },
     "build_exit_code": 0,
     "verify_exit_code": 0,
-    "actual_output": "hello E3"
+    "actual_output": "hello DevOps"
   },
   "error": null
 }
