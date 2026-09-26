@@ -144,8 +144,46 @@ function Test-LocalArtifact {
   }
 }
 
+function Test-DraftArtifact {
+  param(
+    [string]$RelativePath,
+    [object]$Metadata
+  )
+
+  $artifactPath = Join-Path $packageRoot $RelativePath
+  $bytes = [System.IO.File]::ReadAllBytes($artifactPath)
+  $actualHash = (Get-FileHash -LiteralPath $artifactPath -Algorithm SHA256).Hash.ToLowerInvariant()
+  try {
+    $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
+    $null = $strictUtf8.GetString($bytes)
+    $validUtf8 = $true
+  } catch {
+    $validUtf8 = $false
+  }
+  $passed = (
+    $validUtf8 -and
+    $Metadata.encoding -eq 'utf-8' -and
+    $Metadata.uri -eq $Metadata.read_method.url -and
+    $actualHash -eq $Metadata.sha256 -and
+    $bytes.Length -eq $Metadata.size_bytes
+  )
+  if (-not $passed) {
+    $failures.Add("DRAFT artifact failed: $RelativePath")
+  }
+  [pscustomobject]@{
+    Check = 'draft-artifact'
+    File = $RelativePath
+    Expected = "$($Metadata.sha256) / $($Metadata.size_bytes) bytes / UTF-8"
+    Actual = "$actualHash / $($bytes.Length) bytes / utf8=$validUtf8"
+    Passed = $passed
+  }
+}
+
 $results = [System.Collections.Generic.List[object]]::new()
 
+$results.Add((Test-SchemaDocument 'contracts/draft-request.json' $true))
+$results.Add((Test-SchemaDocument 'contracts/draft-success.json' $true))
+$results.Add((Test-SchemaDocument 'contracts/draft-failure.json' $true))
 $results.Add((Test-SchemaDocument 'contracts/examples/repair/repair-request.json' $true))
 $results.Add((Test-SchemaDocument 'contracts/examples/repair/repair-result-success.json' $true))
 $results.Add((Test-SchemaDocument 'contracts/examples/repair/repair-response-reject-redundant.json' $true))
@@ -191,6 +229,58 @@ $results.Add([pscustomobject]@{
   Passed = $resultAndReportMatch
 })
 
+$draftRequest = Get-Content -LiteralPath (Join-Path $packageRoot 'contracts/draft-request.json') -Raw |
+  ConvertFrom-Json -Depth 100
+$draftSuccess = Get-Content -LiteralPath (Join-Path $packageRoot 'contracts/draft-success.json') -Raw |
+  ConvertFrom-Json -Depth 100
+$draftFailure = Get-Content -LiteralPath (Join-Path $packageRoot 'contracts/draft-failure.json') -Raw |
+  ConvertFrom-Json -Depth 100
+$draftInputMatches = (
+  ($draftSuccess.input | ConvertTo-Json -Depth 100 -Compress) -eq ($draftRequest.input | ConvertTo-Json -Depth 100 -Compress) -and
+  ($draftFailure.input | ConvertTo-Json -Depth 100 -Compress) -eq ($draftRequest.input | ConvertTo-Json -Depth 100 -Compress) -and
+  $draftSuccess.output.repository_commit -eq $draftRequest.input.repository.commit -and
+  ($draftSuccess.output.configuration | ConvertTo-Json -Depth 100 -Compress) -eq ($draftRequest.input.configuration | ConvertTo-Json -Depth 100 -Compress) -and
+  $draftSuccess.output.verification.actual_output -eq $draftRequest.input.expected_output -and
+  $draftFailure.error.code -eq 'ENV_3002'
+)
+if (-not $draftInputMatches) {
+  $failures.Add('DRAFT request, success result, and failure result are inconsistent')
+}
+$results.Add([pscustomobject]@{
+  Check = 'draft-consistency'
+  File = 'contracts/draft-*.json'
+  Expected = 'matching input, commit, configuration, output, and failure code'
+  Actual = [string]$draftInputMatches
+  Passed = $draftInputMatches
+})
+
+$draftImage = $draftSuccess.output.image
+$imageMatches = (
+  $draftImage.reference.EndsWith("@$($draftImage.digest)") -and
+  ($draftImage.pull_command | ConvertTo-Json -Compress) -eq (@('docker', 'pull', $draftImage.reference) | ConvertTo-Json -Compress)
+)
+if (-not $imageMatches) {
+  $failures.Add('DRAFT image reference is not fixed to its declared digest')
+}
+$results.Add([pscustomobject]@{
+  Check = 'draft-image'
+  File = $draftImage.reference
+  Expected = 'reference ends in declared digest and pull argv matches'
+  Actual = [string]$imageMatches
+  Passed = $imageMatches
+})
+
+$draftArtifacts = @(
+  [pscustomobject]@{ Path = 'draft-baseline/Dockerfile.reference'; Metadata = $draftSuccess.output.dockerfile },
+  [pscustomobject]@{ Path = 'draft-baseline/artifacts/build-success.log'; Metadata = $draftSuccess.output.build_log },
+  [pscustomobject]@{ Path = 'draft-baseline/artifacts/run-result.log'; Metadata = $draftSuccess.output.run_log },
+  [pscustomobject]@{ Path = 'draft-baseline/Dockerfile.broken'; Metadata = $draftFailure.output.dockerfile },
+  [pscustomobject]@{ Path = 'draft-baseline/artifacts/build-failed.log'; Metadata = $draftFailure.output.build_log }
+)
+foreach ($draftArtifact in $draftArtifacts) {
+  $results.Add((Test-DraftArtifact $draftArtifact.Path $draftArtifact.Metadata))
+}
+
 if (-not $SkipRemote) {
   $requestObject = Get-Content -LiteralPath (Join-Path $exampleRoot 'repair-request.json') -Raw |
     ConvertFrom-Json -Depth 100
@@ -221,6 +311,53 @@ if (-not $SkipRemote) {
   } finally {
     Remove-Item -LiteralPath $temporaryFile.FullName -Force
   }
+
+  foreach ($draftArtifact in $draftArtifacts) {
+    $temporaryDraftFile = New-TemporaryFile
+    try {
+      $draftResponse = Invoke-WebRequest -Uri $draftArtifact.Metadata.uri -OutFile $temporaryDraftFile.FullName -PassThru
+      $actualHash = (Get-FileHash -LiteralPath $temporaryDraftFile.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+      $actualSize = (Get-Item -LiteralPath $temporaryDraftFile.FullName).Length
+      $actualMediaType = [string]$draftResponse.Headers.'Content-Type'
+      $remoteDraftPassed = (
+        $draftResponse.StatusCode -eq 200 -and
+        $actualMediaType -like 'text/plain*' -and
+        $actualHash -eq $draftArtifact.Metadata.sha256 -and
+        $actualSize -eq $draftArtifact.Metadata.size_bytes
+      )
+      if (-not $remoteDraftPassed) {
+        $failures.Add("remote DRAFT artifact failed: $($draftArtifact.Path)")
+      }
+      $results.Add([pscustomobject]@{
+        Check = 'remote-draft-artifact'
+        File = $draftArtifact.Metadata.uri
+        Expected = "HTTP 200 / text/plain / $($draftArtifact.Metadata.sha256) / $($draftArtifact.Metadata.size_bytes) bytes"
+        Actual = "HTTP $($draftResponse.StatusCode) / $actualMediaType / $actualHash / $actualSize bytes"
+        Passed = $remoteDraftPassed
+      })
+    } finally {
+      Remove-Item -LiteralPath $temporaryDraftFile.FullName -Force
+    }
+  }
+
+  $manifest = docker manifest inspect --verbose $draftImage.reference | ConvertFrom-Json -Depth 100
+  $manifestPassed = (
+    $LASTEXITCODE -eq 0 -and
+    $manifest.Descriptor.digest -eq $draftImage.digest -and
+    $manifest.Descriptor.mediaType -eq $draftImage.media_type -and
+    $manifest.Descriptor.platform.os -eq 'linux' -and
+    $manifest.Descriptor.platform.architecture -eq 'amd64'
+  )
+  if (-not $manifestPassed) {
+    $failures.Add('remote DRAFT image manifest is unavailable or has the wrong platform')
+  }
+  $results.Add([pscustomobject]@{
+    Check = 'remote-draft-image'
+    File = $draftImage.reference
+    Expected = 'anonymous manifest / linux / amd64'
+    Actual = "$($manifest.Descriptor.platform.os) / $($manifest.Descriptor.platform.architecture)"
+    Passed = $manifestPassed
+  })
 }
 
 $results | Format-Table -Wrap -AutoSize
