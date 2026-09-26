@@ -20,6 +20,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Capture expected broken build
+        shell: bash
+        working-directory: draft-baseline
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          if docker build --no-cache --progress=plain -f Dockerfile.broken -t draft-broken:verification . > artifacts/build-failed.log 2>&1; then
+            echo 'Broken Dockerfile unexpectedly built successfully' >&2
+            exit 1
+          fi
+          grep -Eiq 'make: not found|make: command not found|make.*not found' artifacts/build-failed.log
+          iconv -f UTF-8 -t UTF-8 artifacts/build-failed.log > /dev/null
+
       - name: Build and run the reference image
         shell: bash
         working-directory: draft-baseline
@@ -62,6 +75,7 @@ jobs:
         with:
           name: draft-reference-evidence
           path: |
+            draft-baseline/artifacts/build-failed.log
             draft-baseline/artifacts/build-success.log
             draft-baseline/artifacts/run-result.log
             draft-baseline/artifacts/image-digest.txt
