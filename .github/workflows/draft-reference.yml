@@ -4,6 +4,7 @@ on:
   push:
     branches: [dev]
     paths:
+      - '.github/workflows/draft-reference.yml'
       - 'draft-baseline/Dockerfile.reference'
       - 'draft-baseline/Makefile'
       - 'draft-baseline/src/**'
@@ -44,6 +45,17 @@ jobs:
           docker image inspect --format '{{index .RepoDigests 0}}' "$IMAGE:dev-${GITHUB_SHA}" | tee draft-baseline/artifacts/image-digest.txt
           grep -Eq '^ghcr\.io/smwy-cj/devops-pro/draft-reference@sha256:[0-9a-f]{64}$' draft-baseline/artifacts/image-digest.txt
 
+      - name: Verify anonymous pull by digest
+        shell: bash
+        run: |
+          set -euo pipefail
+          image_ref="$(cat draft-baseline/artifacts/image-digest.txt)"
+          docker logout ghcr.io
+          docker image rm "ghcr.io/smwy-cj/devops-pro/draft-reference:dev-${GITHUB_SHA}"
+          docker pull "$image_ref" 2>&1 | tee draft-baseline/artifacts/anonymous-pull.log
+          docker run --rm "$image_ref" 2>&1 | tee draft-baseline/artifacts/anonymous-run.log
+          test "$(cat draft-baseline/artifacts/anonymous-run.log)" = 'hello DevOps'
+
       - name: Upload UTF-8 evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -53,4 +65,6 @@ jobs:
             draft-baseline/artifacts/build-success.log
             draft-baseline/artifacts/run-result.log
             draft-baseline/artifacts/image-digest.txt
+            draft-baseline/artifacts/anonymous-pull.log
+            draft-baseline/artifacts/anonymous-run.log
           if-no-files-found: warn
