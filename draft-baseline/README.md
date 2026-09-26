@@ -109,20 +109,20 @@ artifacts/run-result.log
 
 ## DRAFT v2 镜像与证据
 
-`.github/workflows/draft-reference.yml` 在 `dev` 的 DRAFT 源码、Makefile 或参考 Dockerfile 更新时运行，也可以手动触发。它从 `Dockerfile.reference` 无缓存构建、运行容器并断言输出恰好为 `hello DevOps`，然后把镜像发布至 `ghcr.io/smwy-cj/devops-pro/draft-reference:dev-<commit-sha>`。
+`.github/workflows/draft-reference.yml` 在 `dev` 的工作流、DRAFT 源码、Makefile 或参考 Dockerfile 更新时运行，也可以手动触发。它重新生成失败构建日志，随后从 `Dockerfile.reference` 无缓存构建、运行容器并断言输出恰好为 `hello DevOps`，最后把镜像发布至 `ghcr.io/smwy-cj/devops-pro/draft-reference:dev-<commit-sha>`。
 
-2026-09-26 的[构建运行记录](https://github.com/smwy-cj/DevOps-Pro/actions/runs/36226968640)已成功，源码提交为 `09bab8573f008425e2fc087c71a16634bed64e7e`。仓库内 `artifacts/build-success.log` 和 `artifacts/run-result.log` 已由该次构建的 UTF-8 工件替换，`artifacts/image-digest.txt` 记录完整镜像地址：
+2026-09-26 的[最终构建运行记录](https://github.com/smwy-cj/DevOps-Pro/actions/runs/36227553388)已成功，工作流源码提交为 `6e976ba21184aa77071fa1861054e850232c0f11`。仓库内 `artifacts/build-failed.log`、`artifacts/build-success.log`、`artifacts/run-result.log` 已由该次构建的 UTF-8 工件替换，`artifacts/image-digest.txt` 记录完整镜像地址：
 
 ```text
-ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:f261c3e4893143e37caed1df2ec662244c699db0d0b3848e97f1ddce3f49d472
+ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:b2dbfef36913f7322287f155650cea3f064d2986d414700e916f87404402d2c7
 ```
 
-首次发布的 GHCR 包可能默认为私有。发布成功后在 GitHub Package 的设置中将可见性改为 Public，再在未登录 GHCR 的环境中执行工件提供的完整 digest 地址：
+同一工作流已在 `docker logout ghcr.io` 后按 digest 执行 `docker pull` 与 `docker run`，镜像被成功下载并输出 `hello DevOps`。对应证据为 `artifacts/anonymous-pull.log` 与 `artifacts/anonymous-run.log`。交付方可在自己的未登录环境再次复核：
 
 ```bash
 docker logout ghcr.io
-docker pull ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:<工作流输出的64位摘要>
-docker run --rm ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:<工作流输出的64位摘要>
+docker pull ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:b2dbfef36913f7322287f155650cea3f064d2986d414700e916f87404402d2c7
+docker run --rm ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:b2dbfef36913f7322287f155650cea3f064d2986d414700e916f87404402d2c7
 ```
 
-匿名拉取和输出均通过后，才在验收提交上创建 `e2-draft-contract-v2` Git 标签，并记录其提交 SHA、工作流运行地址与镜像 digest。当前尚未完成公开可见性和匿名拉取验收。
+以上匿名拉取与运行已由云端 Runner 验证。首次未带 token 的 `401` 是 Registry 的标准挑战响应，不表示镜像私有。

@@ -4,4 +4,4 @@
 contracts/artifacts/**/*.json text eol=lf
 contracts/artifacts/**/*.txt text eol=lf
 *.sh text eol=lf
-draft-baseline/artifacts/*.log text eol=lf
+draft-baseline/artifacts/*.log text eol=lf -whitespace

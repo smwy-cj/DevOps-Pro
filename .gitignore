@@ -55,6 +55,8 @@ compile_commands.json
 # Temporary files
 *.tmp
 *.log
+!draft-baseline/artifacts/anonymous-pull.log
+!draft-baseline/artifacts/anonymous-run.log
 *.bak
 *.swp
 
