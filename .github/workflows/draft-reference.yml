@@ -1,0 +1,55 @@
+name: DRAFT reference image
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - '.github/workflows/draft-reference.yml'
+      - 'draft-baseline/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-run-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and run the reference image
+        shell: bash
+        working-directory: draft-baseline
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          docker build --no-cache --progress=plain -f Dockerfile.reference -t draft-reference:verification . 2>&1 | tee artifacts/build-success.log
+          docker run --rm draft-reference:verification 2>&1 | tee artifacts/run-result.log
+          test "$(cat artifacts/run-result.log)" = 'hello DevOps'
+          iconv -f UTF-8 -t UTF-8 artifacts/build-success.log > /dev/null
+          iconv -f UTF-8 -t UTF-8 artifacts/run-result.log > /dev/null
+
+      - name: Publish to GHCR and record digest
+        shell: bash
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE: ghcr.io/smwy-cj/devops-pro/draft-reference
+        run: |
+          set -euo pipefail
+          echo "$GHCR_TOKEN" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
+          docker tag draft-reference:verification "$IMAGE:dev-${GITHUB_SHA}"
+          docker push "$IMAGE:dev-${GITHUB_SHA}"
+          docker image inspect --format '{{index .RepoDigests 0}}' "$IMAGE:dev-${GITHUB_SHA}" | tee draft-baseline/artifacts/image-digest.txt
+          grep -Eq '^ghcr\.io/smwy-cj/devops-pro/draft-reference@sha256:[0-9a-f]{64}$' draft-baseline/artifacts/image-digest.txt
+
+      - name: Upload UTF-8 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: draft-reference-evidence
+          path: |
+            draft-baseline/artifacts/build-success.log
+            draft-baseline/artifacts/run-result.log
+            draft-baseline/artifacts/image-digest.txt
+          if-no-files-found: warn

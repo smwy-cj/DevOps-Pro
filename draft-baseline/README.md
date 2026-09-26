@@ -8,7 +8,7 @@
 - Commit: `3828e6e5e6f7ea27c25b0d627edef9e06b433152`
 - Build command: `make`
 - Verify command: `./hello`
-- Expected output: `hello E3`
+- Expected output: `hello DevOps`
 
 ## 项目结构
 
@@ -89,7 +89,7 @@ docker run --rm draft-reference
 预期输出：
 
 ```text
-hello E3
+hello DevOps
 ```
 
 运行日志位于：
@@ -106,3 +106,17 @@ artifacts/run-result.log
 4. 在Dockerfile中安装构建工具；
 5. 重新构建镜像；
 6. 运行容器并验证输出。
+
+## DRAFT v2 镜像与证据
+
+`.github/workflows/draft-reference.yml` 在 `dev` 的 DRAFT 文件更新时运行，也可以手动触发。它从 `Dockerfile.reference` 无缓存构建、运行容器并断言输出恰好为 `hello DevOps`，然后把镜像发布至 `ghcr.io/smwy-cj/devops-pro/draft-reference:dev-<commit-sha>`。工作流工件 `draft-reference-evidence` 包含本次重新生成的 UTF-8 构建日志、运行日志和完整的 `@sha256:` 镜像地址。旧的仓库内日志为 UTF-16 历史记录，不能当作本次构建证据。
+
+首次发布的 GHCR 包可能默认为私有。发布成功后在 GitHub Package 的设置中将可见性改为 Public，再在未登录 GHCR 的环境中执行工件提供的完整 digest 地址：
+
+```bash
+docker logout ghcr.io
+docker pull ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:<工作流输出的64位摘要>
+docker run --rm ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:<工作流输出的64位摘要>
+```
+
+匿名拉取和输出均通过后，才在验收提交上创建 `e2-draft-contract-v2` Git 标签，并记录其提交 SHA、工作流运行地址与镜像 digest。
