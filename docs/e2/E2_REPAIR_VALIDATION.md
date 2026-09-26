@@ -2,11 +2,11 @@
 
 ## 1. 校验结论
 
-成员 3 的 E2 REPAIR 契约成果已应用至独立验证分支，并完成本地校验。
+组员三庄子宣的 E2 REPAIR 契约成果已应用至独立验证分支，并完成本地校验。
 
 - 验证分支：`integration/e2-repair-validation`
-- 成员 3 原始分支：`member3/e2-repair-contract`
-- 成员 3 原始提交：`4259d387b280ebd5f460edf964a192e38929c0a8`
+- 庄子宣原始分支：`member3/e2-repair-contract`
+- 庄子宣原始提交：`4259d387b280ebd5f460edf964a192e38929c0a8`
 - 应用后的提交：`508fbcbb77155dd312bf5b53c4b5717e1dc3a4a4`
 - LF 兼容修复提交：`9d055227cf7742ed6e451d7dc679f5590d9da110`
 - 校验结果：`All 20 contract checks passed.`
@@ -15,7 +15,7 @@
 ## 2. 集成过程
 
 1. 从最新 `dev` 创建 `integration/e2-repair-validation`。
-2. 将成员 3 的提交 `4259d38` 通过 `cherry-pick` 应用到验证分支。
+2. 将庄子宣的提交 `4259d38` 通过 `cherry-pick` 应用到验证分支。
 3. 使用 `scripts/validate-contract.ps1` 校验 JSON Schema、语义规则、拒绝响应码、本地产物元数据和远端错误报告。
 4. 修复 Windows 工作区的换行符兼容问题。
 5. 重新运行全部校验，20 项检查全部通过。
@@ -73,7 +73,7 @@ Windows 的 `core.autocrlf=true` 将三个文本产物检出为 CRLF，导致实
 
 ## 6. MDFixer 负责人补充复核（2026-09-22）
 
-以上 20 项是组员一在提交 `9d055227cf7742ed6e451d7dc679f5590d9da110` 上完成的历史记录。此后，MDFixer 负责人基于集成分支提交 `357df1612bc9870c4e9fcb9a85a8da776e43b94f` 补充了成功结果的来源与重检状态、Makefile 声明风格、项目路径基准，并新增跨平台校验脚本。本节记录的是**本地待合入文件**，不表示已有新的 GitHub 提交。
+以上 20 项是崔杰在提交 `9d055227cf7742ed6e451d7dc679f5590d9da110` 上完成的历史记录。此后，MDFixer 负责人朱钱晨基于集成分支提交 `357df1612bc9870c4e9fcb9a85a8da776e43b94f` 补充了成功结果的来源与重检状态、Makefile 声明风格、项目路径基准，并新增跨平台校验脚本。本节记录的是**本地待合入文件**，不表示已有新的 GitHub 提交。
 
 在仓库根目录安装 Python 3 依赖并执行：
 

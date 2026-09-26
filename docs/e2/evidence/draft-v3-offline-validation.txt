@@ -1,0 +1,35 @@
+E2 DRAFT v3 pre-release offline validation
+Date: 2026-09-26
+Command: python3 scripts/validate-contract.py --skip-remote
+
+PASS schema draft-request.json
+PASS schema draft-success.json
+PASS schema draft-failure.json
+PASS schema repair-request.json
+PASS schema repair-result-success.json
+PASS schema repair-response-reject-redundant.json
+PASS schema repair-response-reject-commit-mismatch.json
+PASS schema repair-response-reject-configuration-mismatch.json
+PASS schema repair-report.json
+PASS schema repair-request-reject-redundant.json
+PASS schema repair-request-reject-commit-mismatch.json
+PASS schema repair-request-reject-configuration-mismatch.json
+PASS semantic repair-request.json
+PASS semantic repair-request-reject-redundant.json
+PASS semantic repair-request-reject-commit-mismatch.json
+PASS semantic repair-request-reject-configuration-mismatch.json
+PASS response redundant
+PASS response commit-mismatch
+PASS response configuration-mismatch
+PASS artifact fix-main-o-config-h.patch
+PASS artifact repair-report.json
+PASS artifact repair-verification.txt
+PASS result/report consistency
+PASS DRAFT request/result consistency
+PASS DRAFT immutable image reference
+PASS DRAFT artifact Dockerfile.reference
+PASS DRAFT artifact build-success.log
+PASS DRAFT artifact run-result.log
+PASS DRAFT artifact Dockerfile.broken
+PASS DRAFT artifact build-failed.log
+30/30 checks passed

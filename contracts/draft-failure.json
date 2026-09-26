@@ -1,17 +1,98 @@
 {
-  "schema_version": "1.0",
-  "job_id": "draft-job-001",
-  "trace_id": "draft-trace-001",
+  "schema_version": "1.0.0",
+  "job_id": "job-draft-b06-failure-001",
+  "trace_id": "trace-draft-b06-v3-failure-001",
   "job_type": "DRAFT",
   "status": "FAILED",
+  "created_at": "2026-09-26T07:41:35Z",
+  "updated_at": "2026-09-26T07:41:40Z",
+  "input": {
+    "repository": {
+      "url": "https://github.com/smwy-cj/DevOps-Pro.git",
+      "commit": "6e976ba21184aa77071fa1861054e850232c0f11",
+      "subdirectory": "draft-baseline"
+    },
+    "configuration": {
+      "configuration_id": "gcc-12.2.0-make-4.3-debian12-amd64",
+      "os": "Debian GNU/Linux 12 (bookworm)",
+      "architecture": "amd64",
+      "tool_versions": {
+        "gcc": "12.2.0",
+        "make": "4.3"
+      },
+      "commands": {
+        "clean": [
+          "make",
+          "clean"
+        ],
+        "build": [
+          "make"
+        ],
+        "verify": [
+          "./hello"
+        ]
+      }
+    },
+    "documents": [
+      "README.md"
+    ],
+    "expected_output": "hello DevOps"
+  },
   "output": {
-    "dockerfile": "draft-baseline/Dockerfile.broken",
-    "build_log": "draft-baseline/artifacts/build-failed.log"
+    "dockerfile": {
+      "artifact_id": "dockerfile-draft-b06-failure-001",
+      "type": "DOCKERFILE",
+      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-draft-contract-v3/draft-baseline/Dockerfile.broken",
+      "media_type": "text/x-dockerfile",
+      "encoding": "utf-8",
+      "producer_job_id": "job-draft-b06-failure-001",
+      "repository_commit": "6e976ba21184aa77071fa1861054e850232c0f11",
+      "configuration_id": "gcc-12.2.0-make-4.3-debian12-amd64",
+      "sha256": "3b4beff8fcb0f1d15fc7d741c77dc810ddec2e7c6f9b1a923f77ebca091950a2",
+      "size_bytes": 77,
+      "read_method": {
+        "method": "HTTPS_GET",
+        "url": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-draft-contract-v3/draft-baseline/Dockerfile.broken",
+        "authentication": "NONE",
+        "expected_status": 200,
+        "response_media_type": "text/plain; charset=utf-8",
+        "encoding": "utf-8"
+      }
+    },
+    "build_log": {
+      "artifact_id": "build-log-draft-b06-failure-001",
+      "type": "BUILD_LOG",
+      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-draft-contract-v3/draft-baseline/artifacts/build-failed.log",
+      "media_type": "text/plain",
+      "encoding": "utf-8",
+      "producer_job_id": "job-draft-b06-failure-001",
+      "repository_commit": "6e976ba21184aa77071fa1861054e850232c0f11",
+      "configuration_id": "gcc-12.2.0-make-4.3-debian12-amd64",
+      "sha256": "e16f43fe5c6444e4868a78eb71590153e64cb0fcae981c173eedfe3f245f6c00",
+      "size_bytes": 2048,
+      "read_method": {
+        "method": "HTTPS_GET",
+        "url": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-draft-contract-v3/draft-baseline/artifacts/build-failed.log",
+        "authentication": "NONE",
+        "expected_status": 200,
+        "response_media_type": "text/plain; charset=utf-8",
+        "encoding": "utf-8"
+      }
+    }
   },
   "error": {
-    "stage": "BUILD",
-    "code": "COMMAND_NOT_FOUND",
-    "message": "make: not found",
-    "exit_code": 127
+    "code": "ENV_3002",
+    "message": "The generated Dockerfile could not build the project because GNU Make was unavailable.",
+    "retryable": false,
+    "details": {
+      "stage": "IMAGE_BUILD",
+      "exit_code": 127
+    }
+  },
+  "execution": {
+    "started_at": "2026-09-26T07:41:35Z",
+    "finished_at": "2026-09-26T07:41:40Z",
+    "duration_ms": 5000,
+    "worker_id": "github-actions-run-36227553388"
   }
 }

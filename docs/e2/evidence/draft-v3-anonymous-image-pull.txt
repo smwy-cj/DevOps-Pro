@@ -1,0 +1,18 @@
+E2 DRAFT v3 anonymous registry pull verification
+Date: 2026-09-26
+Work package owner: 屠育玮
+Independent execution support: 朱钱晨
+Authentication: none (anonymous GHCR bearer token)
+Command: python3 scripts/verify-anonymous-image-pull.py
+
+PASS anonymous bearer token
+PASS manifest sha256:b2dbfef36913f7322287f155650cea3f064d2986d414700e916f87404402d2c7 1570 bytes
+PASS blob sha256:1c6f778ab5c14f694b06ce92e21aeadd22096ff1d95bafd60886f239b539e347 1764 bytes
+PASS blob sha256:501c3e032d323c5d2ecdc2c3da91ccdf6497a1d8e69fac78ad18322540160970 29153837 bytes
+PASS blob sha256:1a2b802cc5eb5dd6467ca598b3d612e64a5990072e5a2306811a4c94ea3456c7 94 bytes
+PASS blob sha256:dc1dca7d2d2439c339a21944542cbfe107e371a88f6a09c78160997e898667fe 69790849 bytes
+PASS blob sha256:0a4c031f7425be164554ec21b817adbd3d6a0c22591ea2334c49476593886b12 1941 bytes
+PASS blob sha256:e94ede543d59f57c2bf515a81699d10c796cf6225ad8e4ed365b6f7654eb293c 228 bytes
+PASS blob sha256:ceaf16acfb22a0cbb256f41ca456fc01a77b29042b69185247f6794e60fafc3e 2289 bytes
+PASS platform linux/amd64
+PASS anonymous image pull 7 blobs 98951002 bytes
