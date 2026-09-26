@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-draft-contract-v2/contracts/schemas/task.schema.json",
+  "$id": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-contract-v1/contracts/schemas/task.schema.json",
   "title": "A06/B06 asynchronous task contract",
-  "description": "Shared 1.0.0 task envelope and request/result contracts for DRAFT and REPAIR jobs.",
+  "description": "B06 proposal for the shared task envelope and the REPAIR request/result contract. Agreement with A06 is recorded separately in the ADR.",
   "$ref": "#/$defs/document",
   "$defs": {
     "schemaVersion": {
@@ -406,199 +406,6 @@
       },
       "additionalProperties": false
     },
-    "draftInput": {
-      "type": "object",
-      "required": [
-        "repository",
-        "configuration",
-        "documents",
-        "expected_output"
-      ],
-      "properties": {
-        "repository": {
-          "$ref": "#/$defs/repository"
-        },
-        "configuration": {
-          "$ref": "#/$defs/configuration"
-        },
-        "documents": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Path relative to repository.subdirectory."
-          }
-        },
-        "expected_output": {
-          "type": "string",
-          "minLength": 1
-        }
-      },
-      "additionalProperties": false
-    },
-    "draftDockerfileArtifact": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/artifactRef"
-        },
-        {
-          "properties": {
-            "type": {
-              "const": "DOCKERFILE"
-            }
-          }
-        }
-      ]
-    },
-    "draftBuildLogArtifact": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/artifactRef"
-        },
-        {
-          "properties": {
-            "type": {
-              "const": "BUILD_LOG"
-            }
-          }
-        }
-      ]
-    },
-    "draftRunLogArtifact": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/artifactRef"
-        },
-        {
-          "properties": {
-            "type": {
-              "const": "TEST_LOG"
-            }
-          }
-        }
-      ]
-    },
-    "containerImage": {
-      "type": "object",
-      "required": [
-        "name",
-        "digest",
-        "pull_reference"
-      ],
-      "properties": {
-        "name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "digest": {
-          "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
-        },
-        "pull_reference": {
-          "type": "string",
-          "pattern": "^.+@sha256:[0-9a-f]{64}$",
-          "description": "Immutable image reference suitable for docker pull."
-        }
-      },
-      "additionalProperties": false
-    },
-    "draftSuccessOutput": {
-      "type": "object",
-      "required": [
-        "dockerfile",
-        "container_image",
-        "build_log",
-        "run_log",
-        "build_exit_code",
-        "verify_exit_code",
-        "actual_output"
-      ],
-      "properties": {
-        "dockerfile": {
-          "$ref": "#/$defs/draftDockerfileArtifact"
-        },
-        "container_image": {
-          "$ref": "#/$defs/containerImage"
-        },
-        "build_log": {
-          "$ref": "#/$defs/draftBuildLogArtifact"
-        },
-        "run_log": {
-          "$ref": "#/$defs/draftRunLogArtifact"
-        },
-        "build_exit_code": {
-          "type": "integer",
-          "const": 0
-        },
-        "verify_exit_code": {
-          "type": "integer",
-          "const": 0
-        },
-        "actual_output": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "draftFailureOutput": {
-      "type": "object",
-      "required": [
-        "dockerfile",
-        "build_log",
-        "failed_stage",
-        "exit_code"
-      ],
-      "properties": {
-        "dockerfile": {
-          "$ref": "#/$defs/draftDockerfileArtifact"
-        },
-        "build_log": {
-          "$ref": "#/$defs/draftBuildLogArtifact"
-        },
-        "failed_stage": {
-          "type": "string",
-          "enum": [
-            "CLEAN",
-            "BUILD",
-            "VERIFY"
-          ]
-        },
-        "exit_code": {
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false
-    },
-    "completedExecution": {
-      "type": "object",
-      "required": [
-        "started_at",
-        "finished_at",
-        "duration_ms",
-        "worker_id"
-      ],
-      "properties": {
-        "started_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "finished_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "duration_ms": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "worker_id": {
-          "type": "string",
-          "minLength": 1
-        }
-      },
-      "additionalProperties": false
-    },
     "systemError": {
       "type": "object",
       "required": [
@@ -822,25 +629,6 @@
               }
             }
           }
-        },
-        {
-          "if": {
-            "properties": {
-              "job_type": {
-                "const": "DRAFT"
-              }
-            },
-            "required": [
-              "job_type"
-            ]
-          },
-          "then": {
-            "properties": {
-              "input": {
-                "$ref": "#/$defs/draftInput"
-              }
-            }
-          }
         }
       ],
       "additionalProperties": false
@@ -957,31 +745,6 @@
         {
           "if": {
             "properties": {
-              "job_type": {
-                "const": "DRAFT"
-              }
-            },
-            "required": [
-              "job_type"
-            ]
-          },
-          "then": {
-            "required": [
-              "execution"
-            ],
-            "properties": {
-              "input": {
-                "$ref": "#/$defs/draftInput"
-              },
-              "execution": {
-                "$ref": "#/$defs/completedExecution"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
               "status": {
                 "const": "SUCCEEDED"
               },
@@ -1004,66 +767,6 @@
               },
               "error": {
                 "type": "null"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "status": {
-                "const": "SUCCEEDED"
-              },
-              "job_type": {
-                "const": "DRAFT"
-              }
-            },
-            "required": [
-              "status",
-              "job_type"
-            ]
-          },
-          "then": {
-            "required": [
-              "output",
-              "error"
-            ],
-            "properties": {
-              "output": {
-                "$ref": "#/$defs/draftSuccessOutput"
-              },
-              "error": {
-                "type": "null"
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "status": {
-                "const": "FAILED"
-              },
-              "job_type": {
-                "const": "DRAFT"
-              }
-            },
-            "required": [
-              "status",
-              "job_type"
-            ]
-          },
-          "then": {
-            "required": [
-              "output",
-              "error"
-            ],
-            "properties": {
-              "output": {
-                "$ref": "#/$defs/draftFailureOutput"
-              },
-              "error": {
-                "$ref": "#/$defs/systemError"
               }
             }
           }

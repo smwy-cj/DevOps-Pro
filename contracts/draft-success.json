@@ -1,91 +1,18 @@
 {
-  "schema_version": "1.0.0",
-  "job_id": "job-draft-001",
-  "trace_id": "trace-draft-001",
+  "schema_version": "1.0",
+  "job_id": "draft-job-001",
+  "trace_id": "draft-trace-001",
   "job_type": "DRAFT",
   "status": "SUCCEEDED",
-  "created_at": "2026-09-26T07:41:35Z",
-  "updated_at": "2026-09-26T07:42:12Z",
-  "input": {
-    "repository": {
-      "url": "https://github.com/smwy-cj/DevOps-Pro.git",
-      "commit": "6e976ba21184aa77071fa1861054e850232c0f11",
-      "subdirectory": "draft-baseline"
-    },
-    "configuration": {
-      "configuration_id": "gcc-12.2.0-bookworm-amd64",
-      "os": "Debian GNU/Linux 12 (bookworm)",
-      "architecture": "amd64",
-      "tool_versions": {
-        "make": "4.3",
-        "gcc": "12.2.0"
-      },
-      "commands": {
-        "clean": [
-          "make",
-          "clean"
-        ],
-        "build": [
-          "make"
-        ],
-        "verify": [
-          "./hello"
-        ]
-      }
-    },
-    "documents": [
-      "README.md"
-    ],
-    "expected_output": "hello DevOps"
-  },
   "output": {
-    "dockerfile": {
-      "artifact_id": "dockerfile-draft-reference-001",
-      "type": "DOCKERFILE",
-      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-draft-contract-v2/draft-baseline/Dockerfile.reference",
-      "media_type": "text/plain",
-      "producer_job_id": "job-draft-001",
-      "repository_commit": "6e976ba21184aa77071fa1861054e850232c0f11",
-      "configuration_id": "gcc-12.2.0-bookworm-amd64",
-      "sha256": "8dfcf35e3726f1252bd60e89c045f72a28f47ad2fa930e3269b4e0a5c15c1ba5",
-      "size_bytes": 268
-    },
-    "container_image": {
-      "name": "ghcr.io/smwy-cj/devops-pro/draft-reference",
-      "digest": "sha256:b2dbfef36913f7322287f155650cea3f064d2986d414700e916f87404402d2c7",
-      "pull_reference": "ghcr.io/smwy-cj/devops-pro/draft-reference@sha256:b2dbfef36913f7322287f155650cea3f064d2986d414700e916f87404402d2c7"
-    },
-    "build_log": {
-      "artifact_id": "build-log-draft-success-001",
-      "type": "BUILD_LOG",
-      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-draft-contract-v2/draft-baseline/artifacts/build-success.log",
-      "media_type": "text/plain",
-      "producer_job_id": "job-draft-001",
-      "repository_commit": "6e976ba21184aa77071fa1861054e850232c0f11",
-      "configuration_id": "gcc-12.2.0-bookworm-amd64",
-      "sha256": "825d7ebff84f52a17b21add44579f2224c665fae881d0dcab3a82f9bd8aad3a6",
-      "size_bytes": 19166
-    },
-    "run_log": {
-      "artifact_id": "run-log-draft-success-001",
-      "type": "TEST_LOG",
-      "uri": "https://raw.githubusercontent.com/smwy-cj/DevOps-Pro/e2-draft-contract-v2/draft-baseline/artifacts/run-result.log",
-      "media_type": "text/plain",
-      "producer_job_id": "job-draft-001",
-      "repository_commit": "6e976ba21184aa77071fa1861054e850232c0f11",
-      "configuration_id": "gcc-12.2.0-bookworm-amd64",
-      "sha256": "2bd113207dd85ff79c85419de8daaea1fa26870abb6da6e13c159f678d838a06",
-      "size_bytes": 13
-    },
+    "dockerfile": "draft-baseline/Dockerfile.reference",
+    "image_name": "draft-reference:latest",
+    "image_id": "draft-baseline/artifacts/image-id.txt",
+    "build_log": "draft-baseline/artifacts/build-success.log",
+    "run_log": "draft-baseline/artifacts/run-result.log",
     "build_exit_code": 0,
     "verify_exit_code": 0,
-    "actual_output": "hello DevOps"
+    "actual_output": "hello E3"
   },
-  "error": null,
-  "execution": {
-    "started_at": "2026-09-26T07:41:35Z",
-    "finished_at": "2026-09-26T07:42:12Z",
-    "duration_ms": 37000,
-    "worker_id": "github-actions-ubuntu-latest"
-  }
+  "error": null
 }

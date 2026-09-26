@@ -1,38 +1,18 @@
 {
-  "schema_version": "1.0.0",
-  "trace_id": "trace-draft-001",
-  "idempotency_key": "draft-6e976ba2-amd64-001",
+  "schema_version": "1.0",
+  "job_id": "draft-job-001",
+  "trace_id": "draft-trace-001",
   "job_type": "DRAFT",
   "input": {
-    "repository": {
-      "url": "https://github.com/smwy-cj/DevOps-Pro.git",
-      "commit": "6e976ba21184aa77071fa1861054e850232c0f11",
-      "subdirectory": "draft-baseline"
-    },
-    "configuration": {
-      "configuration_id": "gcc-12.2.0-bookworm-amd64",
-      "os": "Debian GNU/Linux 12 (bookworm)",
-      "architecture": "amd64",
-      "tool_versions": {
-        "make": "4.3",
-        "gcc": "12.2.0"
-      },
-      "commands": {
-        "clean": [
-          "make",
-          "clean"
-        ],
-        "build": [
-          "make"
-        ],
-        "verify": [
-          "./hello"
-        ]
-      }
-    },
+    "repository": "https://github.com/smwy-cj/DevOps-Pro.git",
+    "commit": "3828e6e5e6f7ea27c25b0d627edef9e06b433152",
+    "project_path": "draft-baseline",
     "documents": [
-      "README.md"
+      "draft-baseline/README.md"
     ],
-    "expected_output": "hello DevOps"
+    "build_command": "make",
+    "clean_command": "make clean",
+    "verify_command": "./hello",
+    "expected_output": "hello E3"
   }
 }

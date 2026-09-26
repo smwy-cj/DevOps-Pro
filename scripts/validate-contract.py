@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import copy
 import hashlib
 import json
 import re
@@ -18,8 +17,6 @@ from jsonschema import Draft202012Validator, FormatChecker
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLES = ROOT / "contracts/examples/repair"
 ARTIFACTS = ROOT / "contracts/artifacts/a06-b06"
-DRAFT_EXAMPLES = ROOT / "contracts"
-DRAFT_ARTIFACTS = ROOT / "draft-baseline"
 SCHEMA = ROOT / "contracts/schemas/task.schema.json"
 
 
@@ -72,29 +69,10 @@ def main() -> int:
         (EXAMPLES / "repair-request-reject-redundant.json", False),
         (EXAMPLES / "repair-request-reject-commit-mismatch.json", True),
         (EXAMPLES / "repair-request-reject-configuration-mismatch.json", True),
-        (DRAFT_EXAMPLES / "draft-request.json", True),
-        (DRAFT_EXAMPLES / "draft-success.json", True),
-        (DRAFT_EXAMPLES / "draft-failure.json", True),
     ]
     for path, expected_valid in schema_cases:
         actual_valid = validator.is_valid(read_json(path))
         check("schema " + path.name, actual_valid == expected_valid)
-
-    draft_request = read_json(DRAFT_EXAMPLES / "draft-request.json")
-    draft_success = read_json(DRAFT_EXAMPLES / "draft-success.json")
-    draft_failure = read_json(DRAFT_EXAMPLES / "draft-failure.json")
-
-    invalid_draft_request = copy.deepcopy(draft_request)
-    del invalid_draft_request["idempotency_key"]
-    check("schema draft request requires idempotency_key", not validator.is_valid(invalid_draft_request))
-
-    invalid_draft_success = copy.deepcopy(draft_success)
-    invalid_draft_success["input"]["configuration"]["commands"]["build"] = "make"
-    check("schema draft commands require argv arrays", not validator.is_valid(invalid_draft_success))
-
-    invalid_draft_failure = copy.deepcopy(draft_failure)
-    invalid_draft_failure["error"]["code"] = "COMMAND_NOT_FOUND"
-    check("schema draft failure requires public error code", not validator.is_valid(invalid_draft_failure))
 
     semantic_cases = [
         ("repair-request.json", "OK"),
@@ -120,51 +98,6 @@ def main() -> int:
     for filename, metadata in artifact_cases:
         data = (ARTIFACTS / filename).read_bytes()
         check("artifact " + filename, sha256(data) == metadata["sha256"] and len(data) == metadata["size_bytes"])
-
-    draft_artifact_cases = [
-        ("Dockerfile.reference", draft_success["output"]["dockerfile"]),
-        ("artifacts/build-success.log", draft_success["output"]["build_log"]),
-        ("artifacts/run-result.log", draft_success["output"]["run_log"]),
-        ("Dockerfile.broken", draft_failure["output"]["dockerfile"]),
-        ("artifacts/build-failed.log", draft_failure["output"]["build_log"]),
-    ]
-    for relative_path, metadata in draft_artifact_cases:
-        data = (DRAFT_ARTIFACTS / relative_path).read_bytes()
-        check(
-            "draft artifact " + relative_path,
-            sha256(data) == metadata["sha256"] and len(data) == metadata["size_bytes"],
-        )
-        if relative_path.endswith(".log"):
-            try:
-                data.decode("utf-8")
-                valid_utf8 = True
-            except UnicodeDecodeError:
-                valid_utf8 = False
-            check("draft artifact utf-8 " + relative_path, valid_utf8)
-
-    check(
-        "draft input echo consistency",
-        draft_request["input"] == draft_success["input"] == draft_failure["input"],
-    )
-    draft_result_artifacts = [
-        ("success", draft_success, ("dockerfile", "build_log", "run_log")),
-        ("failure", draft_failure, ("dockerfile", "build_log")),
-    ]
-    for result_name, result, artifact_names in draft_result_artifacts:
-        repository_commit = result["input"]["repository"]["commit"]
-        configuration_id = result["input"]["configuration"]["configuration_id"]
-        metadata_matches = all(
-            result["output"][artifact_name]["producer_job_id"] == result["job_id"]
-            and result["output"][artifact_name]["repository_commit"] == repository_commit
-            and result["output"][artifact_name]["configuration_id"] == configuration_id
-            for artifact_name in artifact_names
-        )
-        check("draft " + result_name + " artifact provenance", metadata_matches)
-    image = draft_success["output"]["container_image"]
-    check(
-        "draft image digest pin",
-        image["pull_reference"] == image["name"] + "@" + image["digest"],
-    )
 
     check(
         "result/report consistency",
