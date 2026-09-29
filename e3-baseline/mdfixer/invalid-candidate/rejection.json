@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "provenance": "MANUAL_REFERENCE",
+  "source_commit": "be73686c6a9fdbb7c4d3eadb45779233afa33083",
+  "candidate": "invalid.patch",
+  "decision": "REJECTED",
+  "reason": "candidate declares nonexistent.h and build validation fails",
+  "failed_log": "failed-validation.log",
+  "recovery": {
+    "restored_file": "Makefile.before",
+    "build_exit_code": 0,
+    "run_exit_code": 0,
+    "stdout_exact": "1\n",
+    "log": "restore.log"
+  }
+}

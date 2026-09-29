@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "provenance": "MANUAL_REFERENCE",
+  "case_id": "b06-e3-mdfixer-target-style",
+  "repository": {
+    "url": "https://github.com/smwy-cj/DevOps-Pro.git",
+    "commit": "be73686c6a9fdbb7c4d3eadb45779233afa33083",
+    "subdirectory": "e3-baseline/mdfixer/fixed-input"
+  },
+  "configuration": {
+    "configuration_id": "macos-26.6.2-arm64-clang21-make3.81",
+    "os": "macOS 26.6.2",
+    "architecture": "arm64",
+    "compiler": "Apple clang 21.0.0",
+    "make": "GNU Make 3.81",
+    "clean_argv": [
+      "make",
+      "clean"
+    ],
+    "build_argv": [
+      "make"
+    ],
+    "verify_argv": [
+      "./app"
+    ]
+  },
+  "findings": [
+    {
+      "type": "MISSING",
+      "target": "main.o",
+      "dependency": "config.h",
+      "makefile_location": {
+        "path": "Makefile",
+        "line": 8
+      },
+      "source_evidence": {
+        "path": "main.c",
+        "line": 2,
+        "content": "#include \"config.h\""
+      },
+      "behavior_evidence": {
+        "initial_output": "1",
+        "incremental_after_header_change": "1",
+        "clean_build_after_header_change": "2",
+        "logs_directory": "../logs"
+      }
+    }
+  ]
+}

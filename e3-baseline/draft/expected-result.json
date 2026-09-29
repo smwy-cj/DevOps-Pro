@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "provenance": "MANUAL_REFERENCE",
+  "case_id": "b06-e3-draft-tiny-greeting",
+  "repository_commit": "be73686c6a9fdbb7c4d3eadb45779233afa33083",
+  "project": {
+    "directory": "project",
+    "language": "C",
+    "build_system": "GNU Make"
+  },
+  "build": {
+    "argv": [
+      "make",
+      "clean",
+      "&&",
+      "make"
+    ],
+    "expected_exit_code": 0,
+    "expected_artifact": "hello"
+  },
+  "verify": {
+    "argv": [
+      "./hello"
+    ],
+    "expected_exit_code": 0,
+    "stdout_exact": "hello E3\n"
+  },
+  "failure_candidate": {
+    "dockerfile": "Dockerfile.broken",
+    "expected_build_success": false,
+    "expected_reason": "missing make or C toolchain"
+  },
+  "reference_candidate": {
+    "dockerfile": "Dockerfile.reference",
+    "expected_build_success": true,
+    "expected_run_success": true
+  },
+  "environment_record": "../environment.txt"
+}

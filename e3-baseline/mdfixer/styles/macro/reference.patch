@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,7 @@
+ CC = cc
+ CFLAGS = -Wall -Wextra
+ TARGET = app
+-DEPS = main.c
++DEPS = main.c config.h
+ 
+ $(TARGET): main.o
+ 	$(CC) main.o -o $(TARGET)

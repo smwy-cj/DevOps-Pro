@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -5,7 +5,7 @@
+ $(TARGET): main.o
+ 	$(CC) main.o -o $(TARGET)
+ 
+-main.o: main.c
++main.o: main.c config.h nonexistent.h
+ 	$(CC) $(CFLAGS) -c main.c -o main.o
+ 
+ clean:

@@ -1,0 +1,9 @@
+cc -Wall -Wextra -MMD -MP -c main.c -o main.o
+cc main.o -o app
+initial_output:
+1
+incremental_after_config_change:
+cc -Wall -Wextra -MMD -MP -c main.c -o main.o
+cc main.o -o app
+output_after_config_change:
+3
