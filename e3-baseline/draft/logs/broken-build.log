@@ -1,0 +1,53 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.broken
+#1 transferring dockerfile: 121B 0.0s done
+#1 DONE 0.0s
+
+#2 [auth] library/debian:pull token for registry-1.docker.io
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/debian:bookworm-slim
+#3 DONE 0.4s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 1.01kB done
+#5 DONE 0.0s
+
+#6 [1/4] FROM docker.io/library/debian:bookworm-slim@sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251
+#6 resolve docker.io/library/debian:bookworm-slim@sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251 done
+#6 sha256:774043ccc8ccd0d0833a9ee0792142ab7ad93df971e59dd248fbf82db16d0150 27.26MB / 28.24MB 0.1s
+#6 sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251 5.65kB / 5.65kB done
+#6 sha256:f3034a6ec3c1205360777c4aae76234998866ad18806ae62b63a3f84ccad782b 1.02kB / 1.02kB done
+#6 sha256:db9f02c6bde9fa90cc8074c92754b2b046947392f1a857726e77f041febb7b82 453B / 453B done
+#6 sha256:774043ccc8ccd0d0833a9ee0792142ab7ad93df971e59dd248fbf82db16d0150 28.24MB / 28.24MB 0.1s done
+#6 extracting sha256:774043ccc8ccd0d0833a9ee0792142ab7ad93df971e59dd248fbf82db16d0150 0.1s
+#6 extracting sha256:774043ccc8ccd0d0833a9ee0792142ab7ad93df971e59dd248fbf82db16d0150 1.1s done
+#6 DONE 1.3s
+
+#7 [2/4] WORKDIR /work
+#7 DONE 2.7s
+
+#8 [3/4] COPY . .
+#8 DONE 0.0s
+
+#9 [4/4] RUN make
+#9 0.177 /bin/sh: 1: make: not found
+#9 ERROR: process "/bin/sh -c make" did not complete successfully: exit code: 127
+------
+ > [4/4] RUN make:
+0.177 /bin/sh: 1: make: not found
+------
+Dockerfile.broken:7
+--------------------
+   5 |     COPY . .
+   6 |     
+   7 | >>> RUN make
+   8 |     
+   9 |     CMD ["./hello"]
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c make" did not complete successfully: exit code: 127
