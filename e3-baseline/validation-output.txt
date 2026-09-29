@@ -1,0 +1,47 @@
+PASS: JSON is parseable: e3-baseline\draft\expected-result.json
+PASS: JSON is parseable: e3-baseline\mdfixer\fixed-input\missing-report.json
+PASS: JSON is parseable: e3-baseline\commands.json
+PASS: JSON is parseable: e3-baseline\observations.json
+PASS: draft expected result references the fixed source commit
+PASS: MDFixer missing report references the fixed source commit
+PASS: commands metadata references the fixed source commit
+PASS: observations metadata references the fixed source commit
+PASS: commands metadata records build, verify, patch, and restore for target
+PASS: commands metadata records build, verify, patch, and restore for macro
+PASS: commands metadata records build, verify, patch, and restore for implicit
+PASS: commands metadata records build, verify, patch, and restore for hybrid
+PASS: target repair style has all required files
+PASS: target Makefile matches the expected repaired file
+PASS: target verification log contains initial value 1
+PASS: target verification log contains repaired value 3
+PASS: macro repair style has all required files
+PASS: macro Makefile matches the expected repaired file
+PASS: macro verification log contains initial value 1
+PASS: macro verification log contains repaired value 3
+PASS: implicit repair style has all required files
+PASS: implicit Makefile matches the expected repaired file
+PASS: implicit verification log contains initial value 1
+PASS: implicit verification log contains repaired value 3
+PASS: hybrid repair style has all required files
+PASS: hybrid Makefile matches the expected repaired file
+PASS: hybrid verification log contains initial value 1
+PASS: hybrid verification log contains repaired value 3
+PASS: implicit dependency file contains config.h
+PASS: JSON is parseable: e3-baseline\mdfixer\invalid-candidate\rejection.json
+PASS: invalid candidate references the fixed source commit
+PASS: invalid candidate decision is REJECTED
+PASS: invalid candidate recovery metadata records a successful build and run
+PASS: invalid candidate Makefile was restored
+PASS: invalid candidate restore exit codes are zero
+PASS: invalid candidate restore log records output 1
+PASS: invalid candidate failure log records the nonexistent dependency
+PASS: DRAFT host build and run exit codes are zero
+PASS: DRAFT host log outputs hello E3
+PASS: broken Dockerfile build exit code is nonzero
+PASS: broken Docker build log contains make: not found
+PASS: reference Docker build and run exit codes are zero
+PASS: reference container output is exactly hello E3
+PASS: Docker image ID uses sha256:<64 lowercase hex digits>
+PASS: workflow record contains its URL, SHA, evidence commit, and fixture commit
+
+RESULT: PASSED (45 checks)
