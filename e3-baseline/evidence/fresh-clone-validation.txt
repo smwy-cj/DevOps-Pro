@@ -1,0 +1,75 @@
+E3 fresh-clone validation record
+Date: 2026-09-29
+
+Fixed baseline commit:
+acd0e268c104d2211b7e5ca821789cfb4c31cfec
+
+Fresh workspace:
+C:\Users\43546\AppData\Local\Temp\e3-reproducibility-20260929
+
+Clone and checkout commands:
+git clone --quiet https://github.com/smwy-cj/DevOps-Pro.git C:\Users\43546\AppData\Local\Temp\e3-reproducibility-20260929
+git checkout --quiet acd0e268c104d2211b7e5ca821789cfb4c31cfec
+
+Validation environment:
+architecture: Windows AMD64
+git version 2.42.0.windows.2
+gcc.exe (MinGW-W64 x86_64-ucrt-posix-seh) 12.3.0
+GNU Make 4.4.1
+PATH prefix: C:\Program Files\Git\usr\bin;C:\mingw64\bin
+
+[1] DRAFT local build
+Command:
+mingw32-make -C e3-baseline/draft/project clean
+mingw32-make -C e3-baseline/draft/project
+e3-baseline/draft/project/hello.exe
+Result:
+draft_build_exit=0
+draft_output=hello E3
+
+[2] MDFixer pre-fix behavior
+Preparation:
+Copy Makefile.before to fixed-input/Makefile.
+Build once with VALUE 1. Change config.h from VALUE 1 to VALUE 2.
+Run one ordinary incremental build, then clean and build again.
+Result:
+before_build_exit=0
+before_initial_output=1
+before_incremental_exit=0
+before_incremental_output=1
+before_clean_exit=0
+before_clean_output=2
+
+[3] Four reference repair patches
+For each style: restore Makefile.before; git apply --check reference.patch;
+git apply reference.patch; clean/build/run; wait two seconds; change VALUE 1
+to VALUE 3; ordinary build/run.
+The wait is required because Make timestamp comparison may have one-second
+granularity; it ensures config.h is newer than main.o.
+Result:
+target check=0 apply=0 build=0 initial=1 incremental=0 output=3
+macro check=0 apply=0 build=0 initial=1 incremental=0 output=3
+hybrid check=0 apply=0 build=0 initial=1 incremental=0 output=3
+implicit check=0 apply=0 build=0 initial=1 incremental=0 output=3
+
+[4] Invalid candidate and recovery
+Command sequence:
+git apply --check invalid.patch
+git apply invalid.patch
+mingw32-make clean
+mingw32-make
+Copy Makefile.before Makefile
+mingw32-make clean
+mingw32-make
+main.exe
+Result:
+invalid_check=0
+invalid_apply=0
+invalid_build=2
+invalid_build_message=mingw32-make: *** No rule to make target 'nonexistent.h', needed by 'main.o'. Stop.
+restore_build=0
+restore_output=1
+
+Conclusion:
+The specified DRAFT output, pre-fix stale-build behavior, all four repair
+patches, and invalid-candidate recovery were reproduced from a clean clone.
