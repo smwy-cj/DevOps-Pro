@@ -1,0 +1,71 @@
+name: E3 DRAFT Docker evidence
+
+on:
+  push:
+    branches: [member1/e3-draft-docker]
+    paths:
+      - '.github/workflows/e3-draft-docker-evidence.yml'
+      - 'e3-baseline/draft/Dockerfile.*'
+      - 'e3-baseline/draft/project/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docker-evidence:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: e3-baseline/draft/project
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build expected failure and record exit code
+        run: |
+          set -uo pipefail
+          mkdir -p ../logs
+          docker build --no-cache --progress=plain -f ../Dockerfile.broken -t e3-draft-broken . > ../logs/broken-build.log 2>&1
+          result=$?
+          printf '%s\n' "$result" > ../logs/broken-exit-code.txt
+          test "$result" -ne 0
+          grep -Eiq 'make: not found|make: command not found|make.*not found' ../logs/broken-build.log
+
+      - name: Build reference image, run, and record evidence
+        run: |
+          set -uo pipefail
+          docker build --no-cache --progress=plain -f ../Dockerfile.reference -t e3-draft-reference . > ../logs/reference-build.log 2>&1
+          build_result=$?
+          if test "$build_result" -eq 0; then
+            docker image inspect --format '{{.Id}}' e3-draft-reference > ../logs/image-id.txt
+            docker run --rm e3-draft-reference > ../logs/reference-run.log 2>&1
+            run_result=$?
+          else
+            : > ../logs/image-id.txt
+            : > ../logs/reference-run.log
+            run_result=125
+          fi
+          printf 'build=%s\nrun=%s\n' "$build_result" "$run_result" > ../logs/reference-exit-codes.txt
+          test "$build_result" -eq 0
+          test "$run_result" -eq 0
+          printf 'hello E3\n' | cmp -s - ../logs/reference-run.log
+          grep -Eq '^sha256:[0-9a-f]{64}$' ../logs/image-id.txt
+
+      - name: Check evidence encoding and exit codes
+        run: |
+          set -euo pipefail
+          for file in ../logs/{broken-build.log,broken-exit-code.txt,reference-build.log,reference-run.log,reference-exit-codes.txt,image-id.txt}; do
+            iconv -f UTF-8 -t UTF-8 "$file" > /dev/null
+          done
+          test "$(cat ../logs/broken-exit-code.txt)" -ne 0
+          grep -Fxq 'build=0' ../logs/reference-exit-codes.txt
+          grep -Fxq 'run=0' ../logs/reference-exit-codes.txt
+
+      - name: Upload actual Docker evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e3-draft-docker-evidence
+          path: e3-baseline/draft/logs/
+          if-no-files-found: error
