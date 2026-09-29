@@ -61,6 +61,15 @@ def has_labeled_value(log_text: str, label: str, value: str) -> bool:
     return re.search(pattern, log_text) is not None
 
 
+def parse_key_value_lines(text: str) -> dict[str, str]:
+    values: dict[str, str] = {}
+    for line in text.splitlines():
+        key, separator, value = line.partition("=")
+        if separator:
+            values[key.strip()] = value.strip()
+    return values
+
+
 def validate_source_metadata(validation: Validation) -> None:
     expected = read_json(E3_ROOT / "draft" / "expected-result.json", validation)
     missing = read_json(
@@ -197,12 +206,70 @@ def validate_draft(validation: Validation) -> None:
     )
 
 
+def validate_docker_evidence(validation: Validation) -> None:
+    draft_root = E3_ROOT / "draft"
+    logs_root = draft_root / "logs"
+
+    broken_exit_code = read_text(logs_root / "broken-exit-code.txt").strip()
+    validation.check(
+        (draft_root / "Dockerfile.broken").is_file()
+        and broken_exit_code.isdigit()
+        and int(broken_exit_code) != 0,
+        "broken Dockerfile build exit code is nonzero",
+    )
+
+    broken_log = read_text(logs_root / "broken-build.log")
+    validation.check(
+        "make: not found" in broken_log,
+        "broken Docker build log contains make: not found",
+    )
+
+    reference_exit_codes = parse_key_value_lines(
+        read_text(logs_root / "reference-exit-codes.txt")
+    )
+    validation.check(
+        reference_exit_codes.get("build") == "0"
+        and reference_exit_codes.get("run") == "0",
+        "reference Docker build and run exit codes are zero",
+    )
+
+    validation.check(
+        read_text(logs_root / "reference-run.log") == "hello E3\n",
+        "reference container output is exactly hello E3",
+    )
+
+    image_id = read_text(logs_root / "image-id.txt").strip()
+    validation.check(
+        re.fullmatch(r"sha256:[0-9a-f]{64}", image_id) is not None,
+        "Docker image ID uses sha256:<64 lowercase hex digits>",
+    )
+
+    workflow_record = parse_key_value_lines(
+        read_text(logs_root / "workflow-run.txt")
+    )
+    workflow_url = workflow_record.get("workflow_run_url", "")
+    workflow_sha = workflow_record.get("workflow_head_sha", "")
+    evidence_commit = workflow_record.get("evidence_source_commit", "")
+    fixture_commit = workflow_record.get("fixture_source_commit", "")
+    validation.check(
+        re.fullmatch(
+            r"https://github\.com/[^/]+/[^/]+/actions/runs/\d+", workflow_url
+        )
+        is not None
+        and re.fullmatch(r"[0-9a-f]{40}", workflow_sha) is not None
+        and re.fullmatch(r"[0-9a-f]{40}", evidence_commit) is not None
+        and fixture_commit == FIXED_SOURCE_COMMIT,
+        "workflow record contains its URL, SHA, evidence commit, and fixture commit",
+    )
+
+
 def main() -> int:
     validation = Validation()
     validate_source_metadata(validation)
     validate_repair_styles(validation)
     validate_invalid_candidate(validation)
     validate_draft(validation)
+    validate_docker_evidence(validation)
 
     print()
     if validation.failures:

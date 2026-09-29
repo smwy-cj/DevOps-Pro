@@ -37,5 +37,11 @@ PASS: invalid candidate restore log records output 1
 PASS: invalid candidate failure log records the nonexistent dependency
 PASS: DRAFT host build and run exit codes are zero
 PASS: DRAFT host log outputs hello E3
+PASS: broken Dockerfile build exit code is nonzero
+PASS: broken Docker build log contains make: not found
+PASS: reference Docker build and run exit codes are zero
+PASS: reference container output is exactly hello E3
+PASS: Docker image ID uses sha256:<64 lowercase hex digits>
+PASS: workflow record contains its URL, SHA, evidence commit, and fixture commit
 
-RESULT: PASSED (39 checks)
+RESULT: PASSED (45 checks)
