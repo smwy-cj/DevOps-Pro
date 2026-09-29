@@ -69,3 +69,7 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# E3 baseline evidence
+!e3-baseline/**/Makefile
+!e3-baseline/**/*.log

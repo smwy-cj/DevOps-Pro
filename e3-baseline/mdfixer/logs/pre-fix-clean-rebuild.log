@@ -1,0 +1,2 @@
+cc -Wall -Wextra -c main.c -o main.o
+cc main.o -o app

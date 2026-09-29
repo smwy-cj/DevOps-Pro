@@ -1,0 +1,9 @@
+captured_at=2026-09-29 09:34:58 +0800
+os_name=macOS
+os_version=26.6.2
+architecture=arm64
+
+git version 2.50.1 (Apple Git-155)
+GNU Make 3.81
+Apple clang version 21.0.0 (clang-2100.1.1.101)
+Python 3.14.6

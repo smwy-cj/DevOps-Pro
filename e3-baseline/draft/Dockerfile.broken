@@ -1,0 +1,9 @@
+FROM debian:bookworm-slim
+
+WORKDIR /work
+
+COPY . .
+
+RUN make
+
+CMD ["./hello"]

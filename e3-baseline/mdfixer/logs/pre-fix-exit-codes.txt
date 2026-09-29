@@ -1,0 +1,6 @@
+initial_build_exit_code=0
+initial_run_exit_code=0
+incremental_build_exit_code=0
+stale_run_exit_code=0
+clean_build_exit_code=0
+clean_run_exit_code=0
