@@ -8,7 +8,7 @@
 - [x] 无效候选构建失败，恢复 `Makefile.before` 后可再次构建并输出 `1`。
 - [x] 复现步骤见 `README.md`，命令和原始输出见 `evidence/fresh-clone-validation.txt`。
 - [x] 团队分工见 `TEAM_CONTRIBUTIONS.md`。
-- [ ] 推送分支并创建 Pull Request。
+- [x] 推送分支并创建 Pull Request。
 
 提交分支：`member4/e3-reproducibility-docs`  
 Pull Request 目标分支：`e3/b06-test-baseline`  
