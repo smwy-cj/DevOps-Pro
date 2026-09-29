@@ -26,8 +26,10 @@ jobs:
         run: |
           set -uo pipefail
           mkdir -p ../logs
+          set +e
           docker build --no-cache --progress=plain -f ../Dockerfile.broken -t e3-draft-broken . > ../logs/broken-build.log 2>&1
           result=$?
+          set -e
           printf '%s\n' "$result" > ../logs/broken-exit-code.txt
           test "$result" -ne 0
           grep -Eiq 'make: not found|make: command not found|make.*not found' ../logs/broken-build.log
@@ -35,6 +37,7 @@ jobs:
       - name: Build reference image, run, and record evidence
         run: |
           set -uo pipefail
+          set +e
           docker build --no-cache --progress=plain -f ../Dockerfile.reference -t e3-draft-reference . > ../logs/reference-build.log 2>&1
           build_result=$?
           if test "$build_result" -eq 0; then
@@ -46,6 +49,7 @@ jobs:
             : > ../logs/reference-run.log
             run_result=125
           fi
+          set -e
           printf 'build=%s\nrun=%s\n' "$build_result" "$run_result" > ../logs/reference-exit-codes.txt
           test "$build_result" -eq 0
           test "$run_result" -eq 0
