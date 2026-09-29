@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0.0",
+  "baseline": {
+    "branch": "e3/b06-test-baseline",
+    "commit": "acd0e268c104d2211b7e5ca821789cfb4c31cfec"
+  },
+  "source_commit": "be73686c6a9fdbb7c4d3eadb45779233afa33083",
+  "draft": {
+    "build": {
+      "working_directory": "e3-baseline/draft/project",
+      "shell": "make clean && make"
+    },
+    "verify": {
+      "working_directory": "e3-baseline/draft/project",
+      "argv": [
+        "./hello"
+      ]
+    }
+  },
+  "mdfixer": {
+    "styles": {
+      "target": {
+        "working_directory": "e3-baseline/mdfixer/styles/target",
+        "patch_check": [
+          "git",
+          "apply",
+          "--check",
+          "reference.patch"
+        ],
+        "patch": [
+          "git",
+          "apply",
+          "reference.patch"
+        ],
+        "build": "make clean && make",
+        "verify": [
+          "./app"
+        ],
+        "restore": [
+          "git",
+          "apply",
+          "-R",
+          "reference.patch"
+        ]
+      },
+      "macro": {
+        "working_directory": "e3-baseline/mdfixer/styles/macro",
+        "patch_check": [
+          "git",
+          "apply",
+          "--check",
+          "reference.patch"
+        ],
+        "patch": [
+          "git",
+          "apply",
+          "reference.patch"
+        ],
+        "build": "make clean && make",
+        "verify": [
+          "./app"
+        ],
+        "restore": [
+          "git",
+          "apply",
+          "-R",
+          "reference.patch"
+        ]
+      },
+      "implicit": {
+        "working_directory": "e3-baseline/mdfixer/styles/implicit",
+        "patch_check": [
+          "git",
+          "apply",
+          "--check",
+          "reference.patch"
+        ],
+        "patch": [
+          "git",
+          "apply",
+          "reference.patch"
+        ],
+        "build": "make clean && make",
+        "verify": [
+          "./app"
+        ],
+        "restore": [
+          "git",
+          "apply",
+          "-R",
+          "reference.patch"
+        ]
+      },
+      "hybrid": {
+        "working_directory": "e3-baseline/mdfixer/styles/hybrid",
+        "patch_check": [
+          "git",
+          "apply",
+          "--check",
+          "reference.patch"
+        ],
+        "patch": [
+          "git",
+          "apply",
+          "reference.patch"
+        ],
+        "build": "make clean && make",
+        "verify": [
+          "./app"
+        ],
+        "restore": [
+          "git",
+          "apply",
+          "-R",
+          "reference.patch"
+        ]
+      }
+    },
+    "invalid_candidate": {
+      "working_directory": "e3-baseline/mdfixer/invalid-candidate",
+      "patch_check": [
+        "git",
+        "apply",
+        "--check",
+        "invalid.patch"
+      ],
+      "patch": [
+        "git",
+        "apply",
+        "invalid.patch"
+      ],
+      "build": "make clean && make",
+      "verify": [
+        "./app"
+      ],
+      "restore": [
+        "git",
+        "apply",
+        "-R",
+        "invalid.patch"
+      ]
+    }
+  }
+}

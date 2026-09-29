@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "source_commit": "be73686c6a9fdbb7c4d3eadb45779233afa33083",
+  "human_expectations": {
+    "draft": {
+      "build_exit_code": 0,
+      "run_exit_code": 0,
+      "stdout_exact": "hello E3\n"
+    },
+    "mdfixer": {
+      "initial_output": "1",
+      "output_after_config_change": "3",
+      "implicit_dependency": "config.h",
+      "invalid_candidate_decision": "REJECTED",
+      "recovery_build_exit_code": 0,
+      "recovery_run_exit_code": 0,
+      "recovery_stdout_exact": "1\n"
+    }
+  },
+  "actual_observations": {
+    "draft": {
+      "build_exit_code": 0,
+      "run_exit_code": 0,
+      "stdout_exact": "hello E3\n",
+      "evidence": [
+        "draft/logs/host-exit-codes.txt",
+        "draft/logs/host-run.log"
+      ]
+    },
+    "mdfixer_styles": {
+      "target": {
+        "initial_output": "1",
+        "output_after_config_change": "3",
+        "evidence": "mdfixer/styles/target/verification.log"
+      },
+      "macro": {
+        "initial_output": "1",
+        "output_after_config_change": "3",
+        "evidence": "mdfixer/styles/macro/verification.log"
+      },
+      "implicit": {
+        "initial_output": "1",
+        "output_after_config_change": "3",
+        "generated_dependency": "main.o: main.c config.h",
+        "evidence": [
+          "mdfixer/styles/implicit/verification.log",
+          "mdfixer/styles/implicit/dependency-file.txt"
+        ]
+      },
+      "hybrid": {
+        "initial_output": "1",
+        "output_after_config_change": "3",
+        "evidence": "mdfixer/styles/hybrid/verification.log"
+      }
+    },
+    "invalid_candidate": {
+      "decision": "REJECTED",
+      "failure": "nonexistent.h is declared but does not exist",
+      "recovery_build_exit_code": 0,
+      "recovery_run_exit_code": 0,
+      "recovery_stdout_exact": "1\n",
+      "evidence": [
+        "mdfixer/invalid-candidate/rejection.json",
+        "mdfixer/invalid-candidate/failed-validation.log",
+        "mdfixer/invalid-candidate/restore-exit-codes.txt",
+        "mdfixer/invalid-candidate/restore.log"
+      ]
+    }
+  }
+}
