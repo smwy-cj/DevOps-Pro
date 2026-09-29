@@ -1,0 +1,6 @@
+workflow_run_url=https://github.com/smwy-cj/DevOps-Pro/actions/runs/36513871468
+workflow_head_sha=90dc638739f0b7db06688226c0b8ed7b559668a2
+evidence_source_commit=c196103f4f705055ebf13711f813c67a263c63e4
+fixture_source_commit=be73686c6a9fdbb7c4d3eadb45779233afa33083
+runner=ubuntu-latest
+base_image_digest=sha256:3783cc01769c7b2b1b83a5c5ad96c815348e28ed7da68e2e3687004faa906251
