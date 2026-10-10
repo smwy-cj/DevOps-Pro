@@ -20,3 +20,22 @@ python3 scripts/validate-contract.py --skip-remote
 ```
 
 成员职责和工作记录见 `docs/e2/TEAM_RESPONSIBILITIES.md`。
+
+## E4 可重复工程环境
+
+B06 使用 DRAFT 服务模板建立可重复构建、测试、冒烟测试和密钥检查环境。
+
+- 服务代码：`services/draft/`
+- E3 冒烟样例：`fixtures/draft/`
+- 容器配置：`compose.yaml`
+- 一键命令：根目录 `Makefile`
+- 运行证据：`work/<时间>/`，默认不提交
+
+在 Ubuntu 服务器的个人克隆中运行：
+
+```sh
+make doctor
+make all
+```
+
+详细操作和预期结果见 `docs/e4/B_DRAFT_README.md`。
