@@ -73,3 +73,15 @@ Testing/
 # E3 baseline evidence
 !e3-baseline/**/Makefile
 !e3-baseline/**/*.log
+
+# E4 reproducible environment
+!/Makefile
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+work/
+__pycache__/
+.pytest_cache/
+!fixtures/draft/Makefile
