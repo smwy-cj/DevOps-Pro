@@ -93,4 +93,45 @@ class Student241880068E9Tests(unittest.TestCase):
                 'style': 'mixed',
             }])
             self.assertEqual(makefile.read_bytes(), before)
+
+class Student241880068E10Tests(unittest.TestCase):
+    def test_compile_failure_rejected_source_unchanged(self):
+        import difflib
+        from lab import validate
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            project = root / 'project'
+            fixture(project)
+
+            makefile = project / 'Makefile'
+            before = makefile.read_bytes()
+            original = before.decode()
+            changed = original.replace(
+                '-c main.c -o main.o',
+                '-c nonexistent.c -o main.o'
+            )
+            self.assertNotEqual(original, changed)
+
+            diff = ''.join(difflib.unified_diff(
+                original.splitlines(True),
+                changed.splitlines(True),
+                fromfile='a/Makefile',
+                tofile='b/Makefile'
+            ))
+            candidate = root / 'compile-failure.patch'
+            candidate.write_text(diff)
+
+            result = validate(
+                project, candidate, root / 'validation'
+            )
+
+            self.assertTrue(result['checks']['patch_applies'])
+            self.assertFalse(result['accepted'])
+            self.assertTrue(result['rollback'])
+            self.assertTrue(result['source_unchanged'])
+            self.assertIn(
+                'nonexistent.c', result['error'] or ''
+            )
+            self.assertEqual(makefile.read_bytes(), before)
 if __name__=='__main__':unittest.main()
