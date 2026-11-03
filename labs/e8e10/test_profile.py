@@ -2,6 +2,62 @@ import json, tempfile, unittest
 from pathlib import Path
 from lab import fixture,scan,patch,commit
 
+class Student241880258E9Tests(unittest.TestCase):
+    def test_duplicate_md_once_per_style_and_source_unchanged(self):
+        import copy
+        import shutil
+        from lab import run
+        for style in ['direct', 'macro', 'mixed']:
+            with self.subTest(style=style), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                project = root / 'project'
+                fixture(project, style)
+                report = scan(project)
+                missing = next(f for f in report['findings'] if f['type'] == 'MISSING')
+                report['findings'].append(dict(missing))
+                input_before = copy.deepcopy(report)
+                before = (project / 'Makefile').read_bytes()
+                diff, plan = patch(project, report)
+                self.assertEqual(plan, [{'target': 'main.o', 'dependency': 'config.h', 'style': style}])
+                added = [line for line in diff.splitlines() if line.startswith('+') and not line.startswith('+++')]
+                expected = {
+                    'direct': '+main.o: main.c unused.h config.h',
+                    'macro': '+DEPS = main.c unused.h config.h',
+                    'mixed': '+main.o: main.c $(HEADERS) config.h',
+                }
+                self.assertEqual(added, [expected[style]])
+                self.assertEqual((project / 'Makefile').read_bytes(), before)
+                self.assertEqual(report, input_before)
+                copy_project = root / 'apply-demo'
+                shutil.copytree(project, copy_project)
+                candidate = root / 'candidate.patch'
+                candidate.write_text(diff)
+                run(['git', 'apply', '--check', str(candidate)], copy_project)
+                run(['git', 'apply', str(candidate)], copy_project)
+                self.assertEqual((copy_project / 'Makefile').read_text().split().count('config.h'), 1)
+                self.assertFalse(any(f['type'] == 'MISSING' for f in scan(copy_project)['findings']))
+                self.assertEqual((project / 'Makefile').read_bytes(), before)
+
+    def test_dedup_key_keeps_distinct_targets_and_dependencies(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory) / 'project'
+            fixture(project)
+            report = scan(project)
+            edges = [('main.o', 'config.h'), ('helper.o', 'config.h'), ('main.o', 'extra.h')]
+            report['findings'] = [
+                {'type': 'MISSING', 'target': target, 'dependency': dependency}
+                for target, dependency in edges + edges
+            ]
+            before = (project / 'Makefile').read_bytes()
+            diff, plan = patch(project, report)
+            self.assertEqual(plan, [
+                {'target': target, 'dependency': dependency, 'style': 'direct'}
+                for target, dependency in edges
+            ])
+            self.assertIn('+main.o: main.c unused.h config.h extra.h\n', diff)
+            self.assertIn('+helper.o: helper.c config.h\n', diff)
+            self.assertEqual((project / 'Makefile').read_bytes(), before)
+
 class ProfileTests(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)

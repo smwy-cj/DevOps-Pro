@@ -9,6 +9,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Build teaching environment
         run: docker build -f labs/e8e10/environment/services/buildchecker/Dockerfile -t course-e8e10:ci labs/e8e10/environment
       - name: Validate both tracks
@@ -16,6 +18,7 @@ jobs:
         run: |
           set -euo pipefail
           docker run --rm --network none --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 -m unittest discover -s labs/e8e10 -p test_profile.py -v
+          docker run --rm --network none --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 labs/e8e10/student_241880258_e9.py --out /course/work/E9-241880258-duplicate-md
           for track in A B; do
             for stage in e8 e9 e10; do
               docker run --rm --network none --cap-add SYS_PTRACE --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 labs/e8e10/lab.py "$stage" --track "$track" --out "/course/work/$track-$stage"
