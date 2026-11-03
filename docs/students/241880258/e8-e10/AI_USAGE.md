@@ -1,15 +1,7 @@
-# AI 使用记录
+# AI_USAGE
 
-姓名：庄子宣；学号：241880258。
+庄子宣，241880258。工具：Codex，2026-11-03。
 
-工具：Codex；日期：2026-11-03。
+本次用 Codex 辅助理解实验要求、整理容器运行命令，并完善 E9 去重代码和测试。采纳的内容包括按 (target, dependency) 去重，以及 Student241880258E9Tests 的两项用例。
 
-用途：协助我理解 B 组实验要求、编写操作命令，完善 E9 重复 MD 去重实现和测试。
-
-采纳内容：patch() 按 (target, dependency) 去重，新增 Student241880258E9Tests 测试类和三种风格的证据脚本。
-
-操作与验证：我在个人分支中完成代码提交，在课程容器内运行基础实验和扩展，比较 Patch、plan 及原 Makefile 字节。
-
-结果：direct、macro、mixed 均只添加一次 config.h，plan 只有一项，原文件不变；课程 7 项加本人 2 项，共 9 项测试通过，退出码 0。日志：work/unit-tests.log。
-
-参考实现来自课程 teaching/e8-e10 分支。我的个人新增内容为重复 MD 去重修改、两项测试及验证记录。B 组 E8—E10 结果保存在各自 OUT 中。
+参考实现来自 teaching/e8-e10。我的提交主要是重复 MD 去重修改、测试和验证记录。三种风格都只补一次 config.h，plan 只有一项，原 Makefile 不变。共 9 项测试通过，退出码 0，日志见 work/unit-tests.log。
