@@ -59,4 +59,38 @@ class Student241880068E8Tests(unittest.TestCase):
             self.assertEqual(
                 (project / 'Makefile').read_bytes(), before
             )
+class Student241880068E9Tests(unittest.TestCase):
+    def test_mixed_shared_headers_only_changes_main_target(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp) / 'project'
+            fixture(project, 'mixed')
+
+            makefile = project / 'Makefile'
+            text = makefile.read_text()
+            text = text.replace(
+                'helper.o: helper.c',
+                'helper.o: helper.c $(HEADERS)'
+            )
+            makefile.write_text(text)
+            commit(project, 'E9 shared HEADERS fixture')
+
+            report = scan(project)
+            before = makefile.read_bytes()
+            diff, plan = patch(project, report)
+
+            changes = [
+                line for line in diff.splitlines()
+                if line.startswith(('+', '-'))
+                and not line.startswith(('+++', '---'))
+            ]
+            self.assertEqual(changes, [
+                '-main.o: main.c $(HEADERS)',
+                '+main.o: main.c $(HEADERS) config.h',
+            ])
+            self.assertEqual(plan, [{
+                'target': 'main.o',
+                'dependency': 'config.h',
+                'style': 'mixed',
+            }])
+            self.assertEqual(makefile.read_bytes(), before)
 if __name__=='__main__':unittest.main()
