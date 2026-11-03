@@ -38,5 +38,25 @@ class ProfileTests(unittest.TestCase):
     def test_unsupported_configuration_rejected(self):
         (self.p/'Makefile').write_text((self.p/'Makefile').read_text().replace('-O0','-include unknown.h'))
         with self.assertRaisesRegex(ValueError,'UNSUPPORTED_FLAGS'):scan(self.p)
+class Student241880068E8Tests(unittest.TestCase):
+    def test_unknown_target_rejected_source_unchanged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp) / 'project'
+            fixture(project)
+            report = scan(project)
+            report['findings'] = [{
+                'type': 'MISSING',
+                'target': 'unknown.o',
+                'dependency': 'config.h',
+            }]
+            before = (project / 'Makefile').read_bytes()
 
+            with self.assertRaisesRegex(
+                ValueError, '^UNSUPPORTED_TARGET$'
+            ):
+                patch(project, report)
+
+            self.assertEqual(
+                (project / 'Makefile').read_bytes(), before
+            )
 if __name__=='__main__':unittest.main()
