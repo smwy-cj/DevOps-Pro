@@ -134,4 +134,41 @@ class Student241880068E10Tests(unittest.TestCase):
                 'nonexistent.c', result['error'] or ''
             )
             self.assertEqual(makefile.read_bytes(), before)
+class Student241880180E10Tests(unittest.TestCase):
+    def test_optimization_only_candidate_is_rejected_source_unchanged(self):
+        import difflib
+        from lab import validate
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            project = root / 'project'
+            fixture(project)
+
+            makefile = project / 'Makefile'
+            before = makefile.read_bytes()
+            original = before.decode()
+            changed = original.replace('CFLAGS = -O0', 'CFLAGS = -O1', 1)
+            self.assertNotEqual(original, changed)
+
+            diff = ''.join(difflib.unified_diff(
+                original.splitlines(True),
+                changed.splitlines(True),
+                fromfile='a/Makefile',
+                tofile='b/Makefile'
+            ))
+            candidate = root / 'optimization-only.patch'
+            candidate.write_text(diff)
+
+            result = validate(project, candidate, root / 'validation')
+
+            self.assertTrue(result['checks']['patch_applies'])
+            self.assertTrue(result['checks']['build'])
+            self.assertTrue(result['checks']['test'])
+            self.assertFalse(result['checks']['header_change'])
+            self.assertFalse(result['checks']['no_missing'])
+            self.assertFalse(result['accepted'])
+            self.assertTrue(result['rollback'])
+            self.assertTrue(result['source_unchanged'])
+            self.assertIsNone(result['error'])
+            self.assertEqual(makefile.read_bytes(), before)
 if __name__=='__main__':unittest.main()
