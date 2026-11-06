@@ -94,5 +94,100 @@ class ProfileTests(unittest.TestCase):
     def test_unsupported_configuration_rejected(self):
         (self.p/'Makefile').write_text((self.p/'Makefile').read_text().replace('-O0','-include unknown.h'))
         with self.assertRaisesRegex(ValueError,'UNSUPPORTED_FLAGS'):scan(self.p)
+class Student241880068E8Tests(unittest.TestCase):
+    def test_unknown_target_rejected_source_unchanged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp) / 'project'
+            fixture(project)
+            report = scan(project)
+            report['findings'] = [{
+                'type': 'MISSING',
+                'target': 'unknown.o',
+                'dependency': 'config.h',
+            }]
+            before = (project / 'Makefile').read_bytes()
 
+            with self.assertRaisesRegex(
+                ValueError, '^UNSUPPORTED_TARGET$'
+            ):
+                patch(project, report)
+
+            self.assertEqual(
+                (project / 'Makefile').read_bytes(), before
+            )
+class Student241880068E9Tests(unittest.TestCase):
+    def test_mixed_shared_headers_only_changes_main_target(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp) / 'project'
+            fixture(project, 'mixed')
+
+            makefile = project / 'Makefile'
+            text = makefile.read_text()
+            text = text.replace(
+                'helper.o: helper.c',
+                'helper.o: helper.c $(HEADERS)'
+            )
+            makefile.write_text(text)
+            commit(project, 'E9 shared HEADERS fixture')
+
+            report = scan(project)
+            before = makefile.read_bytes()
+            diff, plan = patch(project, report)
+
+            changes = [
+                line for line in diff.splitlines()
+                if line.startswith(('+', '-'))
+                and not line.startswith(('+++', '---'))
+            ]
+            self.assertEqual(changes, [
+                '-main.o: main.c $(HEADERS)',
+                '+main.o: main.c $(HEADERS) config.h',
+            ])
+            self.assertEqual(plan, [{
+                'target': 'main.o',
+                'dependency': 'config.h',
+                'style': 'mixed',
+            }])
+            self.assertEqual(makefile.read_bytes(), before)
+
+class Student241880068E10Tests(unittest.TestCase):
+    def test_compile_failure_rejected_source_unchanged(self):
+        import difflib
+        from lab import validate
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            project = root / 'project'
+            fixture(project)
+
+            makefile = project / 'Makefile'
+            before = makefile.read_bytes()
+            original = before.decode()
+            changed = original.replace(
+                '-c main.c -o main.o',
+                '-c nonexistent.c -o main.o'
+            )
+            self.assertNotEqual(original, changed)
+
+            diff = ''.join(difflib.unified_diff(
+                original.splitlines(True),
+                changed.splitlines(True),
+                fromfile='a/Makefile',
+                tofile='b/Makefile'
+            ))
+            candidate = root / 'compile-failure.patch'
+            candidate.write_text(diff)
+
+            result = validate(
+                project, candidate, root / 'validation'
+            )
+
+            self.assertTrue(result['checks']['patch_applies'])
+            self.assertFalse(result['accepted'])
+            self.assertTrue(result['rollback'])
+            self.assertTrue(result['source_unchanged'])
+            self.assertIn(
+                'nonexistent.c', result['error'] or ''
+            )
+            self.assertEqual(makefile.read_bytes(), before)
 if __name__=='__main__':unittest.main()
