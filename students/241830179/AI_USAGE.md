@@ -1,6 +1,9 @@
 # AI 使用记录
 
+- 姓名：崔杰。
 - 学号：241830179。
+- 校区：苏州校区。
+- 小组：B06组。
 - 工具：Codex。
 - 任务：B 轨 E8–E10，组员 2 的 REDUNDANT-only 扩展。
 
@@ -26,7 +29,10 @@ AI 读取实际日志、退出码、补丁和 JSON 报告，独立比较 Makefil
 AI 核对 E10 正常接受和两个失败拒绝场景，以及最终 BuildChecker 无 MISSING 的结果，据此更新报告。
 本地开发校验与远程实验分开记录，报告中的环境和结果来自远程证据。
 
-## 责任与后续状态
+## 责任与完成状态
 
-本人负责核对提交材料、执行服务器命令和提交个人 PR。
-AI 未代替本人执行本次远程实验。个人 PR、最新提交的 Actions 核验和 artifact 下载仍在后续流程中，完成情况应以 GitHub 记录和下载文件为准。
+本人执行远程实验、提供证据，并确认个人扩展和 11 项单元测试已审核通过。个人 [PR #14](https://github.com/smwy-cj/DevOps-Pro/pull/14) 已提交。
+
+AI 核对已验证提交 [`e60ee3f`](https://github.com/smwy-cj/DevOps-Pro/commit/e60ee3f6b2151a450ace39fa043773237cf305f3) 对应的两次成功运行（[分支推送](https://github.com/smwy-cj/DevOps-Pro/actions/runs/41785089281)、[PR 检查](https://github.com/smwy-cj/DevOps-Pro/actions/runs/41785702947)）及各自的 artifact 记录。AI 复算已下载的 [PR artifact](https://github.com/smwy-cj/DevOps-Pro/actions/runs/41785702947/artifacts/13300289144) 的 SHA-256，与 GitHub 记录一致，并从包内日志和汇总文件确认 11 项单元测试和三个扩展场景均通过。
+
+AI 根据本人提供的信息补齐身份字段，更新个人报告和本记录，并将文档提交到原 PR 分支。
