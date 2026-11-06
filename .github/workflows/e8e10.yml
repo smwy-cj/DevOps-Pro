@@ -9,8 +9,6 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7.0.1
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Build teaching environment
         run: docker build -f labs/e8e10/environment/services/buildchecker/Dockerfile -t course-e8e10:ci labs/e8e10/environment
       - name: Validate both tracks
