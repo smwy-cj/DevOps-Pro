@@ -15,16 +15,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          docker run --rm --network none --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 -m unittest discover -s labs/e8e10 -p test_profile.py -v
+          mkdir -p work/unit-tests
+          docker run --rm --network none --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 -m unittest discover -s labs/e8e10 -p 'test_*.py' -v 2>&1 | tee work/unit-tests/tests.log
           docker run --rm --network none --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 labs/e8e10/student_241880258_e9.py --out /course/work/E9-241880258-duplicate-md
           for track in A B; do
             for stage in e8 e9 e10; do
               docker run --rm --network none --cap-add SYS_PTRACE --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 labs/e8e10/lab.py "$stage" --track "$track" --out "/course/work/$track-$stage"
             done
           done
+      - name: Export student 241830179 member 2 evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm --network none --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e8e10:ci python3 labs/e8e10/member2_redundant.py --out /course/work/B-member2-241830179 2>&1 | tee work/member2-241830179.log
       - uses: actions/upload-artifact@v7.0.2
         if: always()
         with:
           name: e8e10-evidence-${{ github.run_id }}
           path: work/
           retention-days: 14
+
