@@ -1,0 +1,10 @@
+{
+  "student_id": "241830179",
+  "state": "PREPARED_AWAITING_USER_EXECUTION",
+  "linux_docker_e12": "NOT_RUN",
+  "independent_reverification": "NOT_RUN",
+  "result_json": "Generated only by an actual E12 run",
+  "candidate_patch": "Generated only from the live MISSING report",
+  "host_validation": "See HOST_VALIDATION.md",
+  "runbook": "RUNBOOK.md"
+}
