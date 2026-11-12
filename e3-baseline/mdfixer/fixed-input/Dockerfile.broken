@@ -1,0 +1,6 @@
+FROM python:3.13-slim
+WORKDIR /work
+COPY main.c config.h Makefile test_app.py ./
+RUN make app
+RUN python3 test_app.py
+CMD ["./app"]
