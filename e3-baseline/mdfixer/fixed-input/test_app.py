@@ -4,7 +4,7 @@ import re
 import subprocess
 
 value = int(re.search(r'^#define VALUE (\d+)$', Path('config.h').read_text(), re.M)[1])
-binary = './app.exe' if Path('app.exe').exists() else './app'
+binary = str((Path('app.exe') if Path('app.exe').exists() else Path('app')).resolve())
 for args, expected in [([], str(value)), (['--double'], str(2 * value))]:
     result = subprocess.run([binary, *args], capture_output=True, text=True, timeout=10)
     assert result.returncode == 0, result
