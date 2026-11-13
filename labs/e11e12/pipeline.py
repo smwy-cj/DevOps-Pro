@@ -42,6 +42,10 @@ def load_artifact(path, expected_sha256):
         raise Failure('ARTIFACT_HASH_MISMATCH','Artifact content changed during transfer')
     return json.loads(data)
 
+def verify_candidate(path, expected_sha256):
+    if expected_sha256 is not None and hashlib.sha256(path.read_bytes()).hexdigest() != expected_sha256:
+        raise Failure('CANDIDATE_HASH_MISMATCH', 'Candidate Dockerfile changed after preparation')
+
 def command(argv, cwd, log):
     log.parent.mkdir(parents=True, exist_ok=True)
     p = subprocess.run(argv, cwd=cwd, capture_output=True, text=True, timeout=120)
@@ -117,6 +121,7 @@ def execute(request, out, job_id=None):
         if mode in ('e11-b','e12'):
             from draft.autobuild import auto_build
             candidate=Path(request['candidate']).resolve()
+            verify_candidate(candidate,request.get('candidate_sha256'))
             draft=auto_build(adapter.directory(target) if adapter else target,candidate,out/'draft-build',request.get('expected_output','1'),timeout=request.get('build_timeout',600))
             if draft['status']!='SUCCEEDED':
                 raise Failure('DRAFT_FAILED',draft.get('error','Inspect draft-build logs'))

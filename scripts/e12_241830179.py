@@ -48,6 +48,7 @@ def prepare():
     DATA.mkdir(parents=True)
     command(['git', 'clone', '--no-hardlinks', '--no-checkout', str(ROOT), str(DATA / 'repo')])
     shutil.copyfile(DOCS / 'candidate.Dockerfile', DATA / 'candidate.Dockerfile')
+    request['candidate_sha256'] = hashlib.sha256((DATA / 'candidate.Dockerfile').read_bytes()).hexdigest()
     save(DATA / 'request.json', request)
     digest = hashlib.sha256(json.dumps(request, sort_keys=True).encode()).hexdigest()
     save(DATA / 'api-request.json', {'idempotency_key': '241830179-e12-' + digest[:24], 'input': request})

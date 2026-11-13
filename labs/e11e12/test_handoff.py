@@ -52,6 +52,20 @@ class HandoffTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'already exists'):
                 handoff.prepare()
 
+    def test_candidate_change_invalidates_prepared_request(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'candidate.Dockerfile'
+            path.write_bytes(b'FROM pinned\n')
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            pipeline.verify_candidate(path, digest)
+            path.write_bytes(b'FROM changed\n')
+            with self.assertRaisesRegex(pipeline.Failure, 'changed after preparation'):
+                pipeline.verify_candidate(path, digest)
+            first = {'candidate': str(path), 'candidate_sha256': digest}
+            second = dict(first, candidate_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+            self.assertNotEqual(hashlib.sha256(json.dumps(first, sort_keys=True).encode()).hexdigest(),
+                                hashlib.sha256(json.dumps(second, sort_keys=True).encode()).hexdigest())
+
     def test_api_downloads_unicode_artifact_with_integrity(self):
         content = '本机传输测试'.encode('utf-8')
         result = {'job_id': 'job-test', 'status': 'SUCCEEDED', 'artifacts': [
