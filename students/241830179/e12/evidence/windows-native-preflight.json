@@ -1,0 +1,34 @@
+{
+  "scope": "Windows native preflight only; no Docker or strace full check",
+  "target_commit": "71ae2ffc4ce9fa99734c297f44c6e057f0df03cf",
+  "compiler": "D:\\envs\\mingw64\\bin\\gcc.EXE",
+  "findings": [
+    {
+      "type": "MISSING",
+      "target": "main.o",
+      "dependency": "config.h"
+    }
+  ],
+  "edits": [
+    {
+      "target": "main.o",
+      "dependency": "config.h",
+      "style": "explicit-addition"
+    }
+  ],
+  "validation": {
+    "accepted": true,
+    "checks": {
+      "patch_applies": true,
+      "build": true,
+      "test": true,
+      "header_change": true,
+      "incremental_test": true
+    },
+    "error": null,
+    "source_unchanged": false,
+    "rollback": false
+  },
+  "remaining_findings_in_gcc_scan": [],
+  "linux_docker_status": "NOT_RUN"
+}

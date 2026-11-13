@@ -1,0 +1,285 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 355B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.13-slim@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM docker.io/library/python:3.13-slim@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74
+#4 resolve docker.io/library/python:3.13-slim@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74 0.0s done
+#4 DONE 0.1s
+
+#5 [internal] load build context
+#5 transferring context: 114B done
+#5 DONE 0.0s
+
+#6 [2/6] WORKDIR /work
+#6 CACHED
+
+#7 [3/6] COPY main.c config.h Makefile test_app.py ./
+#7 CACHED
+
+#8 [4/6] RUN apt-get update && apt-get install -y --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*
+#8 2.502 Get:1 http://deb.debian.org/debian trixie InRelease [140 kB]
+#8 2.826 Get:2 http://deb.debian.org/debian trixie-updates InRelease [47.3 kB]
+#8 3.704 Get:3 http://deb.debian.org/debian-security trixie-security InRelease [43.4 kB]
+#8 4.979 Get:4 http://deb.debian.org/debian trixie/main amd64 Packages [9678 kB]
+#8 5.675 Get:5 http://deb.debian.org/debian trixie-updates/main amd64 Packages [1108 B]
+#8 6.140 Get:6 http://deb.debian.org/debian-security trixie-security/main amd64 Packages [302 kB]
+#8 6.725 Fetched 10.2 MB in 6s (1591 kB/s)
+#8 6.725 Reading package lists...
+#8 7.875 Reading package lists...
+#8 9.790 Building dependency tree...
+#8 10.06 Reading state information...
+#8 10.43 The following additional packages will be installed:
+#8 10.43   binutils binutils-common binutils-x86-64-linux-gnu bzip2 cpp cpp-14
+#8 10.43   cpp-14-x86-64-linux-gnu cpp-x86-64-linux-gnu dpkg-dev g++ g++-14
+#8 10.43   g++-14-x86-64-linux-gnu g++-x86-64-linux-gnu gcc gcc-14
+#8 10.43   gcc-14-x86-64-linux-gnu gcc-x86-64-linux-gnu libasan8 libatomic1 libbinutils
+#8 10.43   libc-bin libc-dev-bin libc6 libc6-dev libcc1-0 libcrypt-dev libctf-nobfd0
+#8 10.43   libctf0 libdpkg-perl libgcc-14-dev libgdbm-compat4t64 libgomp1 libgprofng0
+#8 10.44   libhwasan0 libisl23 libitm1 libjansson4 liblsan0 liblzma5 libmpc3 libmpfr6
+#8 10.44   libperl5.40 libquadmath0 libsframe1 libstdc++-14-dev libtsan2 libubsan1
+#8 10.44   linux-libc-dev make patch perl perl-base perl-modules-5.40 rpcsvc-proto
+#8 10.44   xz-utils
+#8 10.44 Suggested packages:
+#8 10.44   binutils-doc gprofng-gui binutils-gold bzip2-doc cpp-doc gcc-14-locales
+#8 10.44   cpp-14-doc debian-keyring debian-tag2upload-keyring g++-multilib
+#8 10.44   g++-14-multilib gcc-14-doc gcc-multilib manpages-dev autoconf automake
+#8 10.44   libtool flex bison gdb gcc-doc gcc-14-multilib gdb-x86-64-linux-gnu
+#8 10.44   libc-devtools glibc-doc sq | sqop | rsop | gosop | pgpainless-cli | gpg-sq
+#8 10.44   | gnupg sensible-utils git bzr libstdc++-14-doc make-doc ed diffutils-doc
+#8 10.44   perl-doc libterm-readline-gnu-perl | libterm-readline-perl-perl
+#8 10.44   libtap-harness-archive-perl
+#8 10.44 Recommended packages:
+#8 10.44   fakeroot sq | sqop | rsop | gosop | pgpainless-cli | gpg-sq | gnupg
+#8 10.44   libalgorithm-merge-perl manpages manpages-dev libfile-fcntllock-perl
+#8 10.44   liblocale-gettext-perl
+#8 10.75 The following NEW packages will be installed:
+#8 10.75   binutils binutils-common binutils-x86-64-linux-gnu build-essential bzip2 cpp
+#8 10.75   cpp-14 cpp-14-x86-64-linux-gnu cpp-x86-64-linux-gnu dpkg-dev g++ g++-14
+#8 10.75   g++-14-x86-64-linux-gnu g++-x86-64-linux-gnu gcc gcc-14
+#8 10.75   gcc-14-x86-64-linux-gnu gcc-x86-64-linux-gnu libasan8 libatomic1 libbinutils
+#8 10.75   libc-dev-bin libc6-dev libcc1-0 libcrypt-dev libctf-nobfd0 libctf0
+#8 10.75   libdpkg-perl libgcc-14-dev libgdbm-compat4t64 libgomp1 libgprofng0
+#8 10.75   libhwasan0 libisl23 libitm1 libjansson4 liblsan0 libmpc3 libmpfr6
+#8 10.75   libperl5.40 libquadmath0 libsframe1 libstdc++-14-dev libtsan2 libubsan1
+#8 10.75   linux-libc-dev make patch perl perl-modules-5.40 rpcsvc-proto xz-utils
+#8 10.76 The following packages will be upgraded:
+#8 10.76   libc-bin libc6 liblzma5 perl-base
+#8 11.43 4 upgraded, 52 newly installed, 0 to remove and 25 not upgraded.
+#8 11.43 Need to get 88.1 MB of archives.
+#8 11.43 After this operation, 336 MB of additional disk space will be used.
+#8 11.43 Get:1 http://deb.debian.org/debian trixie/main amd64 perl-base amd64 5.40.1-6+deb13u1 [1666 kB]
+#8 12.20 Get:2 http://deb.debian.org/debian trixie/main amd64 libc6 amd64 2.41-12+deb13u4 [2847 kB]
+#8 12.89 Get:3 http://deb.debian.org/debian trixie/main amd64 libc-bin amd64 2.41-12+deb13u4 [638 kB]
+#8 13.38 Get:4 http://deb.debian.org/debian-security trixie-security/main amd64 liblzma5 amd64 5.8.1-1+deb13u2 [310 kB]
+#8 13.67 Get:5 http://deb.debian.org/debian trixie/main amd64 bzip2 amd64 1.0.8-6 [40.5 kB]
+#8 14.44 Get:6 http://deb.debian.org/debian trixie/main amd64 perl-modules-5.40 all 5.40.1-6+deb13u1 [3014 kB]
+#8 15.10 Get:7 http://deb.debian.org/debian trixie/main amd64 libgdbm-compat4t64 amd64 1.24-2 [50.3 kB]
+#8 16.19 Get:8 http://deb.debian.org/debian trixie/main amd64 libperl5.40 amd64 5.40.1-6+deb13u1 [4326 kB]
+#8 16.91 Get:9 http://deb.debian.org/debian trixie/main amd64 perl amd64 5.40.1-6+deb13u1 [268 kB]
+#8 17.52 Get:10 http://deb.debian.org/debian-security trixie-security/main amd64 xz-utils amd64 5.8.1-1+deb13u2 [660 kB]
+#8 17.91 Get:11 http://deb.debian.org/debian trixie/main amd64 libsframe1 amd64 2.44-3 [78.4 kB]
+#8 18.66 Get:12 http://deb.debian.org/debian trixie/main amd64 binutils-common amd64 2.44-3 [2509 kB]
+#8 19.37 Get:13 http://deb.debian.org/debian trixie/main amd64 libbinutils amd64 2.44-3 [534 kB]
+#8 20.09 Get:14 http://deb.debian.org/debian trixie/main amd64 libgprofng0 amd64 2.44-3 [808 kB]
+#8 20.59 Get:15 http://deb.debian.org/debian trixie/main amd64 libctf-nobfd0 amd64 2.44-3 [156 kB]
+#8 20.98 Get:16 http://deb.debian.org/debian trixie/main amd64 libctf0 amd64 2.44-3 [88.6 kB]
+#8 21.28 Get:17 http://deb.debian.org/debian trixie/main amd64 libjansson4 amd64 2.14-2+b3 [39.8 kB]
+#8 21.82 Get:18 http://deb.debian.org/debian trixie/main amd64 binutils-x86-64-linux-gnu amd64 2.44-3 [1014 kB]
+#8 22.34 Get:19 http://deb.debian.org/debian trixie/main amd64 binutils amd64 2.44-3 [265 kB]
+#8 22.67 Get:20 http://deb.debian.org/debian trixie/main amd64 libc-dev-bin amd64 2.41-12+deb13u4 [60.0 kB]
+#8 23.42 Get:21 http://deb.debian.org/debian-security trixie-security/main amd64 linux-libc-dev all 6.12.116-1 [3050 kB]
+#8 24.19 Get:22 http://deb.debian.org/debian trixie/main amd64 libcrypt-dev amd64 1:4.4.38-1 [119 kB]
+#8 24.53 Get:23 http://deb.debian.org/debian trixie/main amd64 rpcsvc-proto amd64 1.4.3-1 [63.3 kB]
+#8 25.20 Get:24 http://deb.debian.org/debian trixie/main amd64 libc6-dev amd64 2.41-12+deb13u4 [1995 kB]
+#8 25.86 Get:25 http://deb.debian.org/debian trixie/main amd64 libisl23 amd64 0.27-1 [659 kB]
+#8 26.46 Get:26 http://deb.debian.org/debian trixie/main amd64 libmpfr6 amd64 4.2.2-1 [729 kB]
+#8 26.81 Get:27 http://deb.debian.org/debian trixie/main amd64 libmpc3 amd64 1.3.1-1+b3 [52.2 kB]
+#8 28.07 Get:28 http://deb.debian.org/debian trixie/main amd64 cpp-14-x86-64-linux-gnu amd64 14.2.0-19 [11.0 MB]
+#8 28.78 Get:29 http://deb.debian.org/debian trixie/main amd64 cpp-14 amd64 14.2.0-19 [1280 B]
+#8 28.98 Get:30 http://deb.debian.org/debian trixie/main amd64 cpp-x86-64-linux-gnu amd64 4:14.2.0-1 [4840 B]
+#8 29.17 Get:31 http://deb.debian.org/debian trixie/main amd64 cpp amd64 4:14.2.0-1 [1568 B]
+#8 60.82 Ign:32 http://deb.debian.org/debian trixie/main amd64 libcc1-0 amd64 14.2.0-19
+#8 60.82 Ign:33 http://deb.debian.org/debian trixie/main amd64 libgomp1 amd64 14.2.0-19
+#8 60.82 Ign:34 http://deb.debian.org/debian trixie/main amd64 libitm1 amd64 14.2.0-19
+#8 60.82 Ign:35 http://deb.debian.org/debian trixie/main amd64 libatomic1 amd64 14.2.0-19
+#8 60.82 Ign:36 http://deb.debian.org/debian trixie/main amd64 libasan8 amd64 14.2.0-19
+#8 60.82 Ign:37 http://deb.debian.org/debian trixie/main amd64 liblsan0 amd64 14.2.0-19
+#8 60.82 Ign:38 http://deb.debian.org/debian trixie/main amd64 libtsan2 amd64 14.2.0-19
+#8 60.82 Ign:39 http://deb.debian.org/debian trixie/main amd64 libubsan1 amd64 14.2.0-19
+#8 60.82 Ign:40 http://deb.debian.org/debian trixie/main amd64 libhwasan0 amd64 14.2.0-19
+#8 60.82 Ign:41 http://deb.debian.org/debian trixie/main amd64 libquadmath0 amd64 14.2.0-19
+#8 60.82 Ign:42 http://deb.debian.org/debian trixie/main amd64 libgcc-14-dev amd64 14.2.0-19
+#8 61.84 Ign:42 http://deb.debian.org/debian trixie/main amd64 libgcc-14-dev amd64 14.2.0-19
+#8 61.84 Ign:41 http://deb.debian.org/debian trixie/main amd64 libquadmath0 amd64 14.2.0-19
+#8 61.84 Ign:40 http://deb.debian.org/debian trixie/main amd64 libhwasan0 amd64 14.2.0-19
+#8 61.84 Ign:39 http://deb.debian.org/debian trixie/main amd64 libubsan1 amd64 14.2.0-19
+#8 61.84 Ign:38 http://deb.debian.org/debian trixie/main amd64 libtsan2 amd64 14.2.0-19
+#8 61.84 Ign:37 http://deb.debian.org/debian trixie/main amd64 liblsan0 amd64 14.2.0-19
+#8 61.84 Ign:36 http://deb.debian.org/debian trixie/main amd64 libasan8 amd64 14.2.0-19
+#8 61.84 Ign:35 http://deb.debian.org/debian trixie/main amd64 libatomic1 amd64 14.2.0-19
+#8 61.84 Ign:34 http://deb.debian.org/debian trixie/main amd64 libitm1 amd64 14.2.0-19
+#8 61.84 Ign:33 http://deb.debian.org/debian trixie/main amd64 libgomp1 amd64 14.2.0-19
+#8 61.84 Ign:32 http://deb.debian.org/debian trixie/main amd64 libcc1-0 amd64 14.2.0-19
+#8 63.84 Ign:32 http://deb.debian.org/debian trixie/main amd64 libcc1-0 amd64 14.2.0-19
+#8 63.84 Ign:33 http://deb.debian.org/debian trixie/main amd64 libgomp1 amd64 14.2.0-19
+#8 63.84 Ign:34 http://deb.debian.org/debian trixie/main amd64 libitm1 amd64 14.2.0-19
+#8 63.84 Ign:35 http://deb.debian.org/debian trixie/main amd64 libatomic1 amd64 14.2.0-19
+#8 63.84 Ign:36 http://deb.debian.org/debian trixie/main amd64 libasan8 amd64 14.2.0-19
+#8 63.84 Ign:37 http://deb.debian.org/debian trixie/main amd64 liblsan0 amd64 14.2.0-19
+#8 63.84 Ign:38 http://deb.debian.org/debian trixie/main amd64 libtsan2 amd64 14.2.0-19
+#8 63.84 Ign:39 http://deb.debian.org/debian trixie/main amd64 libubsan1 amd64 14.2.0-19
+#8 63.84 Ign:40 http://deb.debian.org/debian trixie/main amd64 libhwasan0 amd64 14.2.0-19
+#8 63.84 Ign:41 http://deb.debian.org/debian trixie/main amd64 libquadmath0 amd64 14.2.0-19
+#8 63.84 Ign:42 http://deb.debian.org/debian trixie/main amd64 libgcc-14-dev amd64 14.2.0-19
+#8 67.84 Err:42 http://deb.debian.org/debian trixie/main amd64 libgcc-14-dev amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:41 http://deb.debian.org/debian trixie/main amd64 libquadmath0 amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:40 http://deb.debian.org/debian trixie/main amd64 libhwasan0 amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:39 http://deb.debian.org/debian trixie/main amd64 libubsan1 amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:38 http://deb.debian.org/debian trixie/main amd64 libtsan2 amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:37 http://deb.debian.org/debian trixie/main amd64 liblsan0 amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:36 http://deb.debian.org/debian trixie/main amd64 libasan8 amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:35 http://deb.debian.org/debian trixie/main amd64 libatomic1 amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:34 http://deb.debian.org/debian trixie/main amd64 libitm1 amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:33 http://deb.debian.org/debian trixie/main amd64 libgomp1 amd64 14.2.0-19
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Err:32 http://deb.debian.org/debian trixie/main amd64 libcc1-0 amd64 14.2.0-19
+#8 67.84   Could not connect to debian.map.fastlydns.net:80 (146.75.114.132), connection timed out Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 67.84 Ign:43 http://deb.debian.org/debian trixie/main amd64 gcc-14-x86-64-linux-gnu amd64 14.2.0-19
+#8 67.84 Ign:44 http://deb.debian.org/debian trixie/main amd64 gcc-14 amd64 14.2.0-19
+#8 67.84 Ign:45 http://deb.debian.org/debian trixie/main amd64 gcc-x86-64-linux-gnu amd64 4:14.2.0-1
+#8 67.84 Ign:46 http://deb.debian.org/debian trixie/main amd64 gcc amd64 4:14.2.0-1
+#8 67.84 Ign:47 http://deb.debian.org/debian trixie/main amd64 libstdc++-14-dev amd64 14.2.0-19
+#8 67.84 Ign:48 http://deb.debian.org/debian trixie/main amd64 g++-14-x86-64-linux-gnu amd64 14.2.0-19
+#8 67.84 Ign:49 http://deb.debian.org/debian trixie/main amd64 g++-14 amd64 14.2.0-19
+#8 67.84 Ign:50 http://deb.debian.org/debian trixie/main amd64 g++-x86-64-linux-gnu amd64 4:14.2.0-1
+#8 67.84 Ign:51 http://deb.debian.org/debian trixie/main amd64 g++ amd64 4:14.2.0-1
+#8 67.84 Ign:52 http://deb.debian.org/debian trixie/main amd64 make amd64 4.4.1-2
+#8 67.84 Ign:53 http://deb.debian.org/debian trixie/main amd64 libdpkg-perl all 1.22.22
+#8 68.84 Ign:53 http://deb.debian.org/debian trixie/main amd64 libdpkg-perl all 1.22.22
+#8 68.84 Ign:52 http://deb.debian.org/debian trixie/main amd64 make amd64 4.4.1-2
+#8 68.84 Ign:51 http://deb.debian.org/debian trixie/main amd64 g++ amd64 4:14.2.0-1
+#8 68.84 Ign:50 http://deb.debian.org/debian trixie/main amd64 g++-x86-64-linux-gnu amd64 4:14.2.0-1
+#8 68.85 Ign:49 http://deb.debian.org/debian trixie/main amd64 g++-14 amd64 14.2.0-19
+#8 68.85 Ign:48 http://deb.debian.org/debian trixie/main amd64 g++-14-x86-64-linux-gnu amd64 14.2.0-19
+#8 68.85 Ign:47 http://deb.debian.org/debian trixie/main amd64 libstdc++-14-dev amd64 14.2.0-19
+#8 68.85 Ign:46 http://deb.debian.org/debian trixie/main amd64 gcc amd64 4:14.2.0-1
+#8 68.85 Ign:45 http://deb.debian.org/debian trixie/main amd64 gcc-x86-64-linux-gnu amd64 4:14.2.0-1
+#8 68.85 Ign:44 http://deb.debian.org/debian trixie/main amd64 gcc-14 amd64 14.2.0-19
+#8 68.85 Ign:43 http://deb.debian.org/debian trixie/main amd64 gcc-14-x86-64-linux-gnu amd64 14.2.0-19
+#8 70.85 Ign:43 http://deb.debian.org/debian trixie/main amd64 gcc-14-x86-64-linux-gnu amd64 14.2.0-19
+#8 70.85 Ign:44 http://deb.debian.org/debian trixie/main amd64 gcc-14 amd64 14.2.0-19
+#8 70.85 Ign:45 http://deb.debian.org/debian trixie/main amd64 gcc-x86-64-linux-gnu amd64 4:14.2.0-1
+#8 70.85 Ign:46 http://deb.debian.org/debian trixie/main amd64 gcc amd64 4:14.2.0-1
+#8 70.85 Ign:47 http://deb.debian.org/debian trixie/main amd64 libstdc++-14-dev amd64 14.2.0-19
+#8 70.85 Ign:48 http://deb.debian.org/debian trixie/main amd64 g++-14-x86-64-linux-gnu amd64 14.2.0-19
+#8 70.85 Ign:49 http://deb.debian.org/debian trixie/main amd64 g++-14 amd64 14.2.0-19
+#8 70.85 Ign:50 http://deb.debian.org/debian trixie/main amd64 g++-x86-64-linux-gnu amd64 4:14.2.0-1
+#8 70.85 Ign:51 http://deb.debian.org/debian trixie/main amd64 g++ amd64 4:14.2.0-1
+#8 70.85 Ign:52 http://deb.debian.org/debian trixie/main amd64 make amd64 4.4.1-2
+#8 70.85 Ign:53 http://deb.debian.org/debian trixie/main amd64 libdpkg-perl all 1.22.22
+#8 74.85 Err:53 http://deb.debian.org/debian trixie/main amd64 libdpkg-perl all 1.22.22
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:52 http://deb.debian.org/debian trixie/main amd64 make amd64 4.4.1-2
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:51 http://deb.debian.org/debian trixie/main amd64 g++ amd64 4:14.2.0-1
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:50 http://deb.debian.org/debian trixie/main amd64 g++-x86-64-linux-gnu amd64 4:14.2.0-1
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:49 http://deb.debian.org/debian trixie/main amd64 g++-14 amd64 14.2.0-19
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:48 http://deb.debian.org/debian trixie/main amd64 g++-14-x86-64-linux-gnu amd64 14.2.0-19
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:47 http://deb.debian.org/debian trixie/main amd64 libstdc++-14-dev amd64 14.2.0-19
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:46 http://deb.debian.org/debian trixie/main amd64 gcc amd64 4:14.2.0-1
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:45 http://deb.debian.org/debian trixie/main amd64 gcc-x86-64-linux-gnu amd64 4:14.2.0-1
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:44 http://deb.debian.org/debian trixie/main amd64 gcc-14 amd64 14.2.0-19
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Err:43 http://deb.debian.org/debian trixie/main amd64 gcc-14-x86-64-linux-gnu amd64 14.2.0-19
+#8 74.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 74.85 Ign:54 http://deb.debian.org/debian trixie/main amd64 patch amd64 2.8-2
+#8 74.85 Ign:55 http://deb.debian.org/debian trixie/main amd64 dpkg-dev all 1.22.22
+#8 74.85 Ign:56 http://deb.debian.org/debian trixie/main amd64 build-essential amd64 12.12
+#8 75.85 Ign:56 http://deb.debian.org/debian trixie/main amd64 build-essential amd64 12.12
+#8 75.85 Ign:55 http://deb.debian.org/debian trixie/main amd64 dpkg-dev all 1.22.22
+#8 75.85 Ign:54 http://deb.debian.org/debian trixie/main amd64 patch amd64 2.8-2
+#8 77.85 Ign:54 http://deb.debian.org/debian trixie/main amd64 patch amd64 2.8-2
+#8 77.85 Ign:55 http://deb.debian.org/debian trixie/main amd64 dpkg-dev all 1.22.22
+#8 77.85 Ign:56 http://deb.debian.org/debian trixie/main amd64 build-essential amd64 12.12
+#8 81.85 Err:56 http://deb.debian.org/debian trixie/main amd64 build-essential amd64 12.12
+#8 81.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.85 Err:55 http://deb.debian.org/debian trixie/main amd64 dpkg-dev all 1.22.22
+#8 81.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.85 Err:54 http://deb.debian.org/debian trixie/main amd64 patch amd64 2.8-2
+#8 81.85   Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libcc1-0_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libgomp1_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libitm1_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libatomic1_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libasan8_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/liblsan0_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libtsan2_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libubsan1_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libhwasan0_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libquadmath0_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libgcc-14-dev_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/gcc-14-x86-64-linux-gnu_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/gcc-14_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-defaults/gcc-x86-64-linux-gnu_14.2.0-1_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-defaults/gcc_14.2.0-1_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/libstdc%2b%2b-14-dev_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/g%2b%2b-14-x86-64-linux-gnu_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/g%2b%2b-14_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-defaults/g%2b%2b-x86-64-linux-gnu_14.2.0-1_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-defaults/g%2b%2b_14.2.0-1_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/m/make-dfsg/make_4.4.1-2_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/d/dpkg/libdpkg-perl_1.22.22_all.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/p/patch/patch_2.8-2_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/d/dpkg/dpkg-dev_1.22.22_all.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/b/build-essential/build-essential_12.12_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+#8 81.86 E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+#8 81.86 Fetched 37.1 MB in 1min 11s (521 kB/s)
+#8 ERROR: process "/bin/sh -c apt-get update && apt-get install -y --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*" did not complete successfully: exit code: 100
+------
+ > [4/6] RUN apt-get update && apt-get install -y --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*:
+81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-14/g%2b%2b-14_14.2.0-19_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-defaults/g%2b%2b-x86-64-linux-gnu_14.2.0-1_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/g/gcc-defaults/g%2b%2b_14.2.0-1_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/m/make-dfsg/make_4.4.1-2_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/d/dpkg/libdpkg-perl_1.22.22_all.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/p/patch/patch_2.8-2_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/d/dpkg/dpkg-dev_1.22.22_all.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+81.86 E: Failed to fetch http://deb.debian.org/debian/pool/main/b/build-essential/build-essential_12.12_amd64.deb  Unable to connect to deb.debian.org:http: [IP: 146.75.114.132 80]
+81.86 E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+81.86 Fetched 37.1 MB in 1min 11s (521 kB/s)
+------
+Dockerfile:4
+--------------------
+   2 |     WORKDIR /work
+   3 |     COPY main.c config.h Makefile test_app.py ./
+   4 | >>> RUN apt-get update && apt-get install -y --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*
+   5 |     RUN make app
+   6 |     RUN python3 test_app.py
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c apt-get update && apt-get install -y --no-install-recommends build-essential && rm -rf /var/lib/apt/lists/*" did not complete successfully: exit code: 100
