@@ -1,7 +1,8 @@
 # 前置检查记录
 
 环境：Windows，Python 3.15.2，MinGW GCC/GNU Make，Git。
-本记录只描述本机预检；Linux Docker/strace 全流程与独立复验尚未执行。
+本记录描述前置阶段的 Windows 预检。后续 Linux Docker/strace 全流程与独立复验
+已于 2026-11-13 完成，正式结果见 [ACCEPTANCE.md](ACCEPTANCE.md)。
 
 - 原有接口契约测试 11 项通过，包括本机 HTTP 202/409 幂等冲突测试。
 - 新增项目适配测试 8 项通过，包含真实 GCC 编译、嵌套目录补丁应用、头文件变更

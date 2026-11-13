@@ -1,0 +1,53 @@
+{
+  "status": "SUCCEEDED",
+  "detector": "BUILDCHECKER_TEACHING",
+  "detector_version": "0.2.0-teaching",
+  "trace_id": "e6-83c17cc0d8ed431da1d2ad41c672095e",
+  "findings": [],
+  "scope": "Single Make process; one final output per recipe job; successful read-open observations",
+  "build_command": [
+    "make",
+    "CC=gcc",
+    "app"
+  ],
+  "clean_command": [
+    "make",
+    "clean"
+  ],
+  "input_sha256": {
+    "Dockerfile.broken": "651d293d5d563c0bafd1e681b9223332c43b00eb2fb01131045f1444532a5ec6",
+    "Makefile": "2c1ef5f4c9e95a73bae34408aa38f39c1a0db8097f7142e0e1156be4bff9732a",
+    "README.md": "372059f2ad637c35d4458e72aaa3ad76d55d9cbb130fb1c3f32f8ba94e64b6f0",
+    "config.h": "16b4dfbcd633bc40c459d018a906d930f6735ace65d81beda186e464c675e2cb",
+    "main.c": "39a084b1fea7c817df3be9e55699b561c8cb0255ec0462ec052c7f5f2387ad84",
+    "test_app.py": "168acfeeea7c33788106c05c186eae0e2b1f65841703027e652f6548a66f15e8"
+  },
+  "clean_exit_code": 0,
+  "trace_command": [
+    "strace",
+    "-ff",
+    "-s",
+    "4096",
+    "-o",
+    "/course/work/api-jobs/job-c27b70783daa47a9a8ef99b739f3c78a/evidence/final-full/trace/t",
+    "-e",
+    "trace=%file,%process",
+    "make",
+    "-p",
+    "CC=gcc",
+    "app"
+  ],
+  "build_exit_code": 0,
+  "observed_targets": [
+    "app",
+    "main.o"
+  ],
+  "artifacts": {
+    "actual_graph": "actual-graph.json",
+    "declared_graph": "declared-graph.json",
+    "processes": "processes.json",
+    "make_database": "make-db.txt",
+    "trace_directory": "trace"
+  },
+  "elapsed_ms": 492
+}

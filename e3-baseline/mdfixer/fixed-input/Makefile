@@ -5,7 +5,7 @@ TARGET = app
 $(TARGET): main.o
 	$(CC) main.o -o $(TARGET)
 
-main.o: main.c
+main.o: main.c config.h
 	$(CC) $(CFLAGS) -c main.c -o main.o
 
 clean:

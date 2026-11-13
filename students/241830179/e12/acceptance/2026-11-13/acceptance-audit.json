@@ -1,0 +1,28 @@
+{
+  "status": "PASSED",
+  "job_id": "job-c27b70783daa47a9a8ef99b739f3c78a",
+  "stages": [
+    "draft",
+    "full-check",
+    "incremental-check",
+    "repair",
+    "recheck"
+  ],
+  "execution_tool_commit": "6d00c9b557435bf44a598c10f4848cf19ee143cc",
+  "base_commit": "37ecb07a11cbc937da8f847e96dbb94d8d0eb6e1",
+  "target_commit": "71ae2ffc4ce9fa99734c297f44c6e057f0df03cf",
+  "artifact_integrity_count": 385,
+  "candidate_sha256": "751d9b48821b96bb3ac899293871030299b599b274f2781c5e0dca59a0778587",
+  "draft_baseline_failure": "MISSING_MAKE",
+  "draft_candidate": "SUCCEEDED",
+  "missing_counts": {
+    "baseline": 1,
+    "target": 1,
+    "final": 0,
+    "independent": 0
+  },
+  "linux_tests_passed": 24,
+  "repair_accepted": true,
+  "original_header_preserved": true,
+  "independent_reverification": "SUCCEEDED"
+}
