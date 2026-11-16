@@ -1,0 +1,70 @@
+{
+  "schema_version": "e8e10-1",
+  "profile": "EXPLICIT_C_MAKE_PROJECT_V1",
+  "commit": "71ae2ffc4ce9fa99734c297f44c6e057f0df03cf",
+  "key": {
+    "inputs": {
+      "Makefile": "53b9b95e6498fcea45fc36f282759692e7ab37d3a8d986d4894d77ad5dee4e00",
+      "config.h": "16b4dfbcd633bc40c459d018a906d930f6735ace65d81beda186e464c675e2cb",
+      "main.c": "39a084b1fea7c817df3be9e55699b561c8cb0255ec0462ec052c7f5f2387ad84"
+    },
+    "profile": {
+      "subdirectory": "e3-baseline/mdfixer/fixed-input",
+      "makefile": "Makefile",
+      "object_sources": {
+        "main.o": "main.c"
+      },
+      "compiler": "gcc",
+      "flags": [
+        "-Wall",
+        "-Wextra"
+      ],
+      "clean": [
+        "make",
+        "clean"
+      ],
+      "build": [
+        "make",
+        "CC=gcc",
+        "app"
+      ],
+      "test": [
+        "python3",
+        "test_app.py"
+      ],
+      "header_probe": {
+        "path": "config.h",
+        "target": "main.o",
+        "replace": {
+          "old": "#define VALUE 1",
+          "new": "#define VALUE 2"
+        }
+      }
+    },
+    "compiler": "gcc (Debian 14.2.0-19) 14.2.0"
+  },
+  "actual": {
+    "main.o": [
+      "config.h",
+      "main.c"
+    ]
+  },
+  "declared": {
+    "main.o": [
+      "main.c"
+    ]
+  },
+  "findings": [
+    {
+      "type": "MISSING",
+      "target": "main.o",
+      "dependency": "config.h"
+    }
+  ],
+  "added": [],
+  "resolved": [],
+  "reused": [],
+  "refreshed": [
+    "main.o"
+  ]
+}

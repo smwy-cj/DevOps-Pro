@@ -1,0 +1,50 @@
+{
+  "status": "FAILED",
+  "detector": "DRAFT_TEACHING_REPLAY",
+  "trace_id": "e6-b-84497704e57b4dafa3afdea69470ede9",
+  "candidate_source": "Manual model response replay; no model/API call in this command",
+  "candidate_sha256": "32246201b53894f096dd7f16bb59c145c53ebf40c095b5a81942f7fc0c53d371",
+  "attempts": [
+    {
+      "iteration": 1,
+      "tag": "e6-draft-replay:84497704e57b4dafa3afdea69470ede9-1",
+      "command": [
+        "docker",
+        "build",
+        "--progress=plain",
+        "-f",
+        "/course/work/api-jobs/job-5eaab79852d8451d9d6aaf92826ac2a7/evidence/draft-build/iter-01/Dockerfile",
+        "-t",
+        "e6-draft-replay:84497704e57b4dafa3afdea69470ede9-1",
+        "/course/work/api-jobs/job-5eaab79852d8451d9d6aaf92826ac2a7/evidence/draft-build/project"
+      ],
+      "build_exit_code": 1,
+      "failure_class": "MISSING_MAKE"
+    },
+    {
+      "iteration": 2,
+      "tag": "e6-draft-replay:84497704e57b4dafa3afdea69470ede9-2",
+      "command": [
+        "docker",
+        "build",
+        "--progress=plain",
+        "-f",
+        "/course/work/api-jobs/job-5eaab79852d8451d9d6aaf92826ac2a7/evidence/draft-build/iter-02/Dockerfile",
+        "-t",
+        "e6-draft-replay:84497704e57b4dafa3afdea69470ede9-2",
+        "/course/work/api-jobs/job-5eaab79852d8451d9d6aaf92826ac2a7/evidence/draft-build/project"
+      ],
+      "build_exit_code": 1
+    }
+  ],
+  "input_sha256": {
+    "Dockerfile.broken": "651d293d5d563c0bafd1e681b9223332c43b00eb2fb01131045f1444532a5ec6",
+    "Makefile": "53b9b95e6498fcea45fc36f282759692e7ab37d3a8d986d4894d77ad5dee4e00",
+    "README.md": "372059f2ad637c35d4458e72aaa3ad76d55d9cbb130fb1c3f32f8ba94e64b6f0",
+    "config.h": "16b4dfbcd633bc40c459d018a906d930f6735ace65d81beda186e464c675e2cb",
+    "main.c": "39a084b1fea7c817df3be9e55699b561c8cb0255ec0462ec052c7f5f2387ad84",
+    "test_app.py": "168acfeeea7c33788106c05c186eae0e2b1f65841703027e652f6548a66f15e8"
+  },
+  "error": "Repair candidate build failed; inspect iter-02 logs",
+  "elapsed_ms": 87267
+}

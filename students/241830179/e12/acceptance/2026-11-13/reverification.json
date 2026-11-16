@@ -1,0 +1,9 @@
+{
+  "status": "SUCCEEDED",
+  "checks": {
+    "patch_integrity": true,
+    "fresh_checkout_build_tests_and_header_rebuild": true,
+    "no_missing_in_full_recheck": true
+  },
+  "target_commit": "71ae2ffc4ce9fa99734c297f44c6e057f0df03cf"
+}

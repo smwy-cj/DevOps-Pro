@@ -1,0 +1,43 @@
+{
+  "mode": "e12",
+  "repo": "/course/data/241830179-e12/repo",
+  "base": "37ecb07a11cbc937da8f847e96dbb94d8d0eb6e1",
+  "target": "71ae2ffc4ce9fa99734c297f44c6e057f0df03cf",
+  "candidate": "/course/data/241830179-e12/candidate.Dockerfile",
+  "expected_output": "1",
+  "build_timeout": 600,
+  "project": {
+    "subdirectory": "e3-baseline/mdfixer/fixed-input",
+    "makefile": "Makefile",
+    "object_sources": {
+      "main.o": "main.c"
+    },
+    "compiler": "gcc",
+    "flags": [
+      "-Wall",
+      "-Wextra"
+    ],
+    "clean": [
+      "make",
+      "clean"
+    ],
+    "build": [
+      "make",
+      "CC=gcc",
+      "app"
+    ],
+    "test": [
+      "python3",
+      "test_app.py"
+    ],
+    "header_probe": {
+      "path": "config.h",
+      "target": "main.o",
+      "replace": {
+        "old": "#define VALUE 1",
+        "new": "#define VALUE 2"
+      }
+    }
+  },
+  "candidate_sha256": "751d9b48821b96bb3ac899293871030299b599b274f2781c5e0dca59a0778587"
+}

@@ -1,0 +1,134 @@
+{
+  "result.json": {
+    "sha256": "f4c668def081cabdea46a04d499fb85c9ad9d991117a1ecbcb32056a75507229",
+    "bytes": 90418
+  },
+  "request.json": {
+    "sha256": "64fc6f711813893db1198da09466ecf92543f02f31bc7e0c25196c075d7c40bb",
+    "bytes": 962
+  },
+  "api-request.json": {
+    "sha256": "8d2c4cb8ba725628020bc9e5623786ace8768e5163d36927f328ba44ae60b3d6",
+    "bytes": 1124
+  },
+  "submit-response.json": {
+    "sha256": "d7e19291b4faad4535aba9539488ce03aceb458c82708872be6b19ce835a1f5b",
+    "bytes": 258
+  },
+  "api-state.json": {
+    "sha256": "a442c0cffa75e2624b06e91e04a9cda1750f437ae8ecee38e3d2dad6d1e61b2c",
+    "bytes": 317
+  },
+  "candidate.patch": {
+    "sha256": "d35c4d6796c2783eb145c0404f641c87d508f62b353cd1c0b49e602e49ded1b0",
+    "bytes": 248
+  },
+  "repair-plan.json": {
+    "sha256": "8eb2e56007c0ce5b15bd2bbd2fa8e3c265b9966dc7e019fbfbd406dbdbb4a463",
+    "bytes": 99
+  },
+  "incremental-report.json": {
+    "sha256": "94c3aec70e772b5c340cbf7551c6d68fe5cff3d7efa0f1c037124b000355b131",
+    "bytes": 1453
+  },
+  "draft-result.json": {
+    "sha256": "e040aabdaabdbbade61f7418efd8deddf5e30cbacc44f1220682a3809bdb75aa",
+    "bytes": 2585
+  },
+  "baseline-findings.json": {
+    "sha256": "ab7a263b256c15027ae76f223ca892b1d18dc121c56b81c75d70c116e609592a",
+    "bytes": 1777
+  },
+  "target-findings.json": {
+    "sha256": "c828d4d409bc333e8af124372126e5ad554cb0c5d221fb28274e9521c347d1e1",
+    "bytes": 2040
+  },
+  "validation.json": {
+    "sha256": "a8c045749a6357a997bafa86fa88baa76eadf59c86d8302d8f8ce7a92ecda90c",
+    "bytes": 229
+  },
+  "final-findings.json": {
+    "sha256": "2ebc5049f2f7f139ec9ae6c30e0b7be7e52765fad3070bb56f98eaf94e65f27b",
+    "bytes": 1524
+  },
+  "reverification.json": {
+    "sha256": "e3e957709d540a93343338bda015d5aa854a36dcac3254ee7ce36978a380b29a",
+    "bytes": 237
+  },
+  "independent-final-findings.json": {
+    "sha256": "2914015d03fa98c1e445d6dea1410d926641e4d7bb51fe19a83e8e11d72c527e",
+    "bytes": 1492
+  },
+  "acceptance-audit.json": {
+    "sha256": "e654ba56e1c4d9d826057275225c02a87922a074c15ff7c02aa72bffe82154db",
+    "bytes": 815
+  },
+  "delivery-summary.json": {
+    "sha256": "718470a4111b85b8cceb269be240636b4203462d035d9ccf80827d7cf60fe97d",
+    "bytes": 1408
+  },
+  "service-image.json": {
+    "sha256": "9eb6ba3e9ea06c8b5c54f1135faf066062827f381decd569121c56cfd013daa6",
+    "bytes": 3069
+  },
+  "toolchain.lock": {
+    "sha256": "bc70f4e9e436d2567c88588171d7fd4575a614c442874baa089407106bbf9358",
+    "bytes": 219
+  },
+  "linux-tests.txt": {
+    "sha256": "3191b27f18c15684dccdcbdc1a62147c20fcb04d0a97ec31ca240084359f081e",
+    "bytes": 3044
+  },
+  "validation-test.txt": {
+    "sha256": "05298e6568942f0be49dd11b5b1ed91706846635d5eb67693814df270f87882d",
+    "bytes": 26
+  },
+  "validation-incremental.txt": {
+    "sha256": "6e4507f0f2c6595908759c48d073f8dffd12592f06cf92506507941ecb7f562b",
+    "bytes": 56
+  },
+  "validation-incremental-test.txt": {
+    "sha256": "05298e6568942f0be49dd11b5b1ed91706846635d5eb67693814df270f87882d",
+    "bytes": 26
+  },
+  "api-server.txt": {
+    "sha256": "bdf760b960275105fca3a36fbfe6765cccc50fa71bae51a334e9ac0299f5e2d2",
+    "bytes": 66485
+  },
+  "docker-version.txt": {
+    "sha256": "0fbe93f257189515f40ca21a1cb3c4d644f3499184b54da068e328aaaffebd97",
+    "bytes": 748
+  },
+  "kernel.txt": {
+    "sha256": "c0c7fdd44d5679baf3206502dd3546c69267e1de20b978ef93f99546578f4435",
+    "bytes": 130
+  },
+  "os-release.txt": {
+    "sha256": "01af466feb100306498c86aa6bad1815e33036019aa34d4362c20f374ea5c829",
+    "bytes": 400
+  },
+  "preparation.json": {
+    "sha256": "810116bd8e6b2b4f6c713cca51f4b337f8a42b3a61695d09a92fa2b6721b9ddf",
+    "bytes": 1405
+  },
+  "candidate.Dockerfile": {
+    "sha256": "751d9b48821b96bb3ac899293871030299b599b274f2781c5e0dca59a0778587",
+    "bytes": 595
+  },
+  "prior-failed-result.json": {
+    "sha256": "d82787984c3a14b95f54a93c21e4316f86d545e0f0b5693a3a9c43ffadb95c28",
+    "bytes": 47795
+  },
+  "prior-failed-draft-result.json": {
+    "sha256": "1209dd09388014a943fdb8986c64eab71bb48557c39b3d8b73c8d8a3f05a93e5",
+    "bytes": 2021
+  },
+  "prior-http-download-error.txt": {
+    "sha256": "fbbfc0a15ea2bb3dc9c802ae26ab10258f167f9059f9fd929a3ac9784fc0831b",
+    "bytes": 25573
+  },
+  "full-evidence.tar.gz": {
+    "sha256": "220ca7a45b4eb4c569752a7d773f29785ebe1c63c56202c0619c58ba1b639af1",
+    "bytes": 729055
+  }
+}

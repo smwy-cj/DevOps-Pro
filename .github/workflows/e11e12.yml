@@ -4,6 +4,7 @@ permissions:
   contents: read
 jobs:
   integration:
+    if: github.event_name == 'workflow_dispatch' || (github.ref != 'refs/heads/student/241830179/e12-real-project' && github.head_ref != 'student/241830179/e12-real-project')
     name: e11e12-integration
     runs-on: ubuntu-24.04
     timeout-minutes: 30

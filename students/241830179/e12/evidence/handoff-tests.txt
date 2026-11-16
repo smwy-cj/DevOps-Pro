@@ -1,0 +1,10 @@
+test_api_downloads_unicode_artifact_with_integrity (test_handoff.HandoffTests.test_api_downloads_unicode_artifact_with_integrity) ... ok
+test_manifest_checks_hash_and_path (test_handoff.HandoffTests.test_manifest_checks_hash_and_path) ... ok
+test_prepare_does_not_overwrite_inputs (test_handoff.HandoffTests.test_prepare_does_not_overwrite_inputs) ... ok
+test_recorded_revisions_and_candidate_contract (test_handoff.HandoffTests.test_recorded_revisions_and_candidate_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.039s
+
+OK
+JOB=job-test STATUS=SUCCEEDED

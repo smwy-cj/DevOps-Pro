@@ -1,0 +1,29 @@
+{
+  "student_id": "241830179",
+  "status": "VERIFIED",
+  "result_status": "SUCCEEDED",
+  "reverification_status": "SUCCEEDED",
+  "artifact_integrity": "PASSED",
+  "project": {
+    "student_id": "241830179",
+    "repository_url": "https://github.com/smwy-cj/DevOps-Pro.git",
+    "branch": "student/241830179/e12-real-project",
+    "subdirectory": "e3-baseline/mdfixer/fixed-input",
+    "base_commit": "37ecb07a11cbc937da8f847e96dbb94d8d0eb6e1",
+    "target_commit": "71ae2ffc4ce9fa99734c297f44c6e057f0df03cf",
+    "source_branch": "e3/b06-test-baseline",
+    "source_commit": "be73686c6a9fdbb7c4d3eadb45779233afa33083",
+    "tool_base_commit": "944b587d0fa469b854acc393a4f9a0c2edc1e5cb",
+    "base_change": "Restore the group's existing E3 C/Make project byte for byte",
+    "target_change": "Add --double and invalid-argument handling, three functional tests, and Docker input",
+    "missing_dependency": {
+      "target": "main.o",
+      "dependency": "config.h",
+      "origin": "Preserved from source commit; not newly injected"
+    },
+    "provenance": "Group-authored course C/Make project restored from another maintained branch",
+    "scope_note": "Small course-origin project; do not describe as an external production application. Course real-project eligibility depends on this disclosed provenance."
+  },
+  "tool_commit": "6d00c9b557435bf44a598c10f4848cf19ee143cc",
+  "tool_worktree_status": ""
+}

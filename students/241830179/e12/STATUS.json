@@ -1,0 +1,14 @@
+{
+  "student_id": "241830179",
+  "state": "VERIFIED",
+  "verification_date": "2026-11-13",
+  "linux_docker_e12": "SUCCEEDED",
+  "independent_reverification": "SUCCEEDED",
+  "job_id": "job-c27b70783daa47a9a8ef99b739f3c78a",
+  "execution_tool_commit": "6d00c9b557435bf44a598c10f4848cf19ee143cc",
+  "result_json": "acceptance/2026-11-13/result.json",
+  "candidate_patch": "acceptance/2026-11-13/candidate.patch",
+  "report": "ACCEPTANCE.md",
+  "host_validation": "See HOST_VALIDATION.md",
+  "runbook": "RUNBOOK.md"
+}

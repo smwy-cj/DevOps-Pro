@@ -1,0 +1,13 @@
+test_existing_sample_projection_preserved (test_real_project.ProfileSafety.test_existing_sample_projection_preserved) ... ok
+test_path_traversal_rejected (test_real_project.ProfileSafety.test_path_traversal_rejected) ... ok
+test_full_sha_required_for_real_snapshot (test_real_project.RealProjectTests.test_full_sha_required_for_real_snapshot) ... ok
+test_nested_patch_and_real_build_validation (test_real_project.RealProjectTests.test_nested_patch_and_real_build_validation) ... ok
+test_scan_cache_and_header_invalidation (test_real_project.RealProjectTests.test_scan_cache_and_header_invalidation) ... ok
+test_source_mapping_change_invalidates_cache (test_real_project.RealProjectTests.test_source_mapping_change_invalidates_cache) ... ok
+test_stale_report_and_complex_rule_rejected (test_real_project.RealProjectTests.test_stale_report_and_complex_rule_rejected) ... ok
+test_test_failure_preserves_source (test_real_project.RealProjectTests.test_test_failure_preserves_source) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 11.969s
+
+OK

@@ -3,7 +3,7 @@ import argparse,json,os,re,subprocess
 from pathlib import Path
 
 root=Path(__file__).resolve().parent
-p=argparse.ArgumentParser();p.add_argument('stage',choices=['build','prepare','run','serve','test']);p.add_argument('--request');p.add_argument('--out');p.add_argument('--port',type=int,default=8080);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('stage',choices=['build','prepare','run','serve','test','reverify']);p.add_argument('--request');p.add_argument('--out');p.add_argument('--evidence');p.add_argument('--port',type=int,default=8080);a=p.parse_args()
 if os.name!='posix':p.error('Run on the Linux cloud host after SSH login')
 sid=subprocess.check_output(['git','config','--local','user.name'],cwd=root,text=True).strip()
 if not re.fullmatch(r'[0-9]{6,16}',sid):p.error('Set local git user.name to your numeric student ID')
@@ -21,6 +21,12 @@ else:
         if not a.request or not a.out:p.error('--request and --out required')
         request=(root/a.request).resolve();out=(root/a.out).resolve()
         if not request.is_relative_to(root) or not out.is_relative_to(root/'work') or out==root/'work':p.error('Request inside repo and output below work/ required')
-        cmd+=['labs/e11e12/pipeline.py','--request','/course/'+str(request.relative_to(root)),'--out','/course/'+str(out.relative_to(root))]
+        script='labs/e11e12/reverify.py' if a.stage=='reverify' else 'labs/e11e12/pipeline.py'
+        cmd+=[script,'--request','/course/'+str(request.relative_to(root)),'--out','/course/'+str(out.relative_to(root))]
+        if a.stage=='reverify':
+            if not a.evidence:p.error('--evidence required')
+            evidence=(root/a.evidence).resolve()
+            if not evidence.is_relative_to(root/'work'):p.error('Evidence must be below work/')
+            cmd+=['--evidence','/course/'+str(evidence.relative_to(root))]
 print('IMAGE='+image,flush=True)
 raise SystemExit(subprocess.call(cmd,cwd=root))
