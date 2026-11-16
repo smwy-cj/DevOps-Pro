@@ -1,0 +1,25 @@
+name: E11-B macro extension 241880258
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  macro:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Build course environment
+        run: docker build -f labs/e8e10/environment/services/buildchecker/Dockerfile -t course-e11-macro:ci labs/e8e10/environment
+      - name: Run macro test and retain evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/e11-macro-241880258
+          docker run --rm --network none --cap-add SYS_PTRACE --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e11-macro:ci python3 -m unittest discover -s labs/e11e12 -p test_macro_241880258.py -v 2>&1 | tee work/e11-macro-241880258/unit-tests.log
+          docker run --rm --network none --cap-add SYS_PTRACE --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/course" -w /course course-e11-macro:ci python3 labs/e11e12/macro_241880258.py --out work/e11-macro-241880258/evidence
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: e11-macro-241880258-${{ github.run_id }}
+          path: work/e11-macro-241880258/
+          retention-days: 14
