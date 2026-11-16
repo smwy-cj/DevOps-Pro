@@ -67,3 +67,8 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+__pycache__/
+
+# E11-E12 generated inputs and evidence
+data/
+work/
