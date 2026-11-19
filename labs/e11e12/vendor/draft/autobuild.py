@@ -100,6 +100,13 @@ def auto_build(fixture, candidate, output, expected_output, timeout=300, verify_
             path.write_text(dockerfile, encoding="utf-8")
             tag = f"e6-draft-replay:{run_id}-{number}"
             command = ["docker", "build", "--progress=plain", "-f", str(path), "-t", tag, str(project)]
+            image_ref = instructions(dockerfile)[0].split()[1]
+            if image_ref.startswith("python:3.13-slim@sha256:"):
+                mirror_ref = "m.daocloud.io/docker.io/library/" + image_ref
+                command[2:2] = [
+                    "--build-context",
+                    image_ref + "=docker-image://" + mirror_ref,
+                ]
             attempt = {"iteration": number, "tag": tag, "command": command}
             report["attempts"].append(attempt)
             code = execute(command, iteration / "build-stdout.log", iteration / "build-stderr.log", timeout)

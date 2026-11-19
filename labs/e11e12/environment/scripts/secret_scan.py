@@ -36,6 +36,11 @@ def scan_text(text, where):
                 value = m.group(m.lastindex or 0)
                 if name == "密钥赋值" and PLACEHOLDER.search(value):
                     continue
+                # JSON parser calls read values dynamically.
+                if (name == "密钥赋值"
+                        and value.startswith(("json.load(", "json.loads("))
+                        and line[m.start(1) - 1:m.start(1)] not in ("'", '"')):
+                    continue
                 hits.append(f"{where}:{n}  {name}  {mask(value)}")
     return hits
 
