@@ -1,0 +1,15 @@
+{
+  "case": "C3",
+  "passed": true,
+  "exit_code": 1,
+  "error": {
+    "code": "ARTIFACT_HASH_MISMATCH",
+    "message": "Artifact content changed during transfer"
+  },
+  "job_id": "job-ca7c6663bc774d689e236ce9c73f9b77",
+  "trace_id": "trace-543b5d5846374b34a717745ed0f902a7",
+  "original_report_sha256": "08e2291341188182d2844860c7e6da455f180bd7f77cfbfc8f2916516a3e2d4a",
+  "test_report_sha256": "44b2f52c4ec1c4d022b4ca45db1fdeae9cd7ccce6da8810c0adb987e1c6e0dfe",
+  "request_report_sha256": "08e2291341188182d2844860c7e6da455f180bd7f77cfbfc8f2916516a3e2d4a",
+  "makefile_bytes_unchanged": true
+}

@@ -1,0 +1,211 @@
+{
+  "status": "VERIFIED",
+  "source_head": "f210d994ce2c29ec88f12e42969ccff05483e301",
+  "fixed_report_sha256": "08e2291341188182d2844860c7e6da455f180bd7f77cfbfc8f2916516a3e2d4a",
+  "peer_acknowledgement": "PENDING",
+  "records": {
+    "H1": {
+      "directory": "work/e13-H1-jsmn-20261117-101500",
+      "status": "SUCCEEDED",
+      "job_id": "job-f89b81b23e3d4a61866e777ccf891473",
+      "trace_id": "trace-d6277dc568ea4034aa20e0ffccd4e010",
+      "base_commit": "66a6dafcc20cea76bf017923d3db725d78407845",
+      "target_commit": "948a1d30cd758d32d45a50f788e5a95fb1d89c69",
+      "verified_artifacts": 177,
+      "error": null
+    },
+    "H2": {
+      "directory": "work/e13-H2-inih-20261117-101533",
+      "status": "SUCCEEDED",
+      "job_id": "job-3f568bd0ac0b40df9fb0ef9ac9a026d2",
+      "trace_id": "trace-decbf3d034274d02b9f6532528a9ce04",
+      "base_commit": "aafc740a2cac05a74541abede93b7d59ed23b87f",
+      "target_commit": "3aadb81763c79651e4dfa99b725ba921ee2b8a39",
+      "verified_artifacts": 177,
+      "error": null
+    },
+    "H3": {
+      "directory": "work/e13-H3-tiny-aes-20261117-101607",
+      "status": "SUCCEEDED",
+      "job_id": "job-6299b580d6924360b46e5eef253c4853",
+      "trace_id": "trace-2c6e576176fe4dd8b08d7d7b41948e36",
+      "base_commit": "dc8099306d7023b7337328d718149973e7b17978",
+      "target_commit": "5640bb69a01e64559207e9f74d15a9ae71a4d0f3",
+      "verified_artifacts": 177,
+      "error": null
+    },
+    "C1": {
+      "directory": "work/e13-C1-a06-to-b06-mirror-20261119-111705",
+      "status": "SUCCEEDED",
+      "job_id": "job-eb304dacfe9b4f03aeebb4c3e6b02557",
+      "trace_id": "trace-a3d343c90ee84297a4e73542fd954e31",
+      "base_commit": "7b0b556ddffaeb489b402ae30e1013da76665259",
+      "target_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "verified_artifacts": 5821,
+      "error": null
+    },
+    "C7": {
+      "directory": "work/e13-C7-p9ot2dhf/normal",
+      "status": "SUCCEEDED",
+      "job_id": "job-a1df3be0d6b740f1950e4a9a8c335b34",
+      "trace_id": "trace-b3bd4fa86e2c465ea048adb25d76d414",
+      "base_commit": "7b0b556ddffaeb489b402ae30e1013da76665259",
+      "target_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "verified_artifacts": 5821,
+      "error": null
+    },
+    "C8": {
+      "directory": "work/api-jobs/job-72eecf8078df4d09b7e26c42f3c9ff36/evidence",
+      "status": "SUCCEEDED",
+      "job_id": "job-72eecf8078df4d09b7e26c42f3c9ff36",
+      "trace_id": "trace-340c8d74f5ee4ef287954855ef9c90aa",
+      "base_commit": "7b0b556ddffaeb489b402ae30e1013da76665259",
+      "target_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "verified_artifacts": 5821,
+      "error": null
+    },
+    "A06_source": {
+      "directory": "data/e13-from-a06/A06-E11-A完整结果",
+      "status": "SUCCEEDED",
+      "job_id": "job-4176885c497a4211b6576a88f41f9821",
+      "trace_id": "trace-2cc14c93644b4a3cb9ca915db14b10b5",
+      "base_commit": "7b0b556ddffaeb489b402ae30e1013da76665259",
+      "target_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "verified_artifacts": 3900,
+      "error": null
+    },
+    "C2": {
+      "directory": "work/e13-C2-C3-qnhtm712/C2",
+      "status": "FAILED",
+      "job_id": "job-462b15edb6e24d5483b651b54bece1dc",
+      "trace_id": "trace-30feacd7ae014cecaaead955a116b804",
+      "base_commit": "7b0b556ddffaeb489b402ae30e1013da76665259",
+      "target_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "verified_artifacts": 3860,
+      "error": {
+        "code": "STALE_REPORT",
+        "message": "Report belongs to another commit"
+      }
+    },
+    "C3": {
+      "directory": "work/e13-C2-C3-qnhtm712/C3",
+      "status": "FAILED",
+      "job_id": "job-ca7c6663bc774d689e236ce9c73f9b77",
+      "trace_id": "trace-543b5d5846374b34a717745ed0f902a7",
+      "base_commit": "7b0b556ddffaeb489b402ae30e1013da76665259",
+      "target_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "verified_artifacts": 3860,
+      "error": {
+        "code": "ARTIFACT_HASH_MISMATCH",
+        "message": "Artifact content changed during transfer"
+      }
+    },
+    "C4": {
+      "directory": "work/e13-C4-65pqy9qr",
+      "status": "FAILED",
+      "job_id": "job-a916ebde7ccf43928d6e4ba8a4c2b4ea",
+      "trace_id": "trace-ec811e9de00a4d089f6828ac3f48485d",
+      "base_commit": "7b0b556ddffaeb489b402ae30e1013da76665259",
+      "target_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "verified_artifacts": 3849,
+      "error": {
+        "code": "DRAFT_FAILED",
+        "message": "Docker client command exceeded 0.01s"
+      }
+    },
+    "C5": {
+      "case": "C5",
+      "passed": true,
+      "before_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "after_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "before_makefile_sha256": "0218e4a53e3c811da210e4bf651eb13e6c88419bae06617135ebc3b68aafff78",
+      "after_makefile_sha256": "0218e4a53e3c811da210e4bf651eb13e6c88419bae06617135ebc3b68aafff78",
+      "validation": {
+        "accepted": false,
+        "checks": {
+          "patch_applies": true
+        },
+        "error": "COMMAND_FAILED ['make', 'app']\ngcc -O0 -c nonexistent.c -o main.o\ncc1: fatal error: nonexistent.c: No such file or directory\ncompilation terminated.\nmake: *** [Makefile:7: main.o] Error 1\n",
+        "source_unchanged": true,
+        "rollback": true
+      }
+    },
+    "C6": {
+      "directory": "work/e13-C6-plkkrwjb",
+      "probe": {
+        "fake_key_blocked": true,
+        "hit_exit": 1,
+        "clean_exit": 0,
+        "before_sha256": "eaa23e89f5ce97902e127ab7e3131d08c5752d43b0c760a178a7dbfb83a445a0",
+        "after_sha256": "4149894cbf0da8022229bcd4b0587b0d3038606cecf175387568722155e778e7"
+      },
+      "images": [
+        {
+          "image_id": "sha256:116618c35040f49042b087766ca596194b54053762060495ea9bb1d20d6e3f7b",
+          "exit_code": 0,
+          "source_reports": [
+            "work/e13-C2-C3-qnhtm712/C2/draft-build/result.json"
+          ],
+          "log": "work/e13-C6-plkkrwjb/candidate-image-1.txt"
+        },
+        {
+          "image_id": "sha256:2c0eedf0e73a22433a3bce830c5dac328662629f323398fb0f59322a848af8dd",
+          "exit_code": 0,
+          "source_reports": [
+            "work/e13-C1-a06-to-b06-mirror-20261119-111705/draft-build/result.json"
+          ],
+          "log": "work/e13-C6-plkkrwjb/candidate-image-2.txt"
+        },
+        {
+          "image_id": "sha256:358b94914ab869964d06adb07412d6650d9211a395d33d58af54c6ffed13b181",
+          "exit_code": 0,
+          "source_reports": [
+            "work/e13-C2-C3-qnhtm712/C3/draft-build/result.json"
+          ],
+          "log": "work/e13-C6-plkkrwjb/candidate-image-3.txt"
+        },
+        {
+          "image_id": "sha256:5462575d218ee6b160b4a4373153707c949500a5ed21707efdd5af3152dd542b",
+          "exit_code": 0,
+          "source_reports": [
+            "work/e13-H2-inih-20261117-101533/draft-build/result.json"
+          ],
+          "log": "work/e13-C6-plkkrwjb/candidate-image-4.txt"
+        },
+        {
+          "image_id": "sha256:559e018c1bac9b4d6315b76f580d0f8d39346abf3fdce6bfbfa9a443e4ef69e9",
+          "exit_code": 0,
+          "source_reports": [
+            "work/e13-H1-jsmn-20261117-101500/draft-build/result.json"
+          ],
+          "log": "work/e13-C6-plkkrwjb/candidate-image-5.txt"
+        },
+        {
+          "image_id": "sha256:7666fb235a40a7951149f1d221f740a3497f7418e12473268ca761c324bc21b4",
+          "exit_code": 0,
+          "source_reports": [
+            "work/api-jobs/job-72eecf8078df4d09b7e26c42f3c9ff36/evidence/draft-build/result.json"
+          ],
+          "log": "work/e13-C6-plkkrwjb/candidate-image-6.txt"
+        },
+        {
+          "image_id": "sha256:77284b3ecb4417d45ee9bc061c4fe4e91b22dfb805fef17423a04b46a07f4bac",
+          "exit_code": 0,
+          "source_reports": [
+            "work/e13-H3-tiny-aes-20261117-101607/draft-build/result.json"
+          ],
+          "log": "work/e13-C6-plkkrwjb/candidate-image-7.txt"
+        },
+        {
+          "image_id": "sha256:e43385e60323a0f0d25a8f9a3fbd3b5683e9116d44c26468b90a98a6ab6a7e15",
+          "exit_code": 0,
+          "source_reports": [
+            "work/e13-C7-p9ot2dhf/normal/draft-build/result.json"
+          ],
+          "log": "work/e13-C6-plkkrwjb/candidate-image-8.txt"
+        }
+      ]
+    }
+  },
+  "verified_artifact_entries": 33463
+}

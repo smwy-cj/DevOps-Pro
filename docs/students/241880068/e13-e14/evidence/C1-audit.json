@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "job_id": "job-eb304dacfe9b4f03aeebb4c3e6b02557",
+  "trace_id": "trace-a3d343c90ee84297a4e73542fd954e31",
+  "consumed_report_sha256": "08e2291341188182d2844860c7e6da455f180bd7f77cfbfc8f2916516a3e2d4a",
+  "source_report": {
+    "job_id": "job-4176885c497a4211b6576a88f41f9821",
+    "trace_id": "trace-2cc14c93644b4a3cb9ca915db14b10b5",
+    "uri": "artifact://job-4176885c497a4211b6576a88f41f9821/incremental-check.json",
+    "sha256": "357815116d003508e19f4099b944151e7d9f027843162f6f4352bce32cbce922"
+  },
+  "final_findings": [
+    {
+      "type": "REDUNDANT",
+      "target": "main.o",
+      "dependency": "unused.h",
+      "evidence": [
+        {
+          "source": "make_database",
+          "artifact": "make-db.txt",
+          "line": 1066,
+          "declaration": "main.o: main.c unused.h config.h"
+        }
+      ],
+      "scope": "Not observed in this recipe job under this build configuration"
+    }
+  ],
+  "source_project_clean": true
+}

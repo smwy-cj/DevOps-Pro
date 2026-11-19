@@ -1,0 +1,66 @@
+[
+  {
+    "image_id": "sha256:116618c35040f49042b087766ca596194b54053762060495ea9bb1d20d6e3f7b",
+    "exit_code": 0,
+    "source_reports": [
+      "work/e13-C2-C3-qnhtm712/C2/draft-build/result.json"
+    ],
+    "log": "work/e13-C6-plkkrwjb/candidate-image-1.txt"
+  },
+  {
+    "image_id": "sha256:2c0eedf0e73a22433a3bce830c5dac328662629f323398fb0f59322a848af8dd",
+    "exit_code": 0,
+    "source_reports": [
+      "work/e13-C1-a06-to-b06-mirror-20261119-111705/draft-build/result.json"
+    ],
+    "log": "work/e13-C6-plkkrwjb/candidate-image-2.txt"
+  },
+  {
+    "image_id": "sha256:358b94914ab869964d06adb07412d6650d9211a395d33d58af54c6ffed13b181",
+    "exit_code": 0,
+    "source_reports": [
+      "work/e13-C2-C3-qnhtm712/C3/draft-build/result.json"
+    ],
+    "log": "work/e13-C6-plkkrwjb/candidate-image-3.txt"
+  },
+  {
+    "image_id": "sha256:5462575d218ee6b160b4a4373153707c949500a5ed21707efdd5af3152dd542b",
+    "exit_code": 0,
+    "source_reports": [
+      "work/e13-H2-inih-20261117-101533/draft-build/result.json"
+    ],
+    "log": "work/e13-C6-plkkrwjb/candidate-image-4.txt"
+  },
+  {
+    "image_id": "sha256:559e018c1bac9b4d6315b76f580d0f8d39346abf3fdce6bfbfa9a443e4ef69e9",
+    "exit_code": 0,
+    "source_reports": [
+      "work/e13-H1-jsmn-20261117-101500/draft-build/result.json"
+    ],
+    "log": "work/e13-C6-plkkrwjb/candidate-image-5.txt"
+  },
+  {
+    "image_id": "sha256:7666fb235a40a7951149f1d221f740a3497f7418e12473268ca761c324bc21b4",
+    "exit_code": 0,
+    "source_reports": [
+      "work/api-jobs/job-72eecf8078df4d09b7e26c42f3c9ff36/evidence/draft-build/result.json"
+    ],
+    "log": "work/e13-C6-plkkrwjb/candidate-image-6.txt"
+  },
+  {
+    "image_id": "sha256:77284b3ecb4417d45ee9bc061c4fe4e91b22dfb805fef17423a04b46a07f4bac",
+    "exit_code": 0,
+    "source_reports": [
+      "work/e13-H3-tiny-aes-20261117-101607/draft-build/result.json"
+    ],
+    "log": "work/e13-C6-plkkrwjb/candidate-image-7.txt"
+  },
+  {
+    "image_id": "sha256:e43385e60323a0f0d25a8f9a3fbd3b5683e9116d44c26468b90a98a6ab6a7e15",
+    "exit_code": 0,
+    "source_reports": [
+      "work/e13-C7-p9ot2dhf/normal/draft-build/result.json"
+    ],
+    "log": "work/e13-C6-plkkrwjb/candidate-image-8.txt"
+  }
+]

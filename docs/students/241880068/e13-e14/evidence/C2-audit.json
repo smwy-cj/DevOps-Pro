@@ -1,0 +1,15 @@
+{
+  "case": "C2",
+  "passed": true,
+  "exit_code": 1,
+  "error": {
+    "code": "STALE_REPORT",
+    "message": "Report belongs to another commit"
+  },
+  "job_id": "job-462b15edb6e24d5483b651b54bece1dc",
+  "trace_id": "trace-30feacd7ae014cecaaead955a116b804",
+  "original_report_sha256": "08e2291341188182d2844860c7e6da455f180bd7f77cfbfc8f2916516a3e2d4a",
+  "test_report_sha256": "ea239dce0cac4a28adfaa81f84f73d13c6879fe812eea08fd4627dff7e421eeb",
+  "request_report_sha256": "ea239dce0cac4a28adfaa81f84f73d13c6879fe812eea08fd4627dff7e421eeb",
+  "makefile_bytes_unchanged": true
+}

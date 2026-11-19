@@ -1,0 +1,45 @@
+{
+  "mode": "e11-b",
+  "repo": "/course/data/a06-project-e13",
+  "base": "7b0b556ddffaeb489b402ae30e1013da76665259",
+  "target": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+  "candidate": "/course/data/e13-from-a06/A06\u9879\u76ee\u8f93\u5165/candidate.Dockerfile",
+  "candidate_sha256": "e774201925c443a66aba331485f644e6fbcf0bda9421f9073d926191e3b684dc",
+  "expected_output": "1",
+  "build_timeout": 600,
+  "project": {
+    "subdirectory": "experiments/e11e12/dependency-counter",
+    "makefile": "Makefile",
+    "object_sources": {
+      "main.o": "main.c",
+      "helper.o": "helper.c"
+    },
+    "compiler": "gcc",
+    "flags": [
+      "-O0"
+    ],
+    "clean": [
+      "make",
+      "clean"
+    ],
+    "build": [
+      "make",
+      "app"
+    ],
+    "test": [
+      "python3",
+      "-c",
+      "import pathlib,re,subprocess; value=re.search(r'#define VALUE (\\d+)',pathlib.Path('config.h').read_text())[1]; p=subprocess.run(['./app'],capture_output=True,text=True,timeout=10); assert p.returncode==0 and p.stdout.strip()==value,(p.returncode,p.stdout,p.stderr)"
+    ],
+    "header_probe": {
+      "path": "config.h",
+      "target": "main.o",
+      "replace": {
+        "old": "#define VALUE 1",
+        "new": "#define VALUE 2"
+      }
+    }
+  },
+  "fixed_report": "/course/data/e13-from-a06/fixed-md.json",
+  "fixed_report_sha256": "08e2291341188182d2844860c7e6da455f180bd7f77cfbfc8f2916516a3e2d4a"
+}
