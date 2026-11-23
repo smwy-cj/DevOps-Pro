@@ -1,0 +1,67 @@
+name: E14 real-project release acceptance
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build pinned runtime and configure workspace identity
+        run: |
+          set -euo pipefail
+          git config --local user.name 999999999
+          git config --local user.email ci@example.invalid
+          printf 'E14_ROOT=%s\nE14_IMAGE=%s\nE14_UID=%s\nE14_GID=%s\nE14_DOCKER_GID=%s\n' \
+            "$PWD" course-e11e12:999999999 "$(id -u)" "$(id -g)" \
+            "$(stat -c '%g' /var/run/docker.sock)" >> "$GITHUB_ENV"
+          docker build --progress=plain \
+            --build-arg BASE_IMAGE=python:3.13-slim@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74 \
+            --build-arg DOCKER_CLI_IMAGE=docker:28.5.1-cli@sha256:9190b0613792e658a7783cf14b2d5ace5941bb68ede7276922ea36ee457d76ad \
+            -f labs/e11e12/environment/services/buildchecker/Dockerfile \
+            -t course-e11e12:999999999 labs/e11e12/environment
+      - name: Regression and source checks
+        run: |
+          set -euo pipefail
+          python3 -m py_compile labs/e13e14/*.py
+          python3 -m unittest discover -s labs/e13e14/tests -p 'test_*.py' -v
+          python3 run_e11e12.py test
+          python3 labs/e11e12/environment/scripts/secret_scan.py . --history
+      - name: Restore fixed sample and E13-exchanged inputs
+        run: |
+          set -euo pipefail
+          python3 run_e11e12.py prepare
+          python3 labs/e13e14/prepare_release.py
+          docker compose -f labs/e13e14/compose.yaml -p e14-release-ci config --quiet
+          docker compose -f labs/e13e14/compose.yaml -p e14-release-ci up -d --wait
+      - name: Actual A06 and B06 four-service acceptance and recovery
+        run: |
+          set -euo pipefail
+          python3 labs/e13e14/run_release.py --image "$E14_IMAGE"
+      - name: Preserve logs and stop only the acceptance project
+        if: always()
+        run: |
+          mkdir -p work/e14-release
+          docker compose -f labs/e13e14/compose.yaml -p e14-release-ci logs --no-color > work/e14-release/final-four-services.log
+          python3 labs/e13e14/scan_runtime_logs.py work/e14-release
+          docker compose -f labs/e13e14/compose.yaml -p e14-release-ci down
+      - uses: actions/upload-artifact@v7.0.2
+        if: always()
+        with:
+          name: e14-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            work/e14-release-assets/
+            work/e14-release/
+          if-no-files-found: warn
+          retention-days: 14

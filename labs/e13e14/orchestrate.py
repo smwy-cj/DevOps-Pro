@@ -1,7 +1,8 @@
-"""Run E14's four Compose services on one pinned teaching project."""
+"""Run E14's four HTTP services on a pinned sample or explicit C/Make project."""
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -12,6 +13,8 @@ from pathlib import Path
 
 PORTS = {'buildchecker': 18081, 'echecker': 18082, 'draft': 18083, 'mdfixer': 18084}
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'labs/e11e12'))
+from real_project import Project
 
 
 def save(path, data):
@@ -45,7 +48,7 @@ def command(argv, cwd, log):
     return p.stdout.strip()
 
 
-def snapshot(repo, revision, target, logs):
+def snapshot(repo, revision, target, logs, adapter=None):
     if not re.fullmatch(r'[0-9a-f]{40}', revision):
         raise ValueError('Use a full Git commit SHA')
     head = command(['git', 'rev-parse', '--verify', revision + '^{commit}'], repo,
@@ -53,12 +56,15 @@ def snapshot(repo, revision, target, logs):
     command(['git', 'clone', '--no-hardlinks', '--no-checkout', str(repo), str(target)], repo,
             logs / (target.name + '-clone.log'))
     command(['git', 'checkout', '--detach', head], target, logs / (target.name + '-checkout.log'))
-    if {p.name for p in target.glob('*.c')} != {'main.c', 'helper.c'} or not (target / 'config.h').is_file():
+    if adapter:
+        adapter.directory(target)
+    elif {p.name for p in target.glob('*.c')} != {'main.c', 'helper.c'} or not (target / 'config.h').is_file():
         raise ValueError('Unsupported teaching project profile')
     return head
 
 
 def call(role, payload, evidence):
+    save(evidence.with_name(evidence.stem + '-request.json'), payload)
     req = urllib.request.Request(f'http://127.0.0.1:{PORTS[role]}/v1/run',
                                  data=json.dumps(payload).encode(),
                                  headers={'Content-Type': 'application/json'})
@@ -89,11 +95,15 @@ def execute(request, out):
     trace = 'trace-' + uuid.uuid4().hex
     result = {'schema_version': 'e14-compose-1', 'job_id': job, 'trace_id': trace,
               'status': 'RUNNING', 'stages': []}
+    if os.environ.get('GITHUB_SHA'):
+        result['tool_commit'] = os.environ['GITHUB_SHA']
     save(out / 'request.json', request)
 
     def payload(project, folder, **extra):
         return {'project': container_path(project), 'out': container_path(folder),
-                'job_id': job, 'trace_id': trace, **extra}
+                'job_id': job, 'trace_id': trace,
+                **({'project_config': request['project']} if 'project' in request else {}),
+                **extra}
 
     def stage(name, commit, data):
         item = {'name': name, 'commit': commit, 'job_id': job, 'trace_id': trace, 'status': 'SUCCEEDED', 'data': data}
@@ -101,16 +111,28 @@ def execute(request, out):
         save(path, item)
         result['stages'].append({'name': name, 'artifact': {'uri': path.name, 'sha256': digest(path)}})
 
+    makefile = None
+    before = None
+    source_makefile = None
     try:
+        adapter = Project(request['project']) if 'project' in request else None
+        if request.get('candidate_sha256') is not None and digest(candidate) != request['candidate_sha256']:
+            raise ValueError('CANDIDATE_HASH_MISMATCH')
         base = out / 'base-project'
         target = out / 'target-project'
         logs = out / 'logs'
-        base_sha = snapshot(repo, request['base'], base, logs)
-        target_sha = snapshot(repo, request['target'], target, logs)
+        base_sha = snapshot(repo, request['base'], base, logs, adapter)
+        target_sha = snapshot(repo, request['target'], target, logs, adapter)
         result.update(base_commit=base_sha, target_commit=target_sha)
+        source_makefile = ((adapter.directory(repo) / adapter.makefile) if adapter else repo / 'Makefile')
+        result['input_makefile_sha256_before'] = digest(source_makefile)
+        result['input_head_before'] = command(['git', 'rev-parse', 'HEAD'], repo, logs / 'input-head-before.log')
+        makefile = ((adapter.directory(target) / adapter.makefile) if adapter else target / 'Makefile')
+        before = makefile.read_bytes()
 
         drafted = call('draft', payload(target, out / 'draft-build',
                                         candidate=container_path(candidate),
+                                        candidate_sha256=digest(candidate),
                                         expected_output=request.get('expected_output', '1'),
                                         build_timeout=request.get('build_timeout', 600)),
                        out / 'draft-response.json')
@@ -122,13 +144,17 @@ def execute(request, out):
 
         increment = call('echecker', payload(target, out / 'incremental', base=container_path(base),
                                             baseline_graph=container_path(out / 'baseline-full/actual-graph.json'),
+                                            baseline_graph_sha256=digest(out / 'baseline-full/actual-graph.json'),
                                             target_findings=container_path(out / 'target-full/findings.json'),
+                                            target_findings_sha256=digest(out / 'target-full/findings.json'),
                                             target_commit=target_sha), out / 'incremental-response.json')
         stage('incremental-check', target_sha, increment)
 
         repair = call('mdfixer', payload(target, out / 'repair-work',
                                         report=increment['report'], report_sha256=increment['sha256'],
                                         target_commit=target_sha), out / 'repair-response.json')
+        if repair.get('input_report', {}).get('sha256') != increment['sha256']:
+            raise ValueError('Repair did not confirm the same incremental report hash')
         stage('repair', target_sha, repair)
 
         final = call('buildchecker', payload(target, out / 'final-full'), out / 'recheck-response.json')
@@ -139,6 +165,19 @@ def execute(request, out):
         result['status'] = 'SUCCEEDED'
     except Exception as exc:
         result.update(status='FAILED', error=str(exc))
+        if makefile is not None and before is not None:
+            changed = makefile.read_bytes() != before
+            makefile.write_bytes(before)
+            result['rollback'] = changed
+            result['target_makefile_unchanged'] = makefile.read_bytes() == before
+    if source_makefile is not None:
+        result['input_makefile_sha256_after'] = digest(source_makefile)
+        result['input_head_after'] = command(['git', 'rev-parse', 'HEAD'], repo, out / 'logs/input-head-after.log')
+        result['input_unchanged'] = (
+            result['input_makefile_sha256_before'] == result['input_makefile_sha256_after']
+            and result['input_head_before'] == result['input_head_after'])
+        if not result['input_unchanged']:
+            result.update(status='FAILED', error='Input repository commit or Makefile changed')
     result['artifacts'] = [{'uri': path.relative_to(out).as_posix(), 'sha256': digest(path),
                             'bytes': path.stat().st_size} for path in sorted(out.rglob('*'))
                            if path.is_file() and '.git' not in path.parts and not path.is_symlink()]

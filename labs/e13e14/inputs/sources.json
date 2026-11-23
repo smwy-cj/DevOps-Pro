@@ -1,0 +1,94 @@
+{
+  "projects": [
+    {
+      "group": "A06",
+      "repository_url": "https://gitee.com/yuisawe/nju-devops-2026-a06.git",
+      "base": "7b0b556ddffaeb489b402ae30e1013da76665259",
+      "target": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+      "project": {
+        "subdirectory": "experiments/e11e12/dependency-counter",
+        "makefile": "Makefile",
+        "object_sources": {
+          "main.o": "main.c",
+          "helper.o": "helper.c"
+        },
+        "compiler": "gcc",
+        "flags": [
+          "-O0"
+        ],
+        "clean": [
+          "make",
+          "clean"
+        ],
+        "build": [
+          "make",
+          "app"
+        ],
+        "test": [
+          "python3",
+          "-c",
+          "import pathlib,re,subprocess; value=re.search(r'#define VALUE (\\d+)',pathlib.Path('config.h').read_text())[1]; p=subprocess.run(['./app'],capture_output=True,text=True,timeout=10); assert p.returncode==0 and p.stdout.strip()==value,(p.returncode,p.stdout,p.stderr)"
+        ],
+        "header_probe": {
+          "path": "config.h",
+          "target": "main.o",
+          "replace": {
+            "old": "#define VALUE 1",
+            "new": "#define VALUE 2"
+          }
+        }
+      },
+      "candidate": "a06.candidate.Dockerfile",
+      "candidate_sha256": "e774201925c443a66aba331485f644e6fbcf0bda9421f9073d926191e3b684dc",
+      "expected_output": "1",
+      "scope": "Group-maintained course C/Make project; E13-exchanged fixed revisions"
+    },
+    {
+      "group": "B06",
+      "repository_url": "https://github.com/smwy-cj/DevOps-Pro.git",
+      "base": "37ecb07a11cbc937da8f847e96dbb94d8d0eb6e1",
+      "target": "71ae2ffc4ce9fa99734c297f44c6e057f0df03cf",
+      "project": {
+        "subdirectory": "e3-baseline/mdfixer/fixed-input",
+        "makefile": "Makefile",
+        "object_sources": {
+          "main.o": "main.c"
+        },
+        "compiler": "gcc",
+        "flags": [
+          "-Wall",
+          "-Wextra"
+        ],
+        "clean": [
+          "make",
+          "clean"
+        ],
+        "build": [
+          "make",
+          "CC=gcc",
+          "app"
+        ],
+        "test": [
+          "python3",
+          "test_app.py"
+        ],
+        "header_probe": {
+          "path": "config.h",
+          "target": "main.o",
+          "replace": {
+            "old": "#define VALUE 1",
+            "new": "#define VALUE 2"
+          }
+        }
+      },
+      "candidate": "b06.candidate.Dockerfile",
+      "candidate_sha256": "751d9b48821b96bb3ac899293871030299b599b274f2781c5e0dca59a0778587",
+      "expected_output": "1",
+      "scope": "Group-maintained course C/Make project; E13-exchanged fixed revisions"
+    }
+  ],
+  "a06_bundle_sha256": "87e389d42ef3e7e8c41645363ff169ae673d826e0b7c2b878e549041e2cd9972",
+  "teacher_zip_sha256": "d9818c5f34d6ff5b6016222dabd7f56daca09ceaa5f525be214e146e3d485435",
+  "a06_bundle_source": "B06交接资料_241880538_20261117.zip, received from A06; original bundle bytes preserved",
+  "a06_secret_scan": "1915 tracked files and Git history scanned, exit 0 on 2026-11-23"
+}

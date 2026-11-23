@@ -2,19 +2,24 @@
 import hashlib
 import json
 import os
+import shlex
 import sys
 import time
 import traceback
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
-sys.path[:0] = ['/course/labs/e8e10', '/course/labs/e11e12/vendor', '/app']
+SOURCE = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(SOURCE / 'labs/e8e10'), str(SOURCE / 'labs/e11e12'),
+               str(SOURCE / 'labs/e11e12/vendor'),
+               str(SOURCE / 'labs/e11e12/environment/services/buildchecker'), '/app']
 from lab import scan, patch, validate
 from draft.autobuild import auto_build
 from buildchecker.fullcheck import full_check
+from real_project import Project
 
 ROOT = Path('/course').resolve()
-ROLE = os.environ['E14_ROLE']
+ROLE = os.environ.get('E14_ROLE')
 
 
 def local(value, area='work'):
@@ -39,15 +44,27 @@ def run(data):
     out = local(data['out'])
     if out.exists():
         raise ValueError('Output already exists')
+    adapter = Project(data['project_config']) if 'project_config' in data else None
+    directory = adapter.directory(project) if adapter else project
+    scan_project = adapter.scan if adapter else scan
+    patch_project = adapter.patch if adapter else patch
+    validate_project = adapter.validate if adapter else validate
+    targets = tuple(adapter.sources) if adapter else ('main.o', 'helper.o')
     if ROLE == 'draft':
         candidate = local(data['candidate'], 'data')
-        result = auto_build(project, candidate, out, data.get('expected_output', '1'),
+        if data.get('candidate_sha256') is not None and sha(candidate) != data['candidate_sha256']:
+            raise ValueError('CANDIDATE_HASH_MISMATCH')
+        result = auto_build(directory, candidate, out, data.get('expected_output', '1'),
                             timeout=float(data.get('build_timeout', 600)))
         if result['status'] != 'SUCCEEDED':
             raise ValueError('DRAFT_' + result['status'] + ': ' + str(result.get('error')))
         return {'status': 'SUCCEEDED', 'result': result, 'artifact': str(out / 'result.json')}
     if ROLE == 'buildchecker':
-        result = full_check(project, out)
+        options = {}
+        if adapter:
+            options = {'clean_command': shlex.join(adapter.config['clean']),
+                       'build_command': shlex.join(adapter.config['build'])}
+        result = full_check(directory, out, **options)
         if result['status'] != 'SUCCEEDED':
             raise ValueError('BUILDCHECKER_' + result['status'] + ': ' + str(result.get('error')))
         return {'status': 'SUCCEEDED', 'result': result, 'artifact': str(out / 'findings.json')}
@@ -55,17 +72,21 @@ def run(data):
         base = local(data['base'])
         baseline_graph = local(data['baseline_graph'])
         target_findings = local(data['target_findings'])
-        old = scan(base)
+        for name, path in (('baseline_graph_sha256', baseline_graph),
+                           ('target_findings_sha256', target_findings)):
+            if name in data and sha(path) != data[name]:
+                raise ValueError('ARTIFACT_HASH_MISMATCH ' + name)
+        old = scan_project(base)
         graph = json.loads(baseline_graph.read_text())
         projected = {t: sorted({e['dependency'] for e in graph if e['target'] == t})
-                     for t in ('main.o', 'helper.o')}
+                     for t in targets}
         if old['actual'] != projected:
             raise ValueError('Baseline BuildChecker/GCC graph mismatch')
         old['actual'] = projected
-        current = scan(project, old)
+        current = scan_project(project, old)
         reference = json.loads(target_findings.read_text())
         normalize = lambda fs: sorted((x['type'], x['target'], x['dependency']) for x in fs
-                                      if x['target'] in ('main.o', 'helper.o'))
+                                      if x['target'] in targets)
         if reference['status'] != 'SUCCEEDED' or normalize(current['findings']) != normalize(reference['findings']):
             raise ValueError('Incremental/full findings mismatch')
         out.mkdir(parents=True)
@@ -88,18 +109,23 @@ def run(data):
                 'e11e12-1', 'incremental-check', 'SUCCEEDED', data['target_commit'],
                 data['job_id'], data['trace_id']):
             raise ValueError('Report identity mismatch')
+        if envelope.get('data', {}).get('commit') != data['target_commit']:
+            raise ValueError('Report data commit mismatch')
         out.mkdir(parents=True)
-        diff, edits = patch(project, envelope['data'])
+        diff, edits = patch_project(project, envelope['data'])
         if not diff:
             raise ValueError('No missing dependency to repair')
         candidate = out / 'candidate.patch'
         candidate.write_text(diff, encoding='utf-8')
         save(out / 'repair-plan.json', edits)
-        verdict = validate(project, candidate, out / 'validation')
+        verdict = validate_project(project, candidate, out / 'validation')
         if not verdict['accepted']:
             raise ValueError('Patch rejected: ' + str(verdict))
         return {'status': 'SUCCEEDED', 'patch': str(candidate),
-                'sha256': sha(candidate), 'validation': verdict}
+                'sha256': sha(candidate), 'validation': verdict,
+                'input_report': {'path': str(report), 'sha256': data['report_sha256'],
+                                 'job_id': data['job_id'], 'trace_id': data['trace_id'],
+                                 'commit': data['target_commit']}}
     raise ValueError('Unknown role')
 
 
