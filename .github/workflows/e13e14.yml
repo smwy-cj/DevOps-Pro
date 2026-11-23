@@ -39,6 +39,8 @@ jobs:
           set -euo pipefail
           git config --local user.name 999999999
           git config --local user.email ci@example.invalid
+          printf 'E14_UID=%s\nE14_GID=%s\nE14_DOCKER_GID=%s\n' \
+            "$(id -u)" "$(id -g)" "$(stat -c '%g' /var/run/docker.sock)" >> "$GITHUB_ENV"
           docker build --progress=plain \
             --build-arg BASE_IMAGE=python:3.13-slim@sha256:f82c96458eedc847b233e582eb31336f4954b39cae020b6dcf5b3ed0e5cbcd74 \
             --build-arg DOCKER_CLI_IMAGE=docker:28.5.1-cli@sha256:9190b0613792e658a7783cf14b2d5ace5941bb68ede7276922ea36ee457d76ad \
@@ -52,6 +54,12 @@ jobs:
           docker compose -f labs/e13e14/compose.yaml -p e14-ci up -d --wait
           python3 labs/e13e14/orchestrate.py --request data/integration-sample/e12.json --out work/ci-e14
           python3 labs/e13e14/scan_runtime_logs.py work/ci-e14
+      - name: Preserve and scan four-service logs
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          export E14_ROOT="$PWD" E14_IMAGE=course-e11e12:999999999
           docker compose -f labs/e13e14/compose.yaml -p e14-ci logs --no-color > work/ci-e14-services.log
           python3 labs/e13e14/scan_runtime_logs.py work/ci-e14-services.log
       - name: Stop only this Compose project
