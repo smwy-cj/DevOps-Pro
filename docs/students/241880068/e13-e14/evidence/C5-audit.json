@@ -1,0 +1,17 @@
+{
+  "case": "C5",
+  "passed": true,
+  "before_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+  "after_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+  "before_makefile_sha256": "0218e4a53e3c811da210e4bf651eb13e6c88419bae06617135ebc3b68aafff78",
+  "after_makefile_sha256": "0218e4a53e3c811da210e4bf651eb13e6c88419bae06617135ebc3b68aafff78",
+  "validation": {
+    "accepted": false,
+    "checks": {
+      "patch_applies": true
+    },
+    "error": "COMMAND_FAILED ['make', 'app']\ngcc -O0 -c nonexistent.c -o main.o\ncc1: fatal error: nonexistent.c: No such file or directory\ncompilation terminated.\nmake: *** [Makefile:7: main.o] Error 1\n",
+    "source_unchanged": true,
+    "rollback": true
+  }
+}

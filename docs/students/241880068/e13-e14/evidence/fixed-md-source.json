@@ -1,0 +1,133 @@
+{
+  "schema_version": "e11e12-1",
+  "kind": "fixed-md",
+  "status": "SUCCEEDED",
+  "commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+  "data": {
+    "schema_version": "e8e10-1",
+    "profile": "A06_EXPLICIT_C_MAKE_PROJECT_V1",
+    "commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+    "key": {
+      "version": "a06-configured-logical-directives-v1",
+      "directives": {
+        "config.h": [
+          "#define VALUE 1"
+        ],
+        "extra.h": [
+          "#define OFFSET 0"
+        ],
+        "helper.c": [
+          "#include \"extra.h\""
+        ],
+        "main.c": [
+          "#include <stdio.h>",
+          "#include \"config.h\""
+        ],
+        "unused.h": []
+      },
+      "makefile_sha256": "0218e4a53e3c811da210e4bf651eb13e6c88419bae06617135ebc3b68aafff78",
+      "project": {
+        "subdirectory": "experiments/e11e12/dependency-counter",
+        "makefile": "Makefile",
+        "object_sources": {
+          "main.o": "main.c",
+          "helper.o": "helper.c"
+        },
+        "compiler": "gcc",
+        "flags": [
+          "-O0"
+        ],
+        "clean": [
+          "make",
+          "clean"
+        ],
+        "build": [
+          "make",
+          "app"
+        ],
+        "test": [
+          "python3",
+          "-c",
+          "import pathlib,re,subprocess; value=re.search(r'#define VALUE (\\d+)',pathlib.Path('config.h').read_text())[1]; p=subprocess.run(['./app'],capture_output=True,text=True,timeout=10); assert p.returncode==0 and p.stdout.strip()==value,(p.returncode,p.stdout,p.stderr)"
+        ],
+        "header_probe": {
+          "path": "config.h",
+          "target": "main.o",
+          "replace": {
+            "old": "#define VALUE 1",
+            "new": "#define VALUE 2"
+          }
+        }
+      },
+      "compiler": "gcc (Debian 14.2.0-19) 14.2.0"
+    },
+    "actual": {
+      "main.o": [
+        "config.h",
+        "main.c"
+      ],
+      "helper.o": [
+        "extra.h",
+        "helper.c"
+      ]
+    },
+    "declared": {
+      "main.o": [
+        "main.c",
+        "unused.h"
+      ],
+      "helper.o": [
+        "helper.c"
+      ]
+    },
+    "findings": [
+      {
+        "type": "MISSING",
+        "target": "main.o",
+        "dependency": "config.h"
+      },
+      {
+        "type": "REDUNDANT",
+        "target": "main.o",
+        "dependency": "unused.h"
+      },
+      {
+        "type": "MISSING",
+        "target": "helper.o",
+        "dependency": "extra.h"
+      }
+    ],
+    "added": [
+      [
+        "MISSING",
+        "helper.o",
+        "extra.h"
+      ]
+    ],
+    "resolved": [],
+    "unchanged": [
+      [
+        "MISSING",
+        "main.o",
+        "config.h"
+      ],
+      [
+        "REDUNDANT",
+        "main.o",
+        "unused.h"
+      ]
+    ],
+    "reused": [],
+    "refreshed": [
+      "main.o",
+      "helper.o"
+    ],
+    "elapsed_s": 0.013539651408791542
+  },
+  "source_report": {
+    "job_id": "job-4176885c497a4211b6576a88f41f9821",
+    "trace_id": "trace-2cc14c93644b4a3cb9ca915db14b10b5",
+    "uri": "artifact://job-4176885c497a4211b6576a88f41f9821/incremental-check.json",
+    "sha256": "357815116d003508e19f4099b944151e7d9f027843162f6f4352bce32cbce922"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "provider": "A06 / 蔡利扬 / 241880538",
+  "repository_url": "https://gitee.com/yuisawe/nju-devops-2026-a06.git",
+  "subdirectory": "experiments/e11e12/dependency-counter",
+  "base_commit": "7b0b556ddffaeb489b402ae30e1013da76665259",
+  "target_commit": "539407b9966eecb62e8898e03e6356b3b0c35f07",
+  "source": "A06 maintained E11-E12 dependency-counter, originating from group fixtures/md-rd",
+  "base_change": "Equivalent helper function body change, program output remains 1",
+  "target_change": "helper.c includes extra.h and reads OFFSET; target Make rule omits that header",
+  "expected_missing_at_base": [
+    [
+      "main.o",
+      "config.h"
+    ]
+  ],
+  "expected_missing_at_target": [
+    [
+      "main.o",
+      "config.h"
+    ],
+    [
+      "helper.o",
+      "extra.h"
+    ]
+  ],
+  "expected_redundant_at_target": [
+    [
+      "main.o",
+      "unused.h"
+    ]
+  ],
+  "new_missing": [
+    [
+      "helper.o",
+      "extra.h"
+    ]
+  ],
+  "expected_output": "1",
+  "candidate_source": "A06 E11-E12 recorded dependency-install pattern, digest-pinned base image",
+  "candidate_sha256": "e774201925c443a66aba331485f644e6fbcf0bda9421f9073d926191e3b684dc",
+  "scope": "group-maintained small course C/Make project; not an external production application",
+  "b06_target_acknowledgement": "PENDING",
+  "b06_execution": "PENDING"
+}

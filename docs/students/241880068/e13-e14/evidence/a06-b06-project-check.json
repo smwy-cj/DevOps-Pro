@@ -1,0 +1,49 @@
+{
+  "provider": "B06",
+  "executor": "A06 / 蔡利扬 / 241880538",
+  "source_commit": "d385ba76e5232211d3310d32c8c18a9bed4a00b7",
+  "job_id": "job-273fd1194817483dae6c9b999e35dce0",
+  "trace_id": "trace-32ee9138b03b4b42a65a3fdcd1fbb601",
+  "status": "SUCCEEDED",
+  "base_commit": "37ecb07a11cbc937da8f847e96dbb94d8d0eb6e1",
+  "target_commit": "71ae2ffc4ce9fa99734c297f44c6e057f0df03cf",
+  "expected_and_observed_missing": [
+    [
+      "main.o",
+      "config.h"
+    ]
+  ],
+  "delta_note": "This missing dependency already exists at the base and remains unchanged at the target.",
+  "full_incremental_comparison": {
+    "passed": true,
+    "base_commit": "37ecb07a11cbc937da8f847e96dbb94d8d0eb6e1",
+    "target_commit": "71ae2ffc4ce9fa99734c297f44c6e057f0df03cf",
+    "actual": {
+      "main.o": [
+        "config.h",
+        "main.c"
+      ]
+    },
+    "findings": [
+      [
+        "MISSING",
+        "main.o",
+        "config.h"
+      ]
+    ],
+    "reused": [],
+    "refreshed": [
+      "main.o"
+    ],
+    "added": [],
+    "resolved": [],
+    "unchanged": [
+      [
+        "MISSING",
+        "main.o",
+        "config.h"
+      ]
+    ]
+  },
+  "artifacts_verified": 236
+}

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "failed_evidence": "work/e13-C4-65pqy9qr",
+  "failed_job_id": "job-a916ebde7ccf43928d6e4ba8a4c2b4ea",
+  "failed_trace_id": "trace-ec811e9de00a4d089f6828ac3f48485d",
+  "success_job_id": "job-a1df3be0d6b740f1950e4a9a8c335b34",
+  "success_trace_id": "trace-b3bd4fa86e2c465ea048adb25d76d414",
+  "success_status": "SUCCEEDED",
+  "failed_result_unchanged": true,
+  "success_artifacts_verified": 5821
+}
