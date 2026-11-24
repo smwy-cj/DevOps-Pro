@@ -1,0 +1,105 @@
+{
+  "historical_cases": [
+    {
+      "case": "normal-20261124-104407",
+      "job_id": "job-b87a701d1ea74891b4c4eddefa49a626",
+      "trace_id": "trace-5a6d4e09ce4b4bd498af16e7d17a7de8",
+      "status": "SUCCEEDED",
+      "error": null,
+      "input_unchanged": true,
+      "checks": {
+        "result_sha256": true,
+        "job_id": true,
+        "trace_id": true,
+        "status": true,
+        "omissions_are_git_metadata_only": true,
+        "available_artifact_hashes": true
+      },
+      "result": "work/microservice-runs/normal-20261124-104407/result.json",
+      "console": "work/microservice-runs/normal-20261124-104407.console.log",
+      "observer": "work/microservice-observer/normal-20261124-104407.json",
+      "completed_stages": [
+        "draft",
+        "full-check",
+        "incremental-check",
+        "repair",
+        "recheck"
+      ],
+      "available_artifacts_checked": 399,
+      "omitted_git_metadata": [],
+      "artifact_entries_total": 399
+    },
+    {
+      "case": "down-20261124-104838",
+      "job_id": "job-5bc459b359e844179168153a78d269bf",
+      "trace_id": "trace-00c82b63f3e2497fbe1eee3f845e907a",
+      "status": "FAILED",
+      "error": "<urlopen error [Errno 111] Connection refused>",
+      "input_unchanged": true,
+      "checks": {
+        "result_sha256": true,
+        "job_id": true,
+        "trace_id": true,
+        "status": true,
+        "omissions_are_git_metadata_only": true,
+        "available_artifact_hashes": true
+      },
+      "result": "work/microservice-runs/down-20261124-104838/result.json",
+      "console": "work/microservice-runs/down-20261124-104838.console.log",
+      "observer": "work/microservice-observer/down-20261124-104838.json",
+      "completed_stages": [
+        "draft",
+        "full-check"
+      ],
+      "available_artifacts_checked": 262,
+      "omitted_git_metadata": [],
+      "artifact_entries_total": 262
+    },
+    {
+      "case": "recovered-20261124-105020",
+      "job_id": "job-c9fc6f6b2eb74c28b45faf539922fd91",
+      "trace_id": "trace-5e100f005f65418f8450d4b5911d3d50",
+      "status": "SUCCEEDED",
+      "error": null,
+      "input_unchanged": true,
+      "checks": {
+        "result_sha256": true,
+        "job_id": true,
+        "trace_id": true,
+        "status": true,
+        "omissions_are_git_metadata_only": true,
+        "available_artifact_hashes": true
+      },
+      "result": "work/microservice-runs/recovered-20261124-105020/result.json",
+      "console": "work/microservice-runs/recovered-20261124-105020.console.log",
+      "observer": "work/microservice-observer/recovered-20261124-105020.json",
+      "completed_stages": [
+        "draft",
+        "full-check",
+        "incremental-check",
+        "repair",
+        "recheck"
+      ],
+      "available_artifacts_checked": 399,
+      "omitted_git_metadata": [],
+      "artifact_entries_total": 399
+    }
+  ],
+  "echecker_up_transitions": [
+    {
+      "time_utc": "2026-11-24T02:40:00+00:00",
+      "value": "1"
+    },
+    {
+      "time_utc": "2026-11-24T02:47:40+00:00",
+      "value": "0"
+    },
+    {
+      "time_utc": "2026-11-24T02:50:20+00:00",
+      "value": "1"
+    }
+  ],
+  "shared_status_unchanged": true,
+  "shared_extension_unchanged": true,
+  "passed": true
+}
