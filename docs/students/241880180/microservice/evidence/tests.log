@@ -1,0 +1,9 @@
+test_01_real_draft_timeout_terminates (__main__.RealProjectFaults.test_01_real_draft_timeout_terminates) ... ok
+test_02_invalid_patch_rejected (__main__.RealProjectFaults.test_02_invalid_patch_rejected) ... ok
+test_03_buildable_patch_still_missing_rejected (__main__.RealProjectFaults.test_03_buildable_patch_still_missing_rejected) ... ok
+test_04_final_recheck_failure_restores_written_makefile (__main__.RealProjectFaults.test_04_final_recheck_failure_restores_written_makefile) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 4.214s
+
+OK
